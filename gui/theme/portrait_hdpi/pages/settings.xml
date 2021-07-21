@@ -1113,14 +1113,6 @@
 				<placement x="%card_txt_x%" y="%cardtxt_7%"/>
 				<text>{@abt_maintainer}</text>
 			</text>
-
-			<text style="about_info">
-				<condition var1="of_maintainer" op="!=" var2="3"/>
-				<condition var1="of_maintainer" op="!=" var2="2"/>
-				<condition var1="of_maintainer" op="!=" var2="1"/>
-				<placement x="%card_txt_x%" y="%cardtxt_8%"/>
-				<text>{@abt_device}: %fox_compatibility_fox_device%</text>
-			</text>
 			<!-- Card -->
 			
 			<!-- Credits button when maintainer is OrangeFox developer -->
@@ -1147,7 +1139,7 @@
 				<image resource="fab_credits"/>
 			</image>
 
-			<!-- Credit button when maintair isn't OrangeFox developer -->
+			<!-- Credit button when maintainer isn't an OrangeFox developer -->
 
 			<button style="btn_about_credits">
 				<condition var1="disable_extra_about" op="!=" var2="1"/>

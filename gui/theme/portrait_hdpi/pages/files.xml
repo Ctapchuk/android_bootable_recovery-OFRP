@@ -552,7 +552,7 @@
 				<action function="set">tw_flash_partition=</action>
 				<action function="page">flash_image_confirm</action>
 			</action>
-			
+
 			<action>
 				<condition var1="tw_file_extension" var2="win"/>
 				<action function="set">fex_found=1</action>
@@ -563,7 +563,7 @@
 				<action function="set">tw_flash_partition=</action>
 				<action function="page">flash_image_confirm</action>
 			</action>
-			
+
 			<action>
 				<condition var1="tw_file_extension" var2="txt"/>
 				<action function="set">fex_found=1</action>
@@ -1070,7 +1070,7 @@
 					<condition var1="tw_fm_isfolder" var2="1"/>
 					<condition var1="opts_show" var2="1"/>
 					<icon res="bs_adv_term"/>
-					<action function="changeterminal">%tw_filename1%</action>
+					<action function="changeterminal">"%tw_filename1%"</action>
 				</listitem>
 				<listitem name="{@fm_open_makezip}">
 					<condition var1="opts_show" var2="1"/>

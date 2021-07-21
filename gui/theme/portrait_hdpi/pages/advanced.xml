@@ -288,21 +288,6 @@
 			</action>
 		</page>
 
-		<page name="mod_survival">
-			<action>
-				<action function="queueclear"/>
-				<action function="set">fox_m_author=DarthJabba9</action>
-				<action function="set">fox_m_name={@module_remove_survival}</action>
-				<action function="set">tw_file=OF_Del_Survival.zip</action>
-				<action function="set">tw_filename=/FFiles/OF_Del_Survival/OF_Del_Survival.zip</action>
-				<action function="set">tw_filecheck=%tw_filename%</action>
-				<action function="set">tw_zip_location=/FFiles/OF_Del_Survival</action>
-				<action function="queuezip"/>
-				<action function="set">tw_notexistpage=fox_modules_confirm</action>
-				<action function="set">tw_existpage=fox_modules_confirm</action>
-				<action function="page">filecheck</action>
-			</action>
-		</page>
 
 		<page name="mod_pass">
 			<action>

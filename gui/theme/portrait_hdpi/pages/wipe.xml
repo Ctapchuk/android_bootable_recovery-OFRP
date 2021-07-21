@@ -659,12 +659,12 @@
 
 				<action>
 					<touch key="home"/>
-					<action function="page">wipe</action>
+					<action function="page">advanced</action>
 				</action>
 
 				<action>
 					<touch key="back"/>
-					<action function="page">wipe</action>
+					<action function="page">advanced</action>
 				</action>
 			</page>
 	</pages>
