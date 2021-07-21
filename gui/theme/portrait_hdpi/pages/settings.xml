@@ -138,19 +138,12 @@
 
 			<text style="text_ab_title">
 				<placement x="%col1_x_indent%" y="%ab_bc_y%"/>
-				<condition var1="general_back" var2="reboot"/>
-				<text>{@reboot_btn}</text>
-			</text>
-
-			<text style="text_ab_title">
-				<placement x="%col1_x_indent%" y="%ab_bc_y%"/>
 				<condition var1="general_back" var2="mount"/>
 				<text>{@mount_hdr}</text>
 			</text>
 
 			<text style="caption">
 				<placement x="%col1_x_caption%" y="%row2_1_y%"/>
-				<condition var1="general_back" op="!=" var2="reboot"/>
 				<text>{@options_hdr}</text>
 			</text>
 

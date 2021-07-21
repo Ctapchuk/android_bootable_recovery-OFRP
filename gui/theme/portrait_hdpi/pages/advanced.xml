@@ -419,6 +419,7 @@
 
 				<listitem name="{@module_remove_survival}">
 					<condition var1="fileexists" var2="/FFiles/OF_Del_Survival/OF_Del_Survival.zip"/>
+					<condition var1="fox_branch" op="&gt;=" var2="10"/>
 					<icon res="bs_btn_archive"/>
 					<action function="page">mod_survival</action>
 				</listitem>

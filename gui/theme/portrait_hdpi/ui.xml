@@ -48,6 +48,5 @@
 	</include>
 	<variables>
 		<variable name="magisk_ver" value="20.3"/>
-		<variable name="fox_branch" value="10"/>
 	</variables>
 </recovery>

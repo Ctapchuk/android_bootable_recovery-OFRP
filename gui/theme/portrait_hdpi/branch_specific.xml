@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <recovery>
+	<variables>
+		<variable name="fox_branch" value="10"/>
+	</variables>
 	<pages>
 		<page name="mod_survival">
 			<action>
