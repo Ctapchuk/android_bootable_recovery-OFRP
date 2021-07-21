@@ -693,9 +693,6 @@
 				<listitem name="{@cust_autoapply}">
 					<data variable="instant_apply"/>
 				</listitem>
-				<listitem name="{@cust_new_ota_screen}">
-					<data variable="ota_new_screen"/>
-				</listitem>
 				<listitem name="{@navpan_new_design}">
 					<data variable="new_nav_panel_des"/>
 				</listitem>
