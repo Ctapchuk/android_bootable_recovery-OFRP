@@ -91,7 +91,8 @@
 		<string name="factory_reset2">(not including internal storage)</string>
 		<string name="factory_reset3">Most of the time this is</string>
 		<string name="factory_reset4">the only wipe that you need.</string>
-		<string name="factory_resetting">Wiping Data, Cache and Dalvik...</string>
+		<string name="factory_reset5">(not including users/lockscreen)</string>
+		<string name="factory_resetting">Factory Reset...</string>
 		<string name="advanced_wipe_hdr">Advanced Wipe</string>
 		<string name="advanced_wipe_btn">Advanced Wipe</string>
 		<string name="wipe_enc_confirm">Wipe Encryption from Data</string>
@@ -369,7 +370,11 @@
 		<string name="reboot_hdr">Reboot</string>
 		<string name="sel_storage_list">Select Storage</string>
 		<string name="ok_btn">OK</string>
+		<string name="install_twrp_ramdisk">Install Recovery Ramdisk</string>
+		<string name="install_kernel">Install Kernel</string>
 		<string name="repack_backup_first">Back up existing image first</string>
+		<string name="installing">Installing...</string>
+		<string name="install_complete">Install Complete</string>
 		<string name="decrypt_users">Decrypt Users</string>
 		<string name="backup_storage_undecrypt_warning">Backup not include some files of user {1}, because the user is not decrypted.</string>
 		<string name="decrypting_user_fbe">Attempting to decrypt FBE for user {1}...</string>
@@ -842,7 +847,7 @@
 		<string name="fox_modules_hdr">Fox Addons</string>
 		<string name="fox_modules_inst">Install addon</string>
 		<string name="backup_short_hdr">New Backup</string>
-		<string name="backups_wat">Where are backups?</string>
+		<string name="backups_wat">Where are the backups?</string>
 		
 		<string name="module_install">Install</string>
 		<string name="module_uninstall">Uninstall</string>
@@ -948,11 +953,11 @@
 		<string name="mm_ver">Magisk Version</string>
 		<string name="mm_mod_ver">Module Version</string>
 		<string name="mm_remove">Remove module next boot</string>
-		<string name="mm_remove_hint">Reboot to changes take effect</string>
+		<string name="mm_remove_hint">Reboot for changes to take effect</string>
 		<string name="mm_remove_reboot">Reboot</string>
 		<string name="magisk_not_found">Magisk not found!</string>
 		<string name="magisk_not_found_1">Do you want to go to the Fox Addons</string>
-		<string name="magisk_not_found_2">and install the bundled Magisk?</string>
+		<string name="magisk_not_found_2">and install prebuilt Magisk?</string>
 		<string name="magisk_not_found_3"></string>
 		
 		<!-- MIUI OTA -->
@@ -1166,7 +1171,7 @@
 		<string name="try_app_2">Check recovery updates using our</string>
 		<string name="try_app_3">new app! </string>
 		<string name="try_app_4">Download link:</string>
-		<string name="try_app_5">https://app.orangefox.download</string>
+		<string name="try_app_5">https://app.orangefox.tech</string>
 		<string name="fm_edit_file">Edit File in nano</string>
 		<string name="fm_open_terminal_btn">Open Terminal Here</string>
 		<string name="batch_progress">Progress</string>
