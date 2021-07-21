@@ -877,6 +877,9 @@
 		<string name="changing_boot_slot">Изменить загрузочный слот</string>
 		<string name="changing_boot_slot_complete">Загрузочный слот изменен</string>
 		<string name="unable_set_boot_slot">Ошибка изменения загрузочного слота {1}</string>
+		<string name="flash_ab_inactive">Прошивка A/B ZIP в неактивный слот: {1}</string>
+		<string name="flash_ab_reboot">Чтобы прошить дополнительные ZIP, перезагрузите рекавери, чтобы переключить слот.</string>
+		<string name="flash_ab_both_slots">Прошить в оба слота</string>
 		<string name="backup_storage_warning">Резервные копии {1} не включают в себя файлы внутреннего хранилища.</string>
 		<string name="sha2_chk">Использовать SHA2</string>
 
