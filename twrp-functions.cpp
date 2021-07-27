@@ -2499,17 +2499,21 @@ void TWFunc::OrangeFox_Startup(void)
   if (theme_ver.empty())
      theme_ver = "0";
 
-  if (theme_ver == FOX_THEME_VERSION) {
-     LOGINFO("Themes version: %s\n", FOX_THEME_VERSION);
+  string build_theme_ver = DataManager::GetStrValue("fox_theme_version");
+  if (build_theme_ver.empty())
+     build_theme_ver = "0";
+
+  if (theme_ver == build_theme_ver) {
+     LOGINFO("Themes version: %s\n", build_theme_ver.c_str());
   } 
   else {
      bool has_themes_dir = TWFunc::Path_Exists(Fox_Home + "/.theme");
      if (has_themes_dir)
-     	gui_print_color("warning","* Themes version mismatch (old='%s'; new='%s')\n", theme_ver.c_str(), FOX_THEME_VERSION);
+     	gui_print_color("warning","* Themes version mismatch (old='%s'; new='%s')\n", theme_ver.c_str(), build_theme_ver.c_str());
      else
-     	LOGINFO("Themes version mismatch (old='%s'; new='%s')\n", theme_ver.c_str(), FOX_THEME_VERSION);
+     	LOGINFO("Themes version mismatch (old='%s'; new='%s')\n", theme_ver.c_str(), build_theme_ver.c_str());
      
-     DataManager::SetValue("of_themes_version", FOX_THEME_VERSION);
+     DataManager::SetValue("of_themes_version", build_theme_ver);
      if (has_themes_dir) {
         gui_print_color("warning", "* Resetting the themes...\n");
         TWFunc::removeDir(Fox_Home + "/.theme", false);
@@ -3422,6 +3426,9 @@ bool TWFunc::Fresh_Fox_Install()
   std::string fox_file = get_log_dir() + "recovery/Fox_Installed";
   bool CanProceed = true;
   New_Fox_Installation = 0;
+  std::string build_theme_ver = DataManager::GetStrValue("fox_theme_version");
+  if (build_theme_ver.empty())
+     build_theme_ver = "0";
 
   if (get_log_dir() == CACHE_LOGS_DIR)
     {
@@ -3437,7 +3444,7 @@ bool TWFunc::Fresh_Fox_Install()
 	unlink(fox_file.c_str());
 	
   	DataManager::SetValue("first_start", "1");
-  	DataManager::SetValue("of_themes_version", FOX_THEME_VERSION);
+  	DataManager::SetValue("of_themes_version", build_theme_ver);
 
 	#ifdef OF_QUICK_BACKUP_LIST
   	DataManager::SetValue("tw_backup_list_quick", OF_QUICK_BACKUP_LIST);
@@ -3468,9 +3475,9 @@ bool TWFunc::Fresh_Fox_Install()
    else
    {
       	if (Path_Exists(fox_file)) {
-      	  unlink(fox_file.c_str());
-      	  DataManager::SetValue("of_themes_version", FOX_THEME_VERSION);
-      	}
+      	    unlink(fox_file.c_str());
+      	    DataManager::SetValue("of_themes_version", build_theme_ver);
+      	 }
       	return false;
    }
 }
