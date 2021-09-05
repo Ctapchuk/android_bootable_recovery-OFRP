@@ -69,6 +69,26 @@ ifneq ($(TW_EXCLUDE_NANO), true)
 	include $(BUILD_PREBUILT)
 endif
 
+ifneq ($(filter $(AB_OTA_UPDATER) $(PRODUCT_USE_DYNAMIC_PARTITIONS) $(TW_INCLUDE_CRYPTO), true),)
+	include $(CLEAR_VARS)
+	LOCAL_MODULE := hwservicemanager.rc
+	LOCAL_MODULE_TAGS := optional
+	LOCAL_MODULE_CLASS := RECOVERY_EXECUTABLES
+	LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/system/etc/init
+
+	LOCAL_SRC_FILES := init/$(LOCAL_MODULE)
+	include $(BUILD_PREBUILT)
+
+	include $(CLEAR_VARS)
+	LOCAL_MODULE := vndservicemanager.rc
+	LOCAL_MODULE_TAGS := optional
+	LOCAL_MODULE_CLASS := RECOVERY_EXECUTABLES
+	LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/system/etc/init
+
+	LOCAL_SRC_FILES := init/$(LOCAL_MODULE)
+	include $(BUILD_PREBUILT)
+endif
+
 ifeq ($(AB_OTA_UPDATER),true)
 	include $(CLEAR_VARS)
 	LOCAL_MODULE := android.hardware.boot@1.0-service.rc
@@ -92,24 +112,6 @@ ifeq ($(PRODUCT_USE_DYNAMIC_PARTITIONS),true)
 endif
 
 ifneq ($(TW_INCLUDE_CRYPTO),)
-	include $(CLEAR_VARS)
-	LOCAL_MODULE := hwservicemanager.rc
-	LOCAL_MODULE_TAGS := optional
-	LOCAL_MODULE_CLASS := RECOVERY_EXECUTABLES
-	LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/system/etc/init
-
-	LOCAL_SRC_FILES := init/$(LOCAL_MODULE)
-	include $(BUILD_PREBUILT)
-
-	include $(CLEAR_VARS)
-	LOCAL_MODULE := vndservicemanager.rc
-	LOCAL_MODULE_TAGS := optional
-	LOCAL_MODULE_CLASS := RECOVERY_EXECUTABLES
-	LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/system/etc/init
-
-	LOCAL_SRC_FILES := init/$(LOCAL_MODULE)
-	include $(BUILD_PREBUILT)
-
 	ifneq ($(TW_INCLUDE_CRYPTO_FBE),)
 		include $(CLEAR_VARS)
 		LOCAL_MODULE := servicemanager.rc
