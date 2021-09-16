@@ -73,6 +73,9 @@ bool startupArgs::processRecoveryArgs(std::vector<std::string> args, int index) 
 			} else {
 				Send_Intent = arg;
 			}
+		} else if (args[index].find(FORMAT_DATA) != std::string::npos) {
+			if (!OpenRecoveryScript::Insert_ORS_Command("format data\n"))
+				return false;;
 		} else if (args[index].find(WIPE_DATA) != std::string::npos) {
 			if (!OpenRecoveryScript::Insert_ORS_Command("wipe data\n"))
 				return false;
