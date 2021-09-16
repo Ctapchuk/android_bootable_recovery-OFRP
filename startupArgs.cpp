@@ -47,7 +47,7 @@ void startupArgs::parse(int *argc, char ***argv) {
 			android::base::SetProperty("sys.usb.config", "fastboot");
 			DataManager::SetValue("tw_enable_adb", 0);
 			DataManager::SetValue("tw_enable_fastboot", 1);
-		} else if (args[index].find(UPDATE_PACKAGE) != std::string::npos) {
+		} else if (args[index].find(UPDATE_PACKAGE) != std::string::npos || args[index].find(SPECIAL_UPDATE_PACKAGE) != std::string::npos) {
 			std::string::size_type eq_pos = args[index].find("=");
 			std::string arg = args[index].substr(eq_pos + 1, args[index].size());
 			if (arg.size() == 0) {
@@ -66,6 +66,9 @@ void startupArgs::parse(int *argc, char ***argv) {
 			} else {
 				Send_Intent = arg;
 			}
+		} else if (args[index].find(FORMAT_DATA) != std::string::npos) {
+			if (!OpenRecoveryScript::Insert_ORS_Command("format data\n"))
+				break;
 		} else if (args[index].find(WIPE_DATA) != std::string::npos) {
 			if (!OpenRecoveryScript::Insert_ORS_Command("wipe data\n"))
 				break;
