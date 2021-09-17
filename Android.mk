@@ -190,6 +190,14 @@ ifeq ($(TW_EXCLUDE_MTP),)
     LOCAL_SHARED_LIBRARIES += libtwrpmtp-ffs
 endif
 
+ifeq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE), true)
+    LOCAL_CFLAGS += -DBOARD_BUILD_SYSTEM_ROOT_IMAGE='"true"'
+endif
+
+ifeq ($(BOARD_USES_RECOVERY_AS_BOOT),true)
+    LOCAL_CFLAGS += -DBOARD_USES_RECOVERY_AS_BOOT='"true"'
+endif
+
 #TWRP Build Flags
 ifeq ($(TW_EXCLUDE_MTP),)
     LOCAL_CFLAGS += -DTW_HAS_MTP

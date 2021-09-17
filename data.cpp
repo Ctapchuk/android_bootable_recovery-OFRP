@@ -758,8 +758,8 @@ void DataManager::SetDefaultValues()
 
   #ifdef FOX_ENABLE_LAB
     mConst.SetValue("fox_lab", "1");
-		LOGERR("Warning: lab enabled\n");
-		LOGERR("Build isn't for release\n");
+    LOGERR("Warning: lab enabled\n");
+    LOGERR("Build isn't for release\n");
   #else
     mConst.SetValue("fox_lab", "0");
   #endif
@@ -778,6 +778,12 @@ void DataManager::SetDefaultValues()
     mData.SetValue("of_no_miui_features", "1");
   #else
     mData.SetValue("of_no_miui_features", "0");
+  #endif
+
+  #if defined(BOARD_USES_RECOVERY_AS_BOOT) && defined(BOARD_BUILD_SYSTEM_ROOT_IMAGE)
+    mConst.SetValue("tw_uses_initramfs", "1");
+  #else
+    mConst.SetValue("tw_uses_initramfs", "0");
   #endif
 
 // =======
