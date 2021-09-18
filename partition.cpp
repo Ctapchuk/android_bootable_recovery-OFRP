@@ -145,7 +145,6 @@ enum TW_FSTAB_FLAGS {
 	TWFLAG_LENGTH,
 	TWFLAG_MOUNTTODECRYPT,
 	TWFLAG_REMOVABLE,
-	TWFLAG_RETAINLAYOUTVERSION,
 	TWFLAG_SETTINGSSTORAGE,
 	TWFLAG_STORAGE,
 	TWFLAG_STORAGENAME,
@@ -193,7 +192,6 @@ const struct flag_list tw_flags[] = {
 	{ "length=",                TWFLAG_LENGTH },
 	{ "mounttodecrypt",         TWFLAG_MOUNTTODECRYPT },
 	{ "removable",              TWFLAG_REMOVABLE },
-	{ "retainlayoutversion",    TWFLAG_RETAINLAYOUTVERSION },
 	{ "settingsstorage",        TWFLAG_SETTINGSSTORAGE },
 	{ "storage",                TWFLAG_STORAGE },
 	{ "storagename=",           TWFLAG_STORAGENAME },
@@ -272,7 +270,6 @@ TWPartition::TWPartition() {
 	Mount_Options = "";
 	Format_Block_Size = 0;
 	Ignore_Blkid = false;
-	Retain_Layout_Version = false;
 	Crypto_Key_Location = "";
 	MTP_Storage_ID = 0;
 	Can_Flash_Img = false;
@@ -999,9 +996,6 @@ void TWPartition::Apply_TW_Flag(const unsigned flag, const char* str, const bool
 		case TWFLAG_REMOVABLE:
 			Removable = val;
 			break;
-		case TWFLAG_RETAINLAYOUTVERSION:
-			Retain_Layout_Version = val;
-			break;
 		case TWFLAG_SETTINGSSTORAGE:
 			Is_Settings_Storage = val;
 			if (Is_Settings_Storage)
@@ -1258,7 +1252,6 @@ void TWPartition::Setup_Data_Media() {
 		backup_exclusions.add_absolute_dir("/data/vendor/dumpsys"); // DJ9,3Aug2020 - exclude this dir to error 255
 		// ---
 		wipe_exclusions.add_absolute_dir(Mount_Point + "/misc/vold"); // adopted storage keys
-		ExcludeAll(Mount_Point + "/.layout_version");
 		ExcludeAll(Mount_Point + "/system/storage.xml");
 	} else {
 		if (Mount(true) && TWFunc::Path_Exists(Mount_Point + "/media/0")) {
@@ -1731,7 +1724,6 @@ bool TWPartition::ReMount_RW(bool Display_Error) {
 bool TWPartition::Wipe(string New_File_System) {
 	bool wiped = false, update_crypt = false, recreate_media = true;
 	int check;
-	string Layout_Filename = Mount_Point + "/.layout_version";
 
 	if (!Can_Be_Wiped) {
 		gui_msg(Msg(msg::kError, "cannot_wipe=Partition {1} cannot be wiped.")(Display_Name));
@@ -1740,11 +1732,6 @@ bool TWPartition::Wipe(string New_File_System) {
 
 	if (Mount_Point == "/cache")
 		Log_Offset = 0;
-
-	if (Retain_Layout_Version && Mount(false) && TWFunc::Path_Exists(Layout_Filename))
-		TWFunc::copy_file(Layout_Filename, "/.layout_version", 0600);
-	else
-		unlink("/.layout_version");
 
 	if (Mount_Point == PartitionManager.Get_Android_Root_Path()) {
 		if (tw_get_default_metadata(PartitionManager.Get_Android_Root_Path().c_str()) != 0) {
@@ -1787,7 +1774,6 @@ bool TWPartition::Wipe(string New_File_System) {
 			wiped = Wipe_FAT();
 		else {
 			LOGERR("Unable to wipe '%s' -- unknown file system '%s'\n", Mount_Point.c_str(), New_File_System.c_str());
-			unlink("/.layout_version");
 			return false;
 		}
 		update_crypt = false;
@@ -1796,9 +1782,6 @@ bool TWPartition::Wipe(string New_File_System) {
 	if (wiped) {
 		if (Mount_Point == "/cache" && TWFunc::get_log_dir() != DATA_LOGS_DIR)
 			DataManager::Output_Version();
-
-		if (TWFunc::Path_Exists("/.layout_version") && Mount(false))
-			TWFunc::copy_file("/.layout_version", Layout_Filename, 0600);
 
 		if (Mount_Point == PartitionManager.Get_Android_Root_Path()) {
 			tw_set_default_metadata(PartitionManager.Get_Android_Root_Path().c_str());
@@ -1817,9 +1800,6 @@ bool TWPartition::Wipe(string New_File_System) {
 			}
 		}
 
-		if (Has_Data_Media && recreate_media) {
-			Recreate_Media_Folder();
-		}
 		if (Is_Storage && Mount(false))
 			PartitionManager.Add_MTP_Storage(MTP_Storage_ID);
 	}
@@ -2128,11 +2108,6 @@ bool TWPartition::Wipe_Encryption() {
 	Is_Encrypted = false;
 	if (Wipe(Fstab_File_System)) {
 		Has_Data_Media = Save_Data_Media;
-		//if (Has_Data_Media && !Symlink_Mount_Point.empty()) {
-		//	Recreate_Media_Folder();
-		//	if (Mount(false))
-		//		PartitionManager.Add_MTP_Storage(MTP_Storage_ID);
-		//}
 		DataManager::SetValue(TW_IS_ENCRYPTED, 0);
 #ifndef TW_OEM_BUILD
 		gui_msg("format_data_msg=You may need to reboot recovery to be able to use /data again.");
@@ -3487,7 +3462,6 @@ int TWPartition::Decrypt_Adopted() {
 					PartitionManager.Remove_Partition_By_Path("/sd-ext");
 				}
 				Setup_Data_Media();
-				Recreate_Media_Folder();
 				Wipe_Available_in_GUI = true;
 				Wipe_During_Factory_Reset = true;
 				Can_Be_Backed_Up = true;
