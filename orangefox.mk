@@ -408,6 +408,7 @@ endif
 
 # post-format
 ifeq ($(OF_RUN_POST_FORMAT_PROCESS),1)
+    $(warning "OF_RUN_POST_FORMAT_PROCESS" is deprecated. It causes issues with Android 11 encryption, and will only be processed if "forced encryption" is being disabled ...)
     LOCAL_CFLAGS += -DOF_RUN_POST_FORMAT_PROCESS='"1"'
 endif
 
