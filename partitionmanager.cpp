@@ -3177,6 +3177,16 @@ bool TWPartitionManager::Decrypt_Adopted()
       LOGERR("Cannot decrypt adopted storage because /data will not mount\n");
       return false;
     }
+
+  #ifdef OF_SKIP_DECRYPTED_ADOPTED_STORAGE
+  if (!PartitionManager.Storage_Is_Encrypted()) {
+      if (TWFunc::Get_Android_SDK_Version() > 30) {
+         LOGINFO("Android 12: skip adopted storage decryption until AOSP 12 ROMs stop creating a binary storage.xml.\n");
+         return false;
+      }
+  }
+  #endif
+
   LOGINFO("Decrypt adopted storage starting\n");
   char *xmlFile =
     PageManager::LoadFileToBuffer("/data/system/storage.xml", NULL);
