@@ -112,7 +112,7 @@ public:
 	static bool Repack_Image(string mount_point);
 	static bool Unpack_Image(string mount_point);
 	static void Read_Write_Specific_Partition(string path, string partition_name, bool backup);
-	static int Get_Android_SDK_Version(void);				// Return the SDK version of the current ROM (or default to 21 (Android 5.0))
+	static int Get_Android_SDK_Version(void);				// Return the SDK version of the current ROM (or default to 29 (Android 10))
 	static string Get_MagiskBoot(void);					// Return the name of the magiskboot binary that should be used for patching
 
 	static void Deactivation_Process(void);                     		// Run deactivation process...
