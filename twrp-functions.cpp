@@ -2261,7 +2261,7 @@ int TWFunc::Check_MIUI_Treble(void)
        gui_print("* Display: %s\n", display_panel.c_str());
 
   // device name
-  gui_print("* Device:  %s\n", Fox_Current_Device.c_str());
+  gui_print("* Device:  %s (%s)\n", TWFunc::Fox_Property_Get("ro.product.device").c_str(), TWFunc::Fox_Property_Get("ro.product.system.device").c_str());
 
   // installed ROM
   rom_desc = GetInstalledRom();
@@ -2270,11 +2270,11 @@ int TWFunc::Check_MIUI_Treble(void)
   	if (fox_is_miui_rom_installed == "1" || TWFunc::Fox_Property_Get("orangefox.miui.rom") == "1")
      	  {
   	     Fox_Current_ROM_IsMIUI = 1;
-  	     gui_print("* MIUI ROM");
+  	     gui_print("* MIUI ROM (SDK: %i)", Get_Android_SDK_Version());
           } 
   	else
      	  {
-  	    gui_print("* Custom ROM");
+  	    gui_print("* Custom ROM (SDK: %i)", Get_Android_SDK_Version());
      	  } 
         gui_print("* %s\n", rom_desc.c_str());
         
@@ -2310,10 +2310,18 @@ void TWFunc::Welcome_Message(void)
     gui_print("[Codebase]  : %s, %s\n", Fox_Property_Get("ro.build.version.sdk").c_str(), FOX_CURRENT_DEV_STR);
     gui_print("[Build date]: %s\n", DataManager::GetStrValue("FOX_BUILD_DATE_REAL").c_str());
     
-    if (FOX_BUILD == "Unofficial")
-      gui_print_color("warning", "[Build type]: Unofficial\n");
-    else
-    gui_print("[Build type]: %s\n", FOX_BUILD_TYPE);
+    if (uppercase(FOX_BUILD) == "UNOFFICIAL")
+      	gui_print_color("warning", "[Build type]: Unofficial. No official support for unofficial builds\n");
+    else {
+    	gui_print("[Build type]: %s\n", FOX_BUILD_TYPE);
+    	if (uppercase(FOX_BUILD_TYPE) == "BETA")
+    	    gui_print("[Support]   : https://t.me/OrangeFoxBeta\n");
+    	else
+    	if (uppercase(FOX_BUILD_TYPE) == "STABLE")
+    	    gui_print("[Support]   : https://t.me/OrangeFoxChat\n");
+    	else
+    	    gui_print_color("warning", "[Support]   : No official support for unknown builds\n");
+    }
 #ifdef FOX_ENABLE_LAB
     gui_print_color("error", "\n*** CONFIDENTIAL ALPHA. NOT FOR RELEASE!! ***\n\n");
 #endif
