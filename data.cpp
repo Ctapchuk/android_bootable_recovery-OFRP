@@ -1128,8 +1128,7 @@ void DataManager::SetDefaultValues()
   mPersist.SetValue("tw_military_time", "1");
   mData.SetValue(TW_IS_SUPER, "0");
 
-  mPersist.SetValue(TW_UNMOUNT_SYSTEM, "1");
-  mPersist.SetValue(TW_UNMOUNT_VENDOR, "1");
+  mPersist.SetValue(TW_UNMOUNT_SUPER, "1");
 
 #ifdef TW_INCLUDE_CRYPTO
 	mPersist.SetValue(TW_USE_SHA2, "1");
