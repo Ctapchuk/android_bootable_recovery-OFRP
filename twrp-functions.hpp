@@ -197,6 +197,7 @@ public:
 	static int read_file(string fn, vector < wstring > &results);
 	static string wstr_to_str(wstring str);
 	static bool IsBinaryXML(const std::string filename); // return whether the file is a binary XML file
+	static bool Fox_Force_Mount_Partitions_RW(); // whether to mount system,vendor,product in read/write mode
 
 	// string functions
 	static string lowercase(const string src); /* convert string to lowercase */

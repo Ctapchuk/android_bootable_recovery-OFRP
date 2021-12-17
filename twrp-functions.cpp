@@ -5033,4 +5033,14 @@ bool TWFunc::IsBinaryXML(const std::string filename) {
   return false;
 }
 
+bool TWFunc::Fox_Force_Mount_Partitions_RW() {
+   if (TWFunc::Has_Dynamic_Partitions())
+   	return false; // return false to ensure that we always mount dynamic partitions RO
+#ifdef OF_MOUNT_NON_DYNAMIC_RW
+   return true;
+#else
+   return false;
+#endif
+}
+
 //
