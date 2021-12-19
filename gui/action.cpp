@@ -2479,6 +2479,9 @@ int GUIAction::mountsystemtoggle(std::string arg)
 	int op_status = 0;
 	bool remount_system = PartitionManager.Is_Mounted_By_Path(PartitionManager.Get_Android_Root_Path());
 	bool remount_vendor = PartitionManager.Is_Mounted_By_Path("/vendor");
+	bool remount_product = PartitionManager.Is_Mounted_By_Path("/product");
+	bool remount_system_ext = PartitionManager.Is_Mounted_By_Path("/system_ext");
+	bool remount_odm = PartitionManager.Is_Mounted_By_Path("/odm");
 
 	operation_start("Toggle System Mount");
 	if (!PartitionManager.UnMount_By_Path(PartitionManager.Get_Android_Root_Path(), true)) {
@@ -2508,6 +2511,48 @@ int GUIAction::mountsystemtoggle(std::string arg)
 				Part->Change_Mount_Read_Only(true);
 			}
 			if (remount_vendor) {
+				Part->Mount(true);
+			}
+			op_status = 0; // success
+		} else {
+			op_status = 1; // fail
+		}
+		Part = PartitionManager.Find_Partition_By_Path("/product");
+		if (Part) {
+			if (arg == "0") {
+				Part->Change_Mount_Read_Only(false);
+			} else {
+				Part->Change_Mount_Read_Only(true);
+			}
+			if (remount_product) {
+				Part->Mount(true);
+			}
+			op_status = 0; // success
+		} else {
+			op_status = 1; // fail
+		}
+		Part = PartitionManager.Find_Partition_By_Path("/system_ext");
+		if (Part) {
+			if (arg == "0") {
+				Part->Change_Mount_Read_Only(false);
+			} else {
+				Part->Change_Mount_Read_Only(true);
+			}
+			if (remount_system_ext) {
+				Part->Mount(true);
+			}
+			op_status = 0; // success
+		} else {
+			op_status = 1; // fail
+		}
+		Part = PartitionManager.Find_Partition_By_Path("/odm");
+		if (Part) {
+			if (arg == "0") {
+				Part->Change_Mount_Read_Only(false);
+			} else {
+				Part->Change_Mount_Read_Only(true);
+			}
+			if (remount_odm) {
 				Part->Mount(true);
 			}
 			op_status = 0; // success
