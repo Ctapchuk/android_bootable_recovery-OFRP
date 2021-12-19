@@ -2477,44 +2477,10 @@ int GUIAction::checkpartitionlifetimewrites(std::string arg)
 int GUIAction::mountsystemtoggle(std::string arg)
 {
 	int op_status = 0;
-	bool remount_system = PartitionManager.Is_Mounted_By_Path(PartitionManager.Get_Android_Root_Path());
-	bool remount_vendor = PartitionManager.Is_Mounted_By_Path("/vendor");
 
 	operation_start("Toggle System Mount");
-	if (!PartitionManager.UnMount_By_Path(PartitionManager.Get_Android_Root_Path(), true)) {
-		op_status = 1; // fail
-	} else {
-		TWPartition* Part = PartitionManager.Find_Partition_By_Path(PartitionManager.Get_Android_Root_Path());
-		if (Part) {
-			if (arg == "0") {
-				DataManager::SetValue("tw_mount_system_ro", 0);
-				Part->Change_Mount_Read_Only(false);
-			} else {
-				DataManager::SetValue("tw_mount_system_ro", 1);
-				Part->Change_Mount_Read_Only(true);
-			}
-			if (remount_system) {
-				Part->Mount(true);
-			}
-			op_status = 0; // success
-		} else {
-			op_status = 1; // fail
-		}
-		Part = PartitionManager.Find_Partition_By_Path("/vendor");
-		if (Part) {
-			if (arg == "0") {
-				Part->Change_Mount_Read_Only(false);
-			} else {
-				Part->Change_Mount_Read_Only(true);
-			}
-			if (remount_vendor) {
-				Part->Mount(true);
-			}
-			op_status = 0; // success
-		} else {
-			op_status = 1; // fail
-		}
-	}
+	PartitionManager.Mount_Super_Toggle(arg);
+	op_status = 0; // success
 
 	operation_end(op_status);
 	return 0;

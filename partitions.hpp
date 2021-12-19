@@ -445,6 +445,7 @@ public:
 	bool Unmap_Super_Devices();                                               // Unmap super devices in TWRP
 	bool Check_Pending_Merges();                                              // Check and run pending merges on data for VAB devices
 	bool Disable_AVB2(bool Display_Info);                                     // Disable AVB2.0 in vbmeta/vbmeta_system
+	void Mount_Super_Toggle(const string& arg);                               // Toggle r/o and r/w for dynamic partitions
 
 #ifdef TW_HAS_MTP
 	bool is_MTP_Enabled(void);						  // returns whether MTP is already enabled
