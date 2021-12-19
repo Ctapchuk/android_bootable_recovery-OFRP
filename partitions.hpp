@@ -430,6 +430,7 @@ public:
 	int Set_FDE_Encrypt_Status();                                             // Sets encryption state for FDE devices (ro.crypto.state and ro.crypto.type)
 	void Unlock_Block_Partitions();                                           // Unlock all block devices after update_engine runs
 	std::vector<users_struct>* Get_Users_List();                              // Returns pointer to list of users
+	void Refresh_Mounting_Info();                                             // Returns read/write access for dynamic partitions if necessary
 
 #ifdef TW_HAS_MTP
 	bool is_MTP_Enabled(void);						// returns whether MTP is already enabled
