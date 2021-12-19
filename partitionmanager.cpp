@@ -4861,4 +4861,26 @@ void TWPartitionManager::UnMount_System_Partitions(void) {
 		UnMount_Main_Partitions();
 	}
 }
+
+void TWPartitionManager::Mount_Super_Toggle(const string& arg) {
+	std::vector<TWPartition*>::iterator iter;
+	if (arg == "0")
+			DataManager::SetValue("tw_mount_system_ro", 0);
+		else
+			DataManager::SetValue("tw_mount_system_ro", 1);
+
+	for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
+		if ((*iter)->Is_Super) {
+			bool need_remount = (*iter)->Is_Mounted();
+			(*iter)->UnMount(false);
+			if (arg == "0")
+				(*iter)->Change_Mount_Read_Only(false);
+			else
+				(*iter)->Change_Mount_Read_Only(true);
+
+			if (need_remount)
+				(*iter)->Mount(false);
+		}
+	}
+}
 //*
