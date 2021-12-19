@@ -4882,4 +4882,22 @@ void TWPartitionManager::Mount_Super_Toggle(const string& arg) {
 		}
 	}
 }
+
+void TWPartitionManager::Refresh_Mounting_Info(void) {
+	if (!DataManager::GetIntValue("tw_mount_system_ro")) {
+		std::vector<TWPartition*>::iterator iter;
+		string command;
+		for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
+			if ((*iter)->Is_Super) {
+				(*iter)->Change_Mount_Read_Only(false);
+#ifdef AB_OTA_UPDATER
+				command = "blockdev --setrw /dev/block/mapper/" + Get_Bare_Partition_Name((*iter)->Get_Mount_Point()) + PartitionManager.Get_Active_Slot_Suffix();
+#else
+				command = "blockdev --setrw /dev/block/mapper/" + Get_Bare_Partition_Name((*iter)->Get_Mount_Point());
+#endif
+				TWFunc::Exec_Cmd(command, false);
+			}
+		}
+	}
+}
 //*
