@@ -185,7 +185,7 @@ bool is_comment_line(const string Src)
 
 bool Fox_Skip_OTA() 
 {
-   #if defined(OF_DISABLE_MIUI_SPECIFIC_FEATURES) || defined(OF_TWRP_COMPATIBILITY_MODE)
+   #if defined(OF_DISABLE_EXTRA_SPECIFIC_FEATURES) || defined(OF_TWRP_COMPATIBILITY_MODE)
    return true;
    #else
    return false;
@@ -512,6 +512,7 @@ int Fox_Prepare_Update_Binary(const char *path, ZipArchiveHandle Zip)
   string fingerprint_property = "ro.build.fingerprint";
   string pre_device = "pre-device";
   string pre_build = "pre-build";
+  string from_version = "from_version";
   string mCheck = "";
   string miui_check1 = "ro.miui.ui.version";
   string check_command = "grep " + miui_check1 + " " + TMP_UPDATER_BINARY_PATH;
@@ -691,6 +692,7 @@ int Fox_Prepare_Update_Binary(const char *path, ZipArchiveHandle Zip)
 	      if (zip_ExtractEntry(Zip, metadata_sg_path, take_out_metadata, 0644))
 		{
 		  string metadata_fingerprint = TWFunc::File_Property_Get(take_out_metadata, pre_build); // look for "pre-build"
+		  string metadata_from_version = TWFunc::File_Property_Get(take_out_metadata, from_version); // look for "from_version"
 		  string metadata_device = TWFunc::File_Property_Get(take_out_metadata, pre_device);  // look for "pre-device"
 
 		  string fingerprint = TWFunc::System_Property_Get(fingerprint_property); // try to get system fingerprint - ro.build.fingerprint
@@ -701,71 +703,80 @@ int Fox_Prepare_Update_Binary(const char *path, ZipArchiveHandle Zip)
    			}
 		  }
 
-		  // appropriate "pre-build" entry in META-INF/com/android/metadata ? == incremental block-based OTA zip installer
-		  if (metadata_fingerprint.size() > FOX_MIN_EXPECTED_FP_SIZE) 
+		  // Define OTA_ROM
+		  string OTA_ROM = "null";
+		  
+		  if (metadata_from_version.size() > 10) OTA_ROM = "ColorOS";
+		  if (metadata_fingerprint.size() > FOX_MIN_EXPECTED_FP_SIZE) OTA_ROM = "MIUI";
+		  
+		  if (OTA_ROM != "null")
 		    {
-		      gui_msg(Msg
-			      ("fox_incremental_package_detected=Detected Incremental package '{1}'")
-			      (path));
+		        gui_msg(Msg
+			        ("fox_incremental_package_detected=Detected {1} Incremental package '{2}'")
+			        (OTA_ROM)(path));
 			      
-		      if (DataManager::GetIntValue(FOX_INCREMENTAL_PACKAGE) == 0)
-		      {
-		  	CloseArchive(Zip);
-		  	LOGERR("Incremental OTA is not enabled. Quitting the incremental OTA update.\n");
-		  	set_miui_install_status(OTA_ERROR, false);
-		  	return INSTALL_ERROR; 
-		      }
+		        if (DataManager::GetIntValue(FOX_INCREMENTAL_PACKAGE) == 0)
+		        {
+		  	  CloseArchive(Zip);
+		  	  LOGERR("Incremental OTA is not enabled. Quitting the incremental OTA update.\n");
+		  	  set_miui_install_status(OTA_ERROR, false);
+		  	  return INSTALL_ERROR; 
+		        }
 
 		      // --- check for mismatching fingerprints when they should match
 		      string metadata_prebuild_incremental = TWFunc::File_Property_Get(take_out_metadata, "pre-build-incremental");
 		      string metadata_ota_type = TWFunc::File_Property_Get(take_out_metadata, "ota-type");
 		      string orangefox_incremental = TWFunc::File_Property_Get(orangefox_cfg, "INCREMENTAL_VERSION");
-
-		      if (metadata_fingerprint != fingerprint)
-		      {
-    			    DataManager::GetValue(FOX_COMPATIBILITY_DEVICE, Fox_Current_Device);
-   			    if (metadata_device == Fox_Current_Device && metadata_prebuild_incremental == orangefox_incremental) {
-       				LOGINFO("- DEBUG: OrangeFox: metadata_fingerprint != system_fingerprint. Trying to fix it.\n- Changing [%s] to [%s]\n",
-           				fingerprint.c_str(), metadata_fingerprint.c_str());
-       				string atmp = "\"";
-       				usleep(4096);
-       				TWFunc::Exec_Cmd("/sbin/resetprop ro.build.fingerprint " + atmp + metadata_fingerprint + atmp);
-       				usleep(250000);
-       				TWFunc::Exec_Cmd("/sbin/resetprop orangefox.system.fingerprint " + atmp + metadata_fingerprint + atmp);
-       				usleep(100000);
-   			     }
-		        }
-			// ---
-
+		      
 		      zip_is_for_specific_build = true;
 		      
 		      DataManager::SetValue(FOX_METADATA_PRE_BUILD, 1);
 		      
-		      if ((fingerprint.size() > FOX_MIN_EXPECTED_FP_SIZE) 
-		      && (DataManager::GetIntValue("fox_verify_incremental_ota_signature") != 0))
-			{
-			  gui_msg
-			    ("fox_incremental_ota_compatibility_chk=Verifying Incremental Package Signature...");
+		      if (OTA_ROM == "MIUI")
+		      {
+		           if (metadata_fingerprint != fingerprint)
+		           {
+    			               DataManager::GetValue(FOX_COMPATIBILITY_DEVICE, Fox_Current_Device);
+   			               if (metadata_device == Fox_Current_Device && metadata_prebuild_incremental == orangefox_incremental) {
+       				           LOGINFO("- DEBUG: OrangeFox: metadata_fingerprint != system_fingerprint. Trying to fix it.\n- Changing [%s] to [%s]\n",
+           				           fingerprint.c_str(), metadata_fingerprint.c_str());
+       				           string atmp = "\"";
+       				           usleep(4096);
+       				           TWFunc::Exec_Cmd("/sbin/resetprop ro.build.fingerprint " + atmp + metadata_fingerprint + atmp);
+       				           usleep(250000);
+       				           TWFunc::Exec_Cmd("/sbin/resetprop orangefox.system.fingerprint " + atmp + metadata_fingerprint + atmp);
+       				           usleep(100000);
+   			                }
+		           }
+		                  
+			// ---
 
-			    if (verify_incremental_package 
-			         (fingerprint, 
-			          metadata_fingerprint,
-				  metadata_device))
-			    {
-			      gui_msg("fox_incremental_ota_compatibility_true=Incremental package is compatible.");
-			      property_set(fingerprint_property.c_str(), metadata_fingerprint.c_str());
-			      DataManager::SetValue(FOX_LOADED_FINGERPRINT, metadata_fingerprint);
-			    }
-			  else
-			    {
-			      set_miui_install_status(OTA_VERIFY_FAIL, false);
-			      gui_err("fox_incremental_ota_compatibility_false=Incremental package isn't compatible with this ROM!");
-			      return INSTALL_ERROR;
-			    }
-			}
-		      else
-			{
+		           if ((fingerprint.size() > FOX_MIN_EXPECTED_FP_SIZE) 
+		           && (DataManager::GetIntValue("fox_verify_incremental_ota_signature") != 0))
+			     {
+			       gui_msg
+			         ("fox_incremental_ota_compatibility_chk=Verifying Incremental Package Signature...");
+
+			         if (verify_incremental_package 
+			              (fingerprint, 
+			               metadata_fingerprint,
+				       metadata_device))
+			          {
+			            gui_msg("fox_incremental_ota_compatibility_true=Incremental package is compatible.");
+			            property_set(fingerprint_property.c_str(), metadata_fingerprint.c_str());
+			            DataManager::SetValue(FOX_LOADED_FINGERPRINT, metadata_fingerprint);
+			          }
+			        else
+			          {
+			            set_miui_install_status(OTA_VERIFY_FAIL, false);
+			            gui_err("fox_incremental_ota_compatibility_false=Incremental package isn't compatible with this ROM!");
+			            return INSTALL_ERROR;
+			          }
+			     }
+		           else
+			     {
 			  property_set(fingerprint_property.c_str(), metadata_fingerprint.c_str());
+			     }
 			}
 		    
 		      if (zip_is_for_specific_build)
@@ -778,6 +789,7 @@ int Fox_Prepare_Update_Binary(const char *path, ZipArchiveHandle Zip)
 			 }			
 		      unlink(take_out_metadata.c_str());		      
 		    }
+		    
 		}
 	      else
 		{

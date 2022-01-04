@@ -109,7 +109,7 @@ static int Fox_Current_ROM_IsMIUI = 0; // is the currently installed ROM a MIUI 
 #define FOX_INSTALL_PREBUILT_ZIP       	"fox_install_built_in_zip"
 #define FOX_DONT_REPLACE_STOCK       	"fox_reboot_dont_disable_stock_recovery"
 #define FOX_ACTUAL_BUILD_VAR            "fox_actual_build"
-#define FOX_INCREMENTAL_PACKAGE         "fox_support_miui_ota"
+#define FOX_INCREMENTAL_PACKAGE         "fox_support_incremental_ota"
 #define FOX_ENABLE_SECURE_RO            "fox_reboot_enable_secure_ro"
 #define FOX_DISABLE_SECURE_RO           "fox_reboot_disable_secure_ro"
 #define FOX_ENABLE_ADB_RO             	"fox_reboot_enable_adb_ro"
@@ -148,6 +148,7 @@ static int Fox_Current_ROM_IsMIUI = 0; // is the currently installed ROM a MIUI 
 #define FOX_MIN_EXPECTED_FP_SIZE 30
 
 #define FOX_INCREMENTAL_OTA_FAIL        "fox_ota_fail"
+#define FOX_OTA_BACKUP_SUPER            "fox_ota_backup_super"
 #define FOX_RUN_SURVIVAL_BACKUP         "fox_run_survival_backup"
 #define FOX_METADATA_PRE_BUILD          "fox_pre_build"
 #define FOX_ENCRYPTED_DEVICE		"fox_encrypted_device"

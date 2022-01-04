@@ -798,10 +798,10 @@ void DataManager::SetDefaultValues()
   // dispense with the "Create Digest" button (it is only for the 9.0 branch)
   mConst.SetValue("fox_show_digest_btn", "0");
 
-  #if defined(OF_DISABLE_MIUI_SPECIFIC_FEATURES) || defined(OF_TWRP_COMPATIBILITY_MODE)
-    mData.SetValue("of_no_miui_features", "1");
+  #if defined(OF_DISABLE_EXTRA_SPECIFIC_FEATURES) || defined(OF_TWRP_COMPATIBILITY_MODE)
+    mData.SetValue("of_no_extra_features", "1");
   #else
-    mData.SetValue("of_no_miui_features", "0");
+    mData.SetValue("of_no_extra_features", "0");
   #endif
 
   #ifdef OF_AB_DEVICE_WITH_RECOVERY_PARTITION
@@ -1006,6 +1006,10 @@ void DataManager::SetDefaultValues()
   	mData.SetValue(TW_IS_SUPER, "0");
 #endif
 
+#ifdef OF_INCREMENTAL_OTA_BACKUP_SUPER
+	mData.SetValue(FOX_OTA_BACKUP_SUPER, "1");
+#endif
+
 #ifdef TW_INCLUDE_CRYPTO
   mConst.SetValue(TW_HAS_CRYPTO, "1");
   printf("TW_INCLUDE_CRYPTO := true\n");
@@ -1054,9 +1058,9 @@ void DataManager::SetDefaultValues()
   mData.SetValue(FOX_ENCRYPTED_DEVICE, "0"); //assume that the device is not encrypted
   mPersist.SetValue("of_themes_version", "0"); // uninitialised theme version
 
-  // { MIUI
+  // { incremental
   string incremental_ota = "1";    // enable by default, unless turned off below
-  #if defined(OF_DISABLE_MIUI_SPECIFIC_FEATURES) || defined(OF_TWRP_COMPATIBILITY_MODE) || defined(OF_DISABLE_MIUI_OTA_BY_DEFAULT)
+  #if defined(OF_DISABLE_EXTRA_SPECIFIC_FEATURES) || defined(OF_TWRP_COMPATIBILITY_MODE) || defined(OF_DISABLE_INCREMENTAL_OTA_BY_DEFAULT)
   incremental_ota = "0";
   #endif  
 
@@ -1093,7 +1097,7 @@ void DataManager::SetDefaultValues()
   #else
   mPersist.SetValue(FOX_DISABLE_FORCED_ENCRYPTION, fEncrypt_switch);
   #endif
-  //  MIUI }
+  //  incremental }
 
   mPersist.SetValue(FOX_FORCE_DEACTIVATE_PROCESS, "0");
   mPersist.SetValue(FOX_ZIP_INSTALLER_CODE, "0");
