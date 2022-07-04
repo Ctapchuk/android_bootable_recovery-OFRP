@@ -281,7 +281,7 @@ static int Run_Update_Binary(const char *path, int* wipe_cache, zip_type ztype) 
 
 int TWinstall_zip(const char *path, int *wipe_cache, bool check_for_digest)
 {
-  int ret_val, zip_verify = 1, unmount_system = 1, reflashtwrp = 0, unmount_vendor = 1;
+  int ret_val, zip_verify = 1, unmount_system = 1, reflashtwrp = 0;
   bool run_rom_scripts = false;
 
   if (strcmp(path, "error") == 0)
@@ -312,8 +312,7 @@ int TWinstall_zip(const char *path, int *wipe_cache, bool check_for_digest)
 	}
     }
 
-  DataManager::GetValue(TW_UNMOUNT_SYSTEM, unmount_system);
-  DataManager::GetValue(TW_UNMOUNT_VENDOR, unmount_vendor);
+   DataManager::GetValue(TW_UNMOUNT_SYSTEM, unmount_system);
 
 #ifndef TW_OEM_BUILD
   DataManager::GetValue(TW_SIGNED_ZIP_VERIFY_VAR, zip_verify);
@@ -357,31 +356,9 @@ int TWinstall_zip(const char *path, int *wipe_cache, bool check_for_digest)
     }
 
     if (unmount_system) {
-	if (PartitionManager.Is_Mounted_By_Path(PartitionManager.Get_Android_Root_Path())) {
-		gui_msg("unmount_system=Unmounting System...");
-		if (PartitionManager.UnMount_By_Path(PartitionManager.Get_Android_Root_Path(), false)) {
-			//unlink(PartitionManager.Get_Android_Root_Path().c_str());
-			//mkdir(PartitionManager.Get_Android_Root_Path().c_str(), 0755);
-		}
-		else {
-			gui_msg("unmount_system_err=Failed to unmount System");
-		        return -1;
-		}
-	}
-   }
-
-   if (unmount_vendor) {
-	if (PartitionManager.Is_Mounted_By_Path("/vendor")) {
-		gui_msg("unmount_vendor=Unmounting Vendor...");
-		if (PartitionManager.UnMount_By_Path("/vendor", false)) {
-		   	//unlink("/vendor");
-		   	//mkdir("/vendor", 0755);
-		} else {
-			gui_msg("unmount_vendor_err=Failed to unmount Vendor");
-			return -1;
-		}
-	}
-   }
+	gui_msg("unmount_system=Unmounting system partitions...");
+		PartitionManager.UnMount_System_Partitions();
+    }
 
    // DJ9, 20200622: try to avoid a situation where blockimg will bomb out when trying to create a stash
    if (TWFunc::Path_Exists("/cache/.") && !TWFunc::Path_Exists("/cache/recovery/.") && !TWFunc::Path_Exists("/data/cache/.")) {

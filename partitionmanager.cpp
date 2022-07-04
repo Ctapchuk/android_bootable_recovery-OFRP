@@ -4848,4 +4848,16 @@ bool TWPartitionManager::Check_Pending_Merges() {
 	}
 	return true;
 }
+
+void TWPartitionManager::UnMount_System_Partitions(void) {
+	if (TWFunc::Has_Dynamic_Partitions()) {
+		for (auto iter = Partitions.begin(); iter != Partitions.end(); iter++) 
+			if ((*iter)->Is_Super) {
+				LOGINFO("Unmount '%s' partition..\n", Get_Bare_Partition_Name((*iter)->Get_Mount_Point()).c_str());
+				(*iter)->UnMount(false);
+			}
+	} else {
+		UnMount_Main_Partitions();
+	}
+}
 //*
