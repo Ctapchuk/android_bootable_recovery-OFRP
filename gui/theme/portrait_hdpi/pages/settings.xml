@@ -169,11 +169,6 @@
 					<condition var1="general_back" var2="mount"/>
 					<data variable="tw_unmount_system"/>
 				</listitem>
-				<listitem name="{@unmount_vendor_install}">
-					<condition var1="general_back" var2="mount"/>
-					<condition var1="fox_branch" op="&gt;=" var2="10"/>
-					<data variable="tw_unmount_vendor"/>
-				</listitem>
 				<listitem name="{@use_rmrf_chk}">
 					<condition var1="general_back" var2="wipe"/>
 					<data variable="tw_rm_rf"/>
@@ -262,10 +257,6 @@
 				</listitem>
 				<listitem name="{@unmount_sys_install}">
 					<data variable="tw_unmount_system"/>
-				</listitem>
-				<listitem name="{@unmount_vendor_install}">
-					<condition var1="fox_branch" op="&gt;=" var2="10"/>
-					<data variable="tw_unmount_vendor"/>
 				</listitem>
 				<listitem name="{@auto_reflashtwrp_chk}">
 					<condition var1="fox_branch" op="&gt;=" var2="11"/>

@@ -4851,4 +4851,14 @@ bool TWPartitionManager::Check_Pending_Merges() {
 	}
 	return true;
 }
+
+void TWPartitionManager::UnMount_System_Partitions(void) {
+	if (TWFunc::Has_Dynamic_Partitions()) {
+		for (auto iter = Partitions.begin(); iter != Partitions.end(); iter++) 
+			if ((*iter)->Is_Super)
+				(*iter)->UnMount(false);
+	} else {
+		UnMount_Main_Partitions();
+	}
+}
 //*

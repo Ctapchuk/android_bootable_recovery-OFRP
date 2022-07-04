@@ -771,13 +771,8 @@
 		<string name="keep_storage_data">Skip wipe when restoring Storage</string>
 		<string name="zip_compatible_err">Zip Treble compatibility error!</string>
 
-		<string name="unmount_sys_install">Unmount System before installing a ZIP</string>
-		<string name="unmount_system">Unmounting System...</string>
-		<string name="unmount_system_err">Failed to unmount System</string>		
-
-		<string name="unmount_vendor_install">Unmount Vendor before installing a ZIP</string>
-		<string name="unmount_vendor">Unmounting Vendor...</string>
-		<string name="unmount_vendor_err">Failed to unmount Vendor</string>	
+		<string name="unmount_sys_install">Unmount system partitions</string>
+		<string name="unmount_system">Unmounting system partitions...</string>			
 			
 		<string name="fbe_wipe_msg">WARNING: {1} wiped. FBE device should be booted into Android and not Recovery to set initial FBE policy after wipe.</string>		
 		<string name="fastboot_button">Fastboot</string>
