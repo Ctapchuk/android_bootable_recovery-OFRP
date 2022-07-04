@@ -2347,6 +2347,10 @@ void TWPartitionManager::UnMount_Main_Partitions(void) {
 	UnMount_By_Path (Get_Android_Root_Path(), true);
 	Partition = Find_Partition_By_Path ("/product");
 	if (Partition != NULL) UnMount_By_Path("/product", false);
+	Partition = Find_Partition_By_Path ("/system_ext");
+	if (Partition != NULL) UnMount_By_Path("/system_ext", false);
+	Partition = Find_Partition_By_Path ("/odm");
+	if (Partition != NULL) UnMount_By_Path("/odm", false);
 	if (!datamedia)
 		UnMount_By_Path("/data", true);
 

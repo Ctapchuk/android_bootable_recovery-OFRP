@@ -1163,11 +1163,10 @@ void DataManager::SetDefaultValues()
   mData.SetValue("tw_background_thread_running", "0");
   mData.SetValue(TW_RESTORE_FILE_DATE, "0");
   mPersist.SetValue("tw_military_time", "1");
-  mPersist.SetValue(TW_UNMOUNT_VENDOR, "1");
 #ifdef AB_OTA_UPDATER
-	mPersist.SetValue(TW_UNMOUNT_SYSTEM, "0");
+	mPersist.SetValue(TW_UNMOUNT_SUPER, "0");
 #else
-	mPersist.SetValue(TW_UNMOUNT_SYSTEM, "1");
+	mPersist.SetValue(TW_UNMOUNT_SUPER, "1");
 #endif
 
 #ifdef TW_INCLUDE_CRYPTO
