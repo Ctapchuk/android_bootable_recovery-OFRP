@@ -2366,28 +2366,15 @@ void TWFunc::Welcome_Message(void)
     gui_print("[Settings]  : %s\n", Fox_Home.c_str());
     #endif
     gui_print("[Build date]: %s\n", DataManager::GetStrValue("FOX_BUILD_DATE_REAL").c_str());
-    
-    if (uppercase(FOX_BUILD) == "UNOFFICIAL")
-      	gui_print_color("warning", "[Build type]: Unofficial. No official support for unofficial builds\n");
-    else {
-    	gui_print("[Build type]: %s\n", FOX_BUILD_TYPE);
-    	if (uppercase(FOX_BUILD_TYPE) == "BETA" || uppercase(FOX_BUILD_TYPE) == "STABLE")
-    	    gui_print("[Support]   : https://t.me/OrangeFoxChat\n");
-    	else
-    	    gui_print_color("warning", "[Support]   : No official support for unknown builds\n");
-    }
+    gui_print("[Build type]: %s\n", FOX_BUILD_TYPE);
+
 #ifdef OF_ENABLE_LAB
     gui_print_color("error", "\n*** CONFIDENTIAL ALPHA. NOT FOR RELEASE!! ***\n\n");
 #endif
 
-    gui_print("\n");
-    gui_print_color("green", "OrangeFox websites:\n");
-    gui_print("[Downloads] : https://orangefox.download/\n");
-    gui_print("[Guides/FAQ]: https://wiki.orangefox.tech/guides/\n");
-
-    #if defined(OF_DISABLE_MIUI_SPECIFIC_FEATURES) || defined(OF_TWRP_COMPATIBILITY_MODE)
+#if defined(OF_DISABLE_MIUI_SPECIFIC_FEATURES) || defined(OF_TWRP_COMPATIBILITY_MODE)
     LOGINFO(" [MIUI-specific features not enabled]\n");
-    #endif
+#endif
     
     gui_print("--------------------------\n");
     Fox_Has_Welcomed++;
