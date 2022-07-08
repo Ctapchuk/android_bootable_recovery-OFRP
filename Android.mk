@@ -316,7 +316,7 @@ endif
 ifeq ($(TW_INCLUDE_PYTHON),true)
     ifeq ($(wildcard external/python3/Android.mk),)
         $(warning Python3 repo not found! You need to clone the repo.)
-        $(warning Please clone https://github.com/CaptainThrowback/android_external_python3.git into external/python3)
+        $(warning Please clone https://github.com/TeamWin/android_external_python3.git into external/python3)
         $(error Python3 repo not present; exiting)
     endif
     TWRP_REQUIRED_MODULES += python3_twrp
