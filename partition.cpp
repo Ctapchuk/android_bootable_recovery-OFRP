@@ -2520,6 +2520,7 @@ bool TWPartition::Wipe_F2FS() {
 	bool NeedPreserveFooter = true;
 	bool needs_casefold = false;
   	bool needs_projid = false;
+  	bool needs_compression = false;
 
 	Find_Actual_Block_Device();
 	if (!Is_Present) {
@@ -2530,6 +2531,7 @@ bool TWPartition::Wipe_F2FS() {
 
 	needs_casefold = android::base::GetBoolProperty("external_storage.casefold.enabled", false);
     	needs_projid = android::base::GetBoolProperty("external_storage.projid.enabled", false);
+    	needs_compression = DataManager::GetIntValue(FOX_USE_F2FS_COMPRESSION);
 
 	unsigned long long dev_sz = TWFunc::IOCTL_Get_Block_Size(Actual_Block_Device.c_str());
 	if (!dev_sz)
@@ -2546,6 +2548,11 @@ bool TWPartition::Wipe_F2FS() {
 
 	if(needs_casefold)
 		f2fs_command += " -O casefold -C utf8";
+		
+	if(needs_compression) {
+		f2fs_command += " -O compression,extra_attr";
+		LOGINFO("F2FS: detected flag for formatting /data for F2FS compression support...\n");
+	}
 
 	f2fs_command += " " + Actual_Block_Device + " " + dev_sz_str;
 
