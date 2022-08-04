@@ -703,6 +703,8 @@ void DataManager::SetBackupFolder()
 
 void DataManager::SetDefaultValues()
 {
+  char propval[PROPERTY_VALUE_MAX];
+
   string str, path;
 
   mConst.SetConst();
@@ -769,8 +771,19 @@ void DataManager::SetDefaultValues()
   
   mConst.SetValue(OF_STATUS_H_S, OF_STATUS_H);
   mConst.SetValue(OF_HIDE_NOTCH_S, OF_HIDE_NOTCH);
-  mConst.SetValue(OF_STATUS_INDENT_LEFT_S, OF_STATUS_INDENT_LEFT);
-  mConst.SetValue(OF_STATUS_INDENT_RIGHT_S, OF_STATUS_INDENT_RIGHT);
+  
+  property_get("fox.status.left.offset", propval, "");
+   if (strlen(propval) > 0)
+	mData.SetValue(OF_STATUS_INDENT_LEFT_S, propval);
+   else
+	mData.SetValue(OF_STATUS_INDENT_LEFT_S, OF_STATUS_INDENT_LEFT);
+
+  property_get("fox.status.right.offset", propval, "");
+   if (strlen(propval) > 0)
+	mData.SetValue(OF_STATUS_INDENT_RIGHT_S, propval);
+   else
+	mData.SetValue(OF_STATUS_INDENT_RIGHT_S, OF_STATUS_INDENT_RIGHT);
+
   mConst.SetValue(OF_CLOCK_POS_S, OF_CLOCK_POS);
   mConst.SetValue(OF_ALLOW_DISABLE_NAVBAR_S, OF_ALLOW_DISABLE_NAVBAR);
   mConst.SetValue(OF_FLASHLIGHT_ENABLE_STR, OF_FLASHLIGHT_ENABLE);
