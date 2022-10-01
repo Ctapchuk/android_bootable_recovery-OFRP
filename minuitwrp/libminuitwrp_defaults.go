@@ -116,7 +116,7 @@ func globalFlags(ctx android.BaseContext) []string {
 	}
 
 	if getMakeVars(ctx, "TARGET_RECOVERY_OVERSCAN_PERCENT") != "" {
-		cflags = append(cflags, "-DDOVERSCAN_PERCENT="+getMakeVars(ctx, "TARGET_RECOVERY_OVERSCAN_PERCENT"))
+		cflags = append(cflags, "-DOVERSCAN_PERCENT="+getMakeVars(ctx, "TARGET_RECOVERY_OVERSCAN_PERCENT"))
 	} else {
 		cflags = append(cflags, "-DOVERSCAN_PERCENT=0")
 	}
