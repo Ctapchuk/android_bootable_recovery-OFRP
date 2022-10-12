@@ -2,7 +2,7 @@
 	Copyright 2012-2020 TeamWin
 	This file is part of TWRP/TeamWin Recovery Project.
 
-	Copyright (C) 2018-2021 OrangeFox Recovery Project
+	Copyright (C) 2018-2022 OrangeFox Recovery Project
 	This file is part of the OrangeFox Recovery Project.
 
 	TWRP is free software: you can redistribute it and/or modify
@@ -390,11 +390,23 @@ static bool Fox_CheckReload_Themes() {
 	found = true;
     }
 
-  if ((TWFunc::Fox_Property_Get("fbe.data.wrappedkey") == "true") ||
+  // FBE
+  if (!found) {
+     if ((TWFunc::Fox_Property_Get("fbe.data.wrappedkey") == "true") ||
 	(TWFunc::Fox_Property_Get("fbe.metadata.wrappedkey") == "true") ||
 	(!TWFunc::Fox_Property_Get("fbe.filenames").empty()) ||
 	(!TWFunc::Fox_Property_Get("fbe.contents").empty())) 
      found = true;
+  }
+
+  // FDE
+  if (!found) {
+     if ((TWFunc::Fox_Property_Get("dev.mnt.blk.data") == "dm-0") ||
+	(TWFunc::Fox_Property_Get("dev.mnt.blk.sdcard") == "dm-0") ||
+	(TWFunc::Fox_Property_Get("ro.crypto.fs_crypto_blkdev") == "/dev/block/dm-0") ||
+	(TWFunc::Fox_Property_Get("ro.crypto.state") == "encrypted" && TWFunc::Fox_Property_Get("ro.crypto.type") == "block"))
+     found = true;
+   }
 
   if (!found)
      return false;
