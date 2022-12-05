@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
  *
- * Copyright (C) 2018-2021 OrangeFox Recovery Project
+ * Copyright (C) 2018-2022 OrangeFox Recovery Project
  * This file is part of the OrangeFox Recovery Project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,6 +90,8 @@ static int Fox_Current_ROM_IsMIUI = 0; // is the currently installed ROM a MIUI 
 #define FOX_STARTUP_SCRIPT "/sbin/foxstart.sh"
 #define FOX_PS_BIN "/FFiles/ps"
 #define FOX_NEW_MAGISKBOOT "/FFiles/magiskboot_new"
+#define FOX_MAGISK_ZIP_INSTALLER "Magisk.zip"
+#define FOX_MAGISK_UNINSTALLER "Magisk_uninstall.zip"
 
 #define FOX_PASS_IN_PERSIST "/persist/.fsec"
 
