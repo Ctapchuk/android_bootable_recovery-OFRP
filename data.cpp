@@ -1142,6 +1142,7 @@ void DataManager::SetDefaultValues()
   mData.SetValue(FOX_COMPATIBILITY_DEVICE, FOX_DEVICE);
   mData.SetValue("found_fox_overwriting_rom", 0);
   mData.SetValue("fox_dfe_formatted", "0"); // whether data has been formatted with disable forced encryption enabled
+  mData.SetValue(FOX_USE_F2FS_COMPRESSION , "0");
 
   // End of the OrangeFox variables
 

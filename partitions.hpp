@@ -39,6 +39,8 @@
 #define REPACK_ORIG_DIR "/tmp/repackorig/"
 #define REPACK_NEW_DIR "/tmp/repacknew/"
 
+#define NOT_AVAILABLE -2
+
 using namespace std;
 
 // BasePartition is used for overriding so we can run custom, device
@@ -440,6 +442,7 @@ public:
 	bool Unmap_Super_Devices();                                               // Unmap super devices in TWRP
 	bool Check_Pending_Merges();                                              // Check and run pending merges on data for VAB devices
 	void Refresh_Mounting_Info();                                             // Returns read/write access for dynamic partitions if necessary
+	void Update_data_props();  						  // Update some props required for data formatting
 
 #ifdef TW_HAS_MTP
 	bool is_MTP_Enabled(void);						  // returns whether MTP is already enabled

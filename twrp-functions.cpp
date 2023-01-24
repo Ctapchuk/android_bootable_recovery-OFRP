@@ -29,6 +29,7 @@
 #include <time.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <fstab/fstab.h>
 #include <sys/mount.h>
 #include <sys/reboot.h>
 #include <sys/sendfile.h>
@@ -53,6 +54,7 @@
 #include "abx-functions.hpp"
 #include "twcommon.h"
 #include "gui/gui.hpp"
+#include <fs_mgr_priv_boot_config.h>
 #ifndef BUILD_TWRPTAR_MAIN
 #include "data.hpp"
 #include "partitions.hpp"
@@ -1341,16 +1343,21 @@ string TWFunc::Get_Current_Date()
 }
 
 string TWFunc::System_Property_Get(string Prop_Name) {
-	return System_Property_Get(Prop_Name, PartitionManager, PartitionManager.Get_Android_Root_Path(), "build.prop");
+	return Partition_Property_Get(Prop_Name, PartitionManager, PartitionManager.Get_Android_Root_Path(), "build.prop");
 }
 
-string TWFunc::System_Property_Get(string Prop_Name, TWPartitionManager &PartitionManager, string Mount_Point, string prop_file_name) {
+string TWFunc::Partition_Property_Get(string Prop_Name, TWPartitionManager &PartitionManager, string Mount_Point, string prop_file_name) {
 	bool mount_state = PartitionManager.Is_Mounted_By_Path(Mount_Point);
 	std::vector<string> buildprop;
 	string propvalue;
+	string prop_file;
 	if (!PartitionManager.Mount_By_Path(Mount_Point, true))
 		return propvalue;
-	string prop_file = Mount_Point + "/system/" + prop_file_name;
+	if (Mount_Point == PartitionManager.Get_Android_Root_Path()) {
+		prop_file = Mount_Point + "/system/" + prop_file_name;
+	} else {
+		prop_file = Mount_Point + "/" + prop_file_name;
+	}
 	if (!TWFunc::Path_Exists(prop_file)) {
 		LOGINFO("Unable to locate file: %s\n", prop_file.c_str());
 		return propvalue;
@@ -1446,7 +1453,15 @@ int TWFunc::Property_Override(string Prop_Name, string Prop_Value) {
     if (TWFunc::Fox_Property_Set(Prop_Name, Prop_Value))
     	return 0;
     else
-    	return -1;
+    	return NOT_AVAILABLE;
+#endif
+}
+
+int TWFunc::Delete_Property(string Prop_Name) {
+#ifdef TW_INCLUDE_LIBRESETPROP
+    return delprop(Prop_Name.c_str(), false);
+#else
+    return NOT_AVAILABLE;
 #endif
 }
 
@@ -5001,6 +5016,32 @@ bool TWFunc::Magiskboot_Repack_Patch_VBMeta()
    #else
    return false;
    #endif
+}
+
+std::string GetFstabPath() {
+	for (const char* prop : {"fstab_suffix", "hardware", "hardware.platform"}) {
+		std::string suffix;
+
+		if (!fs_mgr_get_boot_config(prop, &suffix)) continue;
+
+		for (const char* prefix : {// late-boot/post-boot locations
+			"/odm/etc/fstab.", "/vendor/etc/fstab.",
+			// early boot locations
+			"/system/etc/fstab.", "/first_stage_ramdisk/system/etc/fstab.",
+			"/fstab.", "/first_stage_ramdisk/fstab."}) {
+				std::string fstab_path = prefix + suffix;
+				LOGINFO("%s: %s\n", __func__, fstab_path.c_str());
+				if (access(fstab_path.c_str(), F_OK) == 0) return fstab_path;
+		}
+	}
+
+	return "";
+}
+
+bool TWFunc::Find_Fstab(string &fstab) {
+	fstab = GetFstabPath();
+	if (fstab == "") return false;
+	return true;
 }
 
 //

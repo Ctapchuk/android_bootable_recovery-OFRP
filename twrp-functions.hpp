@@ -132,7 +132,7 @@ public:
 	static bool write_to_file(const string& fn, const std::vector<string> lines); // write vector of strings line by line with newlines
 	static bool Try_Decrypting_Backup(string Restore_Path, string Password); // true for success, false for failed to decrypt
 	static string System_Property_Get(string Prop_Name);                // Returns value of Prop_Name from reading /system/build.prop
-	static string System_Property_Get(string Prop_Name, TWPartitionManager &PartitionManager, string Mount_Point, string prop_file_name);     // Returns value of Prop_Name from reading provided prop file
+	static string Partition_Property_Get(string Prop_Name, TWPartitionManager &PartitionManager, string Mount_Point, string prop_file_name);     // Returns value of Prop_Name from reading provided prop file
   	static bool CheckWord(std::string filename, std::string search); // Check if the word exist in the txt file and then return true or false 
 	static string File_Property_Get(string File_Path, string Prop_Name);                // Returns specified property value from the file
 	static string Get_Current_Date(void);                               // Returns the current date in ccyy-m-dd--hh-nn-ss format
@@ -188,7 +188,9 @@ public:
 	static std::string get_log_dir(); // return recovery log storage directory
 	static void check_selinux_support(); // print whether selinux support is enabled to console
 	static int Property_Override(string Prop_Name, string Prop_Value); // Override properties (including ro. properties)
-	static void Set_Sbin_Dir_Executable_Flags(void); // set the executable flags of all the files in the /sbin/ directory
+	static void Set_Sbin_Dir_Executable_Flags(void); // set the executable flags of all the files in the /sbin/ 
+	static int Delete_Property(string Prop_Name); // Delete properties (non-persistent properties only)
+	static bool Find_Fstab(string &fstab);
 
 #ifdef TW_INCLUDE_CRYPTO
 #ifdef USE_FSCRYPT_POLICY_V1

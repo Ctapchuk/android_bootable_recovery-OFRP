@@ -92,6 +92,7 @@ LOCAL_C_INCLUDES += \
     system/core/fs_mgr/include/ \
     system/core/fs_mgr/libdm/include/ \
     system/core/fs_mgr/liblp/include/ \
+    system/core/fs_mgr/ \
     system/gsid/include/ \
     system/core/init/ \
     system/extras/ext4_utils/include \
@@ -342,6 +343,7 @@ ifeq ($(TW_INCLUDE_CRYPTO), true)
     ifeq ($(LEGACY_HW_DISK_ENCRYPTION), true)
        LOCAL_CFLAGS += -DLEGACY_HW_DISK_ENCRYPTION
     endif
+    TW_INCLUDE_LIBRESETPROP := true
 endif
 WITH_CRYPTO_UTILS := \
     $(if $(wildcard system/core/libcrypto_utils/android_pubkey.c),true)
@@ -471,6 +473,11 @@ endif
 ifeq ($(TW_INCLUDE_RESETPROP), true)
 TWRP_REQUIRED_MODULES += \
     resetprop
+endif
+
+ifeq ($(TW_INCLUDE_LIBRESETPROP), true)
+TWRP_REQUIRED_MODULES += \
+    libresetprop
 endif
 
 TWRP_REQUIRED_MODULES += \

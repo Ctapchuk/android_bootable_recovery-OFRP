@@ -125,6 +125,8 @@ using android::fs_mgr::MetadataBuilder;
 extern bool datamedia;
 std::vector<users_struct> Users_List;
 
+std::string additional_fstab = "/etc/additional.fstab";
+
 TWPartitionManager::TWPartitionManager(void) {
 	mtp_was_enabled = false;
 	mtp_write_fd = -1;
@@ -158,6 +160,51 @@ int TWPartitionManager::Set_Crypto_Type(const char* crypto_type) {
 	// Sleep for a bit so that services can start if needed
 	sleep(1);
 	return 0;
+}
+
+void inline Reset_Prop_From_Partition(std::string prop, std::string def, TWPartition *ven, TWPartition *odm) {
+	bool prop_on_odm = false, prop_on_vendor = false;
+	string prop_value;
+	if (odm) {
+		string odm_prop = TWFunc::Partition_Property_Get(prop, PartitionManager, "/odm", "etc/build.prop");
+		if (!odm_prop.empty()) {
+			prop_on_odm = true;
+			if (TWFunc::Property_Override(prop, odm_prop) == NOT_AVAILABLE) {
+				LOGERR("Unable to override '%s' due to missing libresetprop\n", prop.c_str());
+			} else {
+				prop_value = android::base::GetProperty(prop, "");
+				LOGINFO("Setting '%s' to '%s' from /odm/etc/build.prop\n", prop.c_str(), prop_value.c_str());
+			}
+		}
+	}
+	if (ven) {
+		string vendor_prop = TWFunc::Partition_Property_Get(prop, PartitionManager, "/vendor", "build.prop");
+		if (!vendor_prop.empty()) {
+			prop_on_vendor = true;
+			if (TWFunc::Property_Override(prop, vendor_prop) == NOT_AVAILABLE) {
+				LOGERR("Unable to override '%s' due to missing libresetprop\n", prop.c_str());
+			} else {
+				prop_value = android::base::GetProperty(prop, "");
+				LOGINFO("Setting '%s' to '%s' from /vendor/build.prop\n", prop.c_str(), prop_value.c_str());
+			}
+		}
+	}
+	if (!prop_on_odm && !prop_on_vendor && !def.empty()) {
+		if (TWFunc::Property_Override(prop, def) == NOT_AVAILABLE) {
+			LOGERR("Unable to override '%s' due to missing libresetprop\n", prop.c_str());
+		} else {
+			prop_value = android::base::GetProperty(prop, "");
+			LOGINFO("Setting '%s' to default value (%s)\n", prop.c_str(), prop_value.c_str());
+		}
+	}
+	prop_value = android::base::GetProperty(prop, "");
+	if (!prop_on_odm && !prop_on_vendor && !prop_value.empty() && def.empty()) {
+		if(TWFunc::Delete_Property(prop) == NOT_AVAILABLE) {
+			LOGERR("Unable to delete '%s' due to missing libresetprop\n", prop.c_str());
+		} else {
+			LOGINFO("Deleting property '%s'\n", prop.c_str());
+		}
+	}
 }
 
 int TWPartitionManager::Process_Fstab(string Fstab_Filename, bool Display_Error, bool recovery_mode) {
@@ -266,9 +313,13 @@ int TWPartitionManager::Process_Fstab(string Fstab_Filename, bool Display_Error,
 			mapit->second.fstab_line = NULL;
 		}
 	}
+	
 	if (Get_Super_Status()) {
 		Setup_Super_Devices();
 	}
+	
+	TWPartitionManager::Update_data_props();
+	
 	LOGINFO("Done processing fstab files\n");
 
 	if (recovery_mode) {
@@ -300,7 +351,7 @@ void TWPartitionManager::Setup_Fstab_Partitions(bool Display_Error) {
 				andsec_partition = (*iter);
 			else
 				(*iter)->Has_Android_Secure = false;
-
+				
 			if ((*iter)->Is_Super && !Prepare_Super_Volume(*iter))
 				Partitions.erase(iter--);
 		}
@@ -4649,4 +4700,39 @@ void TWPartitionManager::Refresh_Mounting_Info(void) {
 		}
 	}
 }
+
+void TWPartitionManager::Update_data_props(void) {
+	TWPartition* ven = PartitionManager.Find_Partition_By_Path("/vendor");
+	TWPartition* odm = PartitionManager.Find_Partition_By_Path("/odm");
+	if (ven) ven->Mount(true);
+	if (odm) odm->Mount(true);
+
+	string Fstab_Path;
+	DataManager::SetValue(FOX_USE_F2FS_COMPRESSION, "0");
+	if (TWFunc::Find_Fstab(Fstab_Path)) {
+			std::string Name;
+			std::vector<std::string> Data;
+
+			if (TWFunc::read_file(Fstab_Path, Data) == 0) {
+				for (int index = 0; index < Data.size(); index++) {
+					Name = Data.at(index);
+
+					if (Name[0] == '#')
+						continue;
+
+					if (Name.find("fscompress") != string::npos)
+						DataManager::SetValue(FOX_USE_F2FS_COMPRESSION, "1");
+				}
+			} else LOGINFO("Unable to read file '%s'\n", Fstab_Path.c_str());
+
+	} else LOGINFO("Unable to parse vendor fstab\n");
+
+	Reset_Prop_From_Partition("external_storage.projid.enabled", "", ven, odm);
+	Reset_Prop_From_Partition("external_storage.casefold.enabled", "", ven, odm);
+	Reset_Prop_From_Partition("external_storage.sdcardfs.enabled", "", ven, odm);
+
+	if (ven) ven->UnMount(true);
+	if (odm) odm->UnMount(true);
+}
+
 //*

@@ -152,6 +152,7 @@ static int Fox_Current_ROM_IsMIUI = 0; // is the currently installed ROM a MIUI 
 #define FOX_RUN_SURVIVAL_BACKUP         "fox_run_survival_backup"
 #define FOX_METADATA_PRE_BUILD          "fox_pre_build"
 #define FOX_ENCRYPTED_DEVICE		"fox_encrypted_device"
+#define FOX_USE_F2FS_COMPRESSION        "fox_need_data_f2fs_compression"
 
 //
 #define TW_USE_COMPRESSION_VAR      	"tw_use_compression"
