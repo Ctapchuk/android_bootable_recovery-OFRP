@@ -109,12 +109,6 @@
 					<icon res="bs_adv_se"/>
 					<action function="page">fixcontexts</action>
 				</listitem>
-				<listitem name="{@dumlock_hdr}">
-					<condition var1="utils_show" var2="1"/>
-					<condition var1="tw_show_dumlock" var2="1"/>
-					<icon res="bs_adv_se"/>
-					<action function="page">htcdumlock</action>
-				</listitem>
 				<listitem name="{@inject_twrp_btn}">
 					<condition var1="utils_show" var2="1"/>
 					<condition var1="tw_has_injecttwrp" var2="1"/>
@@ -581,59 +575,6 @@
 				<touch key="back"/>
 				<action function="set">partitionlisterror=0</action>
 				<action function="page">partitionoptions</action>
-			</action>
-		</page>
-
-		<page name="htcdumlock">
-			<listbox style="btn_list">
-				<placement x="0" y="%ab_h%" w="%screen_w%" h="%bl_fullscreen_h%"/>
-				<icon selected="bs_adv_se" unselected="bs_adv_se" />
-				<listitem name="{@dumlock_restore_btn}">
-					<action function="set">tw_back=htcdumlock</action>
-					<action function="set">tw_action=htcdumlockrestoreboot</action>
-					<action function="set">tw_text1={@dumlock_restore_confirm}</action>
-					<action function="set">tw_action_text1={@dumlock_restoring}</action>
-					<action function="set">tw_complete_text1={@dumlock_restore_complete}</action>
-					<action function="set">tw_slider_text={@swipe_to_confirm}</action>
-					<action function="page">confirm_action</action>
-				</listitem>
-				<listitem name="{@dumlock_reflash_btn}">
-					<action function="set">tw_back=htcdumlock</action>
-					<action function="set">tw_action=htcdumlockreflashrecovery</action>
-					<action function="set">tw_text1={@dumlock_reflash_confirm}</action>
-					<action function="set">tw_action_text1={@dumlock_reflashing}</action>
-					<action function="set">tw_complete_text1={@dumlock_reflash_complete}</action>
-					<action function="set">tw_slider_text={@swipe_to_confirm}</action>
-					<action function="page">confirm_action</action>
-				</listitem>
-				<listitem name="{@dumlock_install_btn}">
-					<action function="set">tw_back=htcdumlock</action>
-					<action function="set">tw_action=installhtcdumlock</action>
-					<action function="set">tw_text1={@dumlock_install_confirm}</action>
-					<action function="set">tw_action_text1={@dumlock_installing}</action>
-					<action function="set">tw_complete_text1={@dumlock_install_complete}</action>
-					<action function="set">tw_slider_text={@swipe_to_confirm}</action>
-					<action function="page">confirm_action</action>
-				</listitem>
-			</listbox>
-			
-			<template name="base"/>
-
-			<text style="text_ab_title">
-				<placement x="%col1_x_indent%" y="%ab_bc_y%"/>
-				<text>{@dumlock_hdr}</text>
-			</text>
-
-			<template name="gestures"/>
-
-			<action>
-				<touch key="home"/>
-				<action function="page">main</action>
-			</action>
-
-			<action>
-				<touch key="back"/>
-				<action function="page">advanced</action>
 			</action>
 		</page>
 
