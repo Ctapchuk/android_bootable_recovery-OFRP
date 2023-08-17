@@ -4694,14 +4694,20 @@ void TWPartitionManager::Setup_Super_Partition() {
 	int max_display_size = 3; // total of 4 items since we start at 0
 
 	for (auto partition: Super_Partition_List) {
-		superPartition->Backup_Display_Name = superPartition->Backup_Display_Name + partition;
-		if ((orig_list_size - list_size) == max_display_size) {
-			break;
+		TWPartition* part_iter = Find_Partition_By_Path("/" + partition);
+		
+		if (part_iter != NULL && part_iter->Is_Present) {
+			superPartition->Backup_Display_Name = superPartition->Backup_Display_Name + partition;
+			if ((orig_list_size - list_size) == max_display_size) {
+				break;
+			}
+			if (list_size != 1)
+				superPartition->Backup_Display_Name = superPartition->Backup_Display_Name + " ";
+			list_size--;
 		}
-		if (list_size != 1)
-			superPartition->Backup_Display_Name = superPartition->Backup_Display_Name + " ";
-		list_size--;
 	}
+	if (superPartition->Backup_Display_Name[superPartition->Backup_Display_Name.size()-1] == ' ')
+        	superPartition->Backup_Display_Name.erase(superPartition->Backup_Display_Name.size()-1, 1);
 	superPartition->Backup_Display_Name += ")";
 	superPartition->Can_Flash_Img = true;
 	superPartition->Current_File_System = "emmc";
