@@ -53,7 +53,7 @@
 				<action function="set">tw_simulate_actions=0</action>
 				<action function="set">tw_simulate_fail=0</action>
 				<action function="mount">data</action>
-				<action function="fileexists">/sdcard/Fox/OTA/boot.emmc.win</action>
+				<action function="fileexists">%fox_ota_path%/boot.emmc.win</action>
 			</action>
 
 			<action>
@@ -243,25 +243,25 @@
 				<listitem name="Set screen size to 1920">
 					<condition var1="screen_original_h" op="!=" var2="1920"/>
 					<action function="ftls">
-						[ ! -d "/sdcard/Fox/.navbar" ] &amp;&amp; mkdir -p "/sdcard/Fox/.navbar"
+						[ ! -d "%fox_navbar_path%" ] &amp;&amp; mkdir -p "%fox_navbar_path%"
 						cat "/twres/themes/sed/navbar.xml" | sed -e "s/#NAVBAR_DISABLE#/0/g;
-						s/#SCREEN_H#/1920/g" > /sdcard/Fox/.navbar/navbar.xml;
+						s/#SCREEN_H#/1920/g" > %fox_navbar_path%/navbar.xml;
 					</action>
 					<action function="reload"/>
 				</listitem>
 				<listitem name="Set screen size to %screen_original_h%">
 					<action function="ftls">
-						[ ! -d "/sdcard/Fox/.navbar" ] &amp;&amp; mkdir -p "/sdcard/Fox/.navbar"
+						[ ! -d "%fox_navbar_path%" ] &amp;&amp; mkdir -p "%fox_navbar_path%"
 						cat "/twres/themes/sed/navbar.xml" | sed -e "s/#NAVBAR_DISABLE#/0/g;
-						s/#SCREEN_H#/%screen_original_h%/g" > /sdcard/Fox/.navbar/navbar.xml;
+						s/#SCREEN_H#/%screen_original_h%/g" > %fox_navbar_path%/navbar.xml;
 					</action>
 					<action function="reload"/>
 				</listitem>
 				<listitem name="Set screen size to %screen_original_h% + 96">
 					<action function="ftls">
-						[ ! -d "/sdcard/Fox/.navbar" ] &amp;&amp; mkdir -p "/sdcard/Fox/.navbar"
+						[ ! -d "%fox_navbar_path%" ] &amp;&amp; mkdir -p "%fox_navbar_path%"
 						cat "/twres/themes/sed/navbar.xml" | sed -e "s/#NAVBAR_DISABLE#/0/g;
-						s/#SCREEN_H#/$(expr %screen_original_h% + 96)/g" > /sdcard/Fox/.navbar/navbar.xml;
+						s/#SCREEN_H#/$(expr %screen_original_h% + 96)/g" > %fox_navbar_path%/navbar.xml;
 					</action>
 					<action function="reload"/>
 				</listitem>
@@ -270,7 +270,7 @@
 					<action function="page">scaling</action>
 				</listitem>
 				<listitem name="Reset scaling">
-					<action function="ftls">rm -f /sdcard/Fox/scaling; pkill recovery</action>
+					<action function="ftls">rm -f %fox_home_path%/scaling; pkill recovery</action>
 				</listitem>
 			</listbox>
 
@@ -491,7 +491,7 @@
 				<text>%scaling_dbg%</text>
 				<data name="scaling_dbg"/>
 				<restrict minlen="1" maxlen="6" allow="1234567890."/>
-				<action function="ftls">echo "%scaling_dbg%" > /sdcard/Fox/scaling; pkill recovery</action>
+				<action function="ftls">echo "%scaling_dbg%" > %fox_home_path%/scaling; pkill recovery</action>
 			</input>
 
 			<fill color="%accent%">

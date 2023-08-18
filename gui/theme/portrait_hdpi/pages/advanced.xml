@@ -35,7 +35,7 @@
 				</listitem>
 				<listitem name="{@hint_ffiles_missing}">
 					<condition var1="of_hide_data_hint" op="!=" var2="1"/>
-					<condition var1="fileexists" op="!=" var2="/sdcard/Fox/FoxFiles"/>
+					<condition var1="fileexists" op="!=" var2="%fox_home_files%"/>
 					<icon res="help"/>
 					<action function="overlay">dialog_lost_info</action>
 				</listitem>
@@ -187,7 +187,7 @@
 				<listitem name="AromaFM">
 					<condition var1="utils_show" var2="1"/>
 					<condition var1="aroma_help" op="!=" var2="1"/>
-					<condition var1="fileexists" var2="/sdcard/Fox/FoxFiles/AromaFM/AromaFM.zip"/>
+					<condition var1="fileexists" var2="%aroma_fm_zip%"/>
 					<icon res="bs_adv_aroma"/>
 					<action function="set">aroma_help=1</action>
 				</listitem>
@@ -203,7 +203,7 @@
 					<action function="set">fox_inject_after_zip=0</action>
 					<action function="set">tw_screen_timeout_temp=%tw_screen_timeout_secs%</action>
 					<action function="set">tw_screen_timeout_secs=0</action>
-					<action function="set">tw_filename=/sdcard/Fox/FoxFiles/AromaFM/AromaFM.zip</action>
+					<action function="set">tw_filename=%aroma_fm_zip%</action>
 					<action function="set">qcount_temp=1</action>
 					<action function="queuezip"/>
 					<action function="flash">aroma_busy</action>
@@ -302,9 +302,9 @@
 				<action function="set">fox_m_author=topjohnwu</action>
 				<action function="set">fox_m_name={@module_install} Magisk %magisk_ver%</action>
 				<action function="set">tw_file=%fox_magisk_zip_installer%</action>
-				<action function="set">tw_filename=/sdcard/Fox/FoxFiles/%fox_magisk_zip_installer%</action>
+				<action function="set">tw_filename=%fox_home_files%/%fox_magisk_zip_installer%</action>
 				<action function="set">tw_filecheck=%tw_filename%</action>
-				<action function="set">tw_zip_location=/sdcard/Fox/FoxFiles</action>
+				<action function="set">tw_zip_location=%fox_home_files%</action>
 				<action function="queuezip"/>
 				<action function="set">tw_notexistpage=fox_modules_confirm</action>
 				<action function="set">tw_existpage=fox_modules_confirm</action>
@@ -318,9 +318,9 @@
 				<action function="set">fox_m_author=topjohnwu</action>
 				<action function="set">fox_m_name={@module_uninstall} Magisk</action>
 				<action function="set">tw_file=%fox_magisk_uninstaller%</action>
-				<action function="set">tw_filename=/sdcard/Fox/FoxFiles/%fox_magisk_uninstaller%</action>
+				<action function="set">tw_filename=%fox_home_files%/%fox_magisk_uninstaller%</action>
 				<action function="set">tw_filecheck=%tw_filename%</action>
-				<action function="set">tw_zip_location=/sdcard/Fox/FoxFiles</action>
+				<action function="set">tw_zip_location=%fox_home_files%</action>
 				<action function="queuezip"/>
 				<action function="set">tw_notexistpage=fox_modules_confirm</action>
 				<action function="set">tw_existpage=fox_modules_confirm</action>
@@ -445,15 +445,15 @@
 				</listitem>
 				<listitem name="{@module_initd}">
 					<condition var1="fox_vab_device" op="!=" var2="1"/>
-					<condition var1="fileexists" var2="/sdcard/Fox/FoxFiles/OF_initd.zip"/>
+					<condition var1="fileexists" var2="%of_initd_zip%"/>
 					<icon res="bs_btn_archive"/>
 					<action function="queueclear"/>
 					<action function="set">fox_m_author=DarthJabba9</action>
 					<action function="set">fox_m_name={@module_initd}</action>
 					<action function="set">tw_file=OF_initd.zip</action>
-					<action function="set">tw_filename=/sdcard/Fox/FoxFiles/OF_initd.zip</action>
+					<action function="set">tw_filename=%of_initd_zip%</action>
 					<action function="set">tw_filecheck=%tw_filename%</action>
-					<action function="set">tw_zip_location=/sdcard/Fox/FoxFiles</action>
+					<action function="set">tw_zip_location=%fox_home_files%</action>
 					<action function="queuezip"/>
 					<action function="set">tw_notexistpage=fox_modules_confirm</action>
 					<action function="set">tw_existpage=fox_modules_confirm</action>

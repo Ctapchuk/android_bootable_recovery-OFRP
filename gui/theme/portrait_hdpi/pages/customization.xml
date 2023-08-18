@@ -223,7 +223,7 @@
 			</image>
 			
 			<button style="actionbar">
-				<condition var1="fileexists" var2="/sdcard/Fox/.theme"/>
+				<condition var1="fileexists" var2="fox_theme_path"/>
 				<condition var1="needs_repack" var2="1"/>
 				<placement x="%ab_btn2_x%" y="%ab_y%" placement="4"/>
 				<action function="set">remove_theme=1</action>
@@ -231,14 +231,14 @@
 			</button>
 
 			<image>
-				<condition var1="fileexists" var2="/sdcard/Fox/.theme"/>
+				<condition var1="fileexists" var2="fox_theme_path"/>
 				<condition var1="needs_repack" var2="1"/>
 				<placement x="%ab_btn2_x%" y="%ab_y%" placement="4"/>
 				<image resource="actionbar_delete"/>
 			</image>
 			
 			<button style="actionbar">
-				<condition var1="fileexists" var2="/sdcard/Fox/.theme"/>
+				<condition var1="fileexists" var2="fox_theme_path"/>
 				<condition var1="needs_repack" op="!=" var2="1"/>
 				<placement x="%ab_btn1_x%" y="%ab_y%" placement="4"/>
 				<action function="set">remove_theme=1</action>
@@ -246,7 +246,7 @@
 			</button>
 
 			<image>
-				<condition var1="fileexists" var2="/sdcard/Fox/.theme"/>
+				<condition var1="fileexists" var2="fox_theme_path"/>
 				<condition var1="needs_repack" op="!=" var2="1"/>
 				<placement x="%ab_btn1_x%" y="%ab_y%" placement="4"/>
 				<image resource="actionbar_delete"/>
@@ -1928,10 +1928,10 @@
 				<action function="ftls">
 					#Remove theme
 					if [[ '%remove_theme%' = '1' ]] || [[ '%theme_pie_tmp%' = '1' &amp;&amp; '%theme_style_tmp%' = 'Night' &amp;&amp; '%theme_accent_tmp%' = 'Orange' &amp;&amp; '%theme_font_tmp%' = 'Roboto' &amp;&amp; '%theme_sec_font_tmp%' = 'GoogleSans' &amp;&amp; '%theme_font_size_tmp%' = 'n' ]]; then
-						[ -d "/sdcard/Fox/.theme" ] &amp;&amp; rm -rf /sdcard/Fox/.theme;
+						[ -d "%fox_theme_path%" ] &amp;&amp; rm -rf %fox_theme_path%;
 						[[ '%update_navbar%' = '1' ]] || exit;
 					else
-						if [ ! -d "/sdcard/Fox/.theme" ]; then mkdir -p "/sdcard/Fox/.theme"; fi;
+						if [ ! -d "%fox_theme_path%" ]; then mkdir -p "%fox_theme_path%"; fi;
 					fi;
 
 					#Fonts
@@ -1962,22 +1962,22 @@
 						s/#SECONDARY_FONT_REG#/%theme_sec_font_tmp%${sec_reg}/g;
 						s/#PRIMARY_NAME#/%theme_font_tmp%/g;
 						s/#SECONDARY_NAME#/%theme_sec_font_tmp%/g
-						" > /sdcard/Fox/.theme/font.xml;
+						" > %fox_theme_path%/font.xml;
 					fi;
 				
 					#Navbar
 					if [[ '%update_navbar%' = '1' ]]; then
-						if [ ! -d "/sdcard/Fox/.navbar" ]; then mkdir -p "/sdcard/Fox/.navbar"; fi;
+						if [ ! -d "%fox_navbar_path%" ]; then mkdir -p "%fox_navbar_path%"; fi;
 						cat "/twres/themes/sed/navbar.xml" | sed -e "
 						s/#NAVBAR_DISABLE#/%navbar_disable_tmp%/g;
 						s/#RGE#/%real_gestures_enable_tmp%/g;
 						s/#SCREEN_H#/$(expr %screen_original_h% + %navbar_disable_add_tmp%)/g
-						" > /sdcard/Fox/.navbar/navbar.xml;
+						" > %fox_navbar_path%/navbar.xml;
 					fi;
 				
 					#Style
 					if [[ '%update_style%' = '1' ]]; then
-						cat "/twres/themes/styles/%theme_style_tmp%.xml" > /sdcard/Fox/.theme/style.xml;
+						cat "/twres/themes/styles/%theme_style_tmp%.xml" > %fox_theme_path%/style.xml;
 					fi;
 				
 					#Accent
@@ -1989,7 +1989,7 @@
 							s/#COLOR#/%theme_accent_dark_tmp%/g;
 							s/#COLOR_LIGHT#/%theme_accent_light_tmp%/g;
 							s/#COLOR_DARK#/%theme_accent_dark_tmp%/g
-							" > /sdcard/Fox/.theme/accent.xml;
+							" > %fox_theme_path%/accent.xml;
 						else
 							cat "/twres/themes/sed/accent.xml" | sed -e "
 							s/#ACCENT#/%theme_accent_tmp%/g;
@@ -1997,7 +1997,7 @@
 							s/#COLOR#/%theme_accent_light_tmp%/g;
 							s/#COLOR_LIGHT#/%theme_accent_light_tmp%/g;
 							s/#COLOR_DARK#/%theme_accent_dark_tmp%/g
-							" > /sdcard/Fox/.theme/accent.xml;
+							" > %fox_theme_path%/accent.xml;
 						fi;
 					fi;
 
@@ -2009,20 +2009,20 @@
 								s/#ACCENT#/D%theme_accent_tmp%/g;
 								s/#A_COLOR#/accent/g;
 								s/#ENABLE#/1/g
-								" > /sdcard/Fox/.theme/action.xml;
+								" > %fox_theme_path%/action.xml;
 							else
 								cat "/twres/themes/sed/action.xml" | sed -e "
 								s/#ACCENT#/%theme_accent_tmp%/g;
 								s/#A_COLOR#/accent/g;
 								s/#ENABLE#/1/g
-								" > /sdcard/Fox/.theme/action.xml;
+								" > %fox_theme_path%/action.xml;
 							fi;
 						else
 							cat "/twres/themes/sed/action.xml" | sed -e "
 							s/#ACCENT#/%theme_style_act_tmp%/g;
 							s/#A_COLOR#/text_action/g;
 							s/#ENABLE#/0/g
-							" > /sdcard/Fox/.theme/action.xml;
+							" > %fox_theme_path%/action.xml;
 						fi
 					fi;
 				</action>
