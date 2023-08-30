@@ -115,8 +115,8 @@
 
 			<button style="actionbar">
 				<placement x="%ab_btn1_x%" y="%ab_y%" placement="4"/>
-				<action function="set">general_back=wipe</action>
-				<action function="page">ext_general</action>
+				<action function="set">general_back=formatdata</action>
+				<action function="page">ext_context</action>
 			</button>
 
 			<image>
