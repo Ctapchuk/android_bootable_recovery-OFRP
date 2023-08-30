@@ -193,6 +193,8 @@ public:
 	string Backup_Display_Name;                                               // Name displayed in the partition list for backup selection
 	string MTD_Name;                                                          // Name of the partition for MTD devices
 	bool Is_Present;                                                          // Indicates if the partition is currently present as a block device
+	bool Is_Super_Flash;                                                      // Indicates if the partition is available for flashing as dynamic partition
+	string Super_Volume_Name;                                                 // Name of the dynamic partition which available for flashing
 	string Crypto_Key_Location;                                               // Location of the crypto key used for decrypting encrypted data partitions
 	unsigned int MTP_Storage_ID;
 	string Adopted_GUID;
@@ -255,6 +257,7 @@ private:
 	bool Flash_Image_FI(const string& Filename, ProgressTracking *progress);  // Flashes an image to the partition using flash_image for mtd nand
 	void ExcludeAll(const string& path);                                      // Adds an exclusion for path to both the backup and wipe exclusion lists
 	void Fox_Add_Backup_Exclusions(void);					  // Excludes "troublesome" directories from backups, to avoid predictable "error 255" problems
+	bool Convert_Image_RW(const string& image_path);                          // Convert r/o system images to r/w images
 
 private:
 	bool Can_Be_Mounted;                                                      // Indicates that the partition can be mounted
@@ -367,7 +370,8 @@ public:
 
 	std::string Get_Bare_Partition_Name(std::string Mount_Point);
    
-     	bool Prepare_Super_Volume(TWPartition* twrpPart);				  // Prepare logical super partition volume for mounting
+     	bool Prepare_Super_Volume(TWPartition* twrpPart);			  // Prepare logical super partition volume for mounting
+	bool Resize_Super_Volume(TWPartition* twrpPart_image, unsigned long long image_size); // Resize logical super partition volume for flashing
 	std::string Get_Super_Partition();					  // Get Super Partition block device path
 	void Setup_Super_Devices();						  // Setup logical dm devices on super partition
 	bool Get_Super_Status();						  // Return whether device has a super partition
