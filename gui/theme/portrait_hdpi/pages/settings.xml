@@ -123,7 +123,7 @@
 			</action>
 		</page>
 
-		<!-- settings for Wipe, Mount and Terminal -->
+		<!-- settings for Wipe, FormatData, Mount and Terminal -->
 		<page name="ext_context">
 			<template name="base"/>
 
@@ -137,6 +137,12 @@
 				<placement x="%col1_x_indent%" y="%ab_bc_y%"/>
 				<condition var1="general_back" var2="wipe"/>
 				<text>{@wipe_hdr}</text>
+			</text>
+			
+			<text style="text_ab_title">
+				<placement x="%col1_x_indent%" y="%ab_bc_y%"/>
+				<condition var1="general_back" var2="formatdata"/>
+				<text>{@format_data_hdr}</text>
 			</text>
 
 			<text style="text_ab_title">
@@ -157,7 +163,7 @@
 					<condition var1="tw_mount_system_ro" op="!=" var2="0"/>
 					<icon res="checkbox_true"/>
 					<action function="set">tw_lifetime_writes=2</action>
-					<action function="page">system_readonly_check</action>
+					<action function="page">system_readonly_check_ext_context</action>
 				</listitem>
 				<listitem name="{@mount_sys_ro_chk}">
 					<condition var1="general_back" var2="mount"/>
@@ -176,6 +182,10 @@
 				<listitem name="{@use_fixed_font}">
 					<condition var1="general_back" var2="terminal"/>
 					<data variable="use_fixed_font"/>
+				</listitem>
+				<listitem name="{@use_rmrf_chk}">
+					<condition var1="general_back" var2="formatdata"/>
+					<data variable="tw_rm_rf"/>
 				</listitem>
 			</listbox>
 
@@ -700,7 +710,7 @@
 					<condition var1="tw_no_sha2" var2="0"/>
 					<data variable="tw_use_sha2"/>
 				</listitem>
-				<listitem name="Show additional partition to backup">
+				<listitem name="{@full_partition_list}">
 					<data variable="fox_adv_backup"/>
 				</listitem>
 				<listitem name="{@keep_storage_data}">
