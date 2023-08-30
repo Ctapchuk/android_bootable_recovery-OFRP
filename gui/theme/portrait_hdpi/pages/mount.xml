@@ -162,6 +162,23 @@
 			</action>
 		</page>
 
+		<page name="system_readonly_check_ext_context">
+			<action>
+				<action function="checkpartitionlifetimewrites">/system</action>
+			</action>
+
+			<action>
+				<condition var1="tw_lifetime_writes" var2="1"/>
+				<action function="mountsystemtoggle">0</action>
+				<action function="page">ext_context</action>
+			</action>
+
+			<action>
+				<condition var1="tw_lifetime_writes" var2="0"/>
+				<action function="page">system_readonly_mount</action>
+			</action>
+		</page>
+		
 		<page name="system_readonly">
 			<template name="t_system"/>
 
