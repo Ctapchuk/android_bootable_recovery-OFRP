@@ -302,9 +302,9 @@
 				<action function="set">fox_m_author=topjohnwu</action>
 				<action function="set">fox_m_name={@module_install} Magisk %magisk_ver%</action>
 				<action function="set">tw_file=%fox_magisk_zip_installer%</action>
-				<action function="set">tw_filename=%fox_home_files%/%fox_magisk_zip_installer%</action>
+				<action function="set">tw_filename=/FFiles/OF_Magisk/%fox_magisk_zip_installer%</action>
 				<action function="set">tw_filecheck=%tw_filename%</action>
-				<action function="set">tw_zip_location=%fox_home_files%</action>
+				<action function="set">tw_zip_location=/FFiles/OF_Magisk</action>
 				<action function="queuezip"/>
 				<action function="set">tw_notexistpage=fox_modules_confirm</action>
 				<action function="set">tw_existpage=fox_modules_confirm</action>
@@ -318,9 +318,9 @@
 				<action function="set">fox_m_author=topjohnwu</action>
 				<action function="set">fox_m_name={@module_uninstall} Magisk</action>
 				<action function="set">tw_file=%fox_magisk_uninstaller%</action>
-				<action function="set">tw_filename=%fox_home_files%/%fox_magisk_uninstaller%</action>
+				<action function="set">tw_filename=/FFiles/OF_Magisk/%fox_magisk_uninstaller%</action>
 				<action function="set">tw_filecheck=%tw_filename%</action>
-				<action function="set">tw_zip_location=%fox_home_files%</action>
+				<action function="set">tw_zip_location=/FFiles/OF_Magisk</action>
 				<action function="queuezip"/>
 				<action function="set">tw_notexistpage=fox_modules_confirm</action>
 				<action function="set">tw_existpage=fox_modules_confirm</action>

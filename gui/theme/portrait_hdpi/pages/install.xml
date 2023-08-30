@@ -75,27 +75,27 @@
 			</listbox>
 
 			<button style="btn_raised">
-				<condition var1="fileexists" var2="%fox_home_files%/%fox_magisk_zip_installer%"/>
+				<!--condition var1="fileexists" var2="/FFiles/OF_Magisk/%fox_magisk_zip_installer%"/-->
 				<condition var1="of_magisk_in_queue" var2="0"/>
 				<condition var1="tw_zip_queue_count" var2="1"/>
 				<placement x="%btn_raised_left_x%" y="%row_btn2_y%"/>
 				<text>{@install_queue_magisk_btn}</text>
 				<action function="set">tw_file=%fox_magisk_zip_installer%</action>
-				<action function="set">tw_filename=%fox_home_files%/%fox_magisk_zip_installer%</action>
-				<action function="set">tw_zip_location=%fox_home_files%</action>
+				<action function="set">tw_filename=/FFiles/OF_Magisk/%fox_magisk_zip_installer%</action>
+				<action function="set">tw_zip_location=/FFiles/OF_Magisk</action>
 				<action function="queuezip"/>
 				<action function="page">flash_confirm</action>
 			</button>
 			
 			<button style="btn_raised">
-				<condition var1="fileexists" var2="%fox_home_files%/%fox_magisk_zip_installer%"/>
+				<!--condition var1="fileexists" var2="/FFiles/OF_Magisk/%fox_magisk_zip_installer%"/-->
 				<condition var1="of_magisk_in_queue" var2="0"/>
 				<condition var1="tw_zip_queue_count" op="&gt;=" var2="2"/>
 				<placement x="%btn_raised_left_x%" y="%row_btn3_y%"/>
 				<text>{@install_queue_magisk_btn}</text>
 				<action function="set">tw_file=%fox_magisk_zip_installer%</action>
-				<action function="set">tw_filename=%fox_home_files%/%fox_magisk_zip_installer%</action>
-				<action function="set">tw_zip_location=%fox_home_files%</action>
+				<action function="set">tw_filename=/FFiles/OF_Magisk/%fox_magisk_zip_installer%</action>
+				<action function="set">tw_zip_location=/FFiles/OF_Magisk</action>
 				<action function="queuezip"/>
 				<action function="page">flash_confirm</action>
 			</button>
