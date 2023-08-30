@@ -213,9 +213,16 @@
 
 			<listbox style="settingslist">
 				<condition var1="tw_action" var2="copylog"/>
-				<placement x="0" y="%row1_2_y%" w="%screen_w%" h="%lb_l2%"/>
+				<placement x="0" y="%row1_2_y%" w="%screen_w%" h="%lb_l3%"/>
 				<listitem name="{@include_kernel_log}">
 					<data variable="tw_include_kernel_log"/>
+				</listitem>
+				<listitem name="{@include_logcat}">
+					<data variable="tw_include_logcat"/>
+				</listitem>
+				<listitem name="{@include_pstore_log}">
+					<condition var1="fileexists" var2="/sys/fs/pstore/console-ramoops-0"/>
+					<data variable="tw_include_pstore_log"/>
 				</listitem>
 			</listbox>
 

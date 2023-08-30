@@ -94,6 +94,8 @@
 		<variable name="tw_app_prompt" value="0"/>
 		<variable name="tw_app_install_status" value="2"/>
 		<variable name="tw_include_kernel_log" value="0"/>
+		<variable name="tw_include_logcat" value="0"/>
+		<variable name="tw_include_pstore_log" value="0"/>
 		<variable name="tw_install_reboot" value="0"/>
 		<variable name="needs_repack" value="0"/>
 		<variable name="fm_type_sort" value=""/>
