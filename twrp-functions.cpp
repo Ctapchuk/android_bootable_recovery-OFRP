@@ -2649,6 +2649,30 @@ void TWFunc::copy_kernel_log(string curr_storage)
   tw_set_default_metadata(dmesgDst.c_str());
 }
 
+void TWFunc::copy_logcat(string curr_storage)
+{
+  std::string logcatDst = curr_storage + "/logcat.log";
+  std::string logcatCmd = "/system/bin/logcat -d";
+
+  std::string result;
+  Exec_Cmd(logcatCmd, result);
+  write_to_file(logcatDst, result);
+  gui_msg(Msg("copy_logcat=Copied logcat to {1}") (logcatDst));
+  tw_set_default_metadata(logcatDst.c_str());
+}
+
+void TWFunc::copy_pstore_log(string curr_storage)
+{
+  std::string pstoreDst = curr_storage + "/pstore-ramoops";
+  std::string pstorePath = "/sys/fs/pstore/console-ramoops-0";
+
+  if (TWFunc::Path_Exists(pstorePath)) {
+     copy_file(pstorePath, pstoreDst, 0644);
+     gui_msg(Msg("copy_pstore_log=Copied pstore log to {1}") (pstoreDst));
+     tw_set_default_metadata(pstoreDst.c_str());
+  }
+}
+
 void TWFunc::create_fingerprint_file(string file_path, string fingerprint)
 {
   if (TWFunc::Path_Exists(file_path))
