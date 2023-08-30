@@ -1414,6 +1414,9 @@ void DataManager::SetDefaultValues()
 	mConst.SetValue("tw_oem_build", "0");
 #endif
 
+	mPersist.SetValue("tw_dynamic_flash_clean", "0");
+	mPersist.SetValue("tw_dynamic_convert_rw", "0");
+	mData.SetValue("tw_is_super_part", "0");
 	mData.SetValue("tw_flash_both_slots", "0");
 	mData.SetValue("tw_is_slot_part", "0");
 

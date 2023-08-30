@@ -459,7 +459,7 @@
 			</text>
 
 			<partitionlist style="partitionlist_radio">
-				<placement x="0" y="%row2_2a_y%" w="%screen_w%" h="%lb_l6%"/>
+				<placement x="0" y="%row2_2a_y%" w="%screen_w%" h="%lb_l8%"/>
 				<data name="tw_flash_partition"/>
 				<listtype name="flashimg"/>
 			</partitionlist>
@@ -468,18 +468,36 @@
 				<condition var1="fox_branch" op="&gt;=" var2="11"/>
 				<condition var1="tw_is_slot_part" var2="1"/>
 				<condition var1="tw_has_boot_slots" var2="1"/>
-				<placement x="%col1_x_caption%" y="%row5_3a_y%"/>
+				<condition var1="tw_is_super_part" var2="0"/>
+				<placement x="%col1_x_caption%" y="%row6_3a_y%"/>
+				<text>{@options_cptn}</text>
+			</text>
+
+			<text style="caption">
+				<condition var1="tw_is_super_part" var2="1"/>
+				<placement x="%col1_x_caption%" y="%row6_3a_y%"/>
 				<text>{@options_cptn}</text>
 			</text>
 
 			<listbox style="settingslist">
-				<condition var1="fox_branch" op="&gt;=" var2="11"/>
-				<condition var1="fox_vab_device" var2="1"/>
-				<condition var1="tw_is_slot_part" var2="1"/>
-				<condition var1="tw_has_boot_slots" var2="1"/>
-				<placement x="0" y="%row6_1a_y%" w="%screen_w%" h="%lb_l1%"/>
+				<placement x="0" y="%row7_1a_y%" w="%screen_w%" h="%lb_l3%"/>
 				<listitem name="{@flash_ab_both_slots}">
+					<condition var1="fox_branch" op="&gt;=" var2="11"/>
+					<condition var1="fox_vab_device" var2="1"/>
+					<condition var1="tw_is_slot_part" var2="1"/>
+					<condition var1="tw_has_boot_slots" var2="1"/>
+					<condition var1="tw_is_super_part" var2="0"/>
 					<data variable="tw_flash_both_slots"/>
+				</listitem>
+				<listitem name="{@dynamic_clean_super}">
+					<condition var1="fox_dynamic_device" var2="1"/>
+					<condition var1="tw_is_super_part" var2="1"/>
+					<data variable="tw_dynamic_flash_clean"/>
+				</listitem>
+				<listitem name="{@dynamic_convert_rw}">
+					<condition var1="fox_dynamic_device" var2="1"/>
+					<condition var1="tw_is_super_part" var2="1"/>
+					<data variable="tw_dynamic_convert_rw"/>
 				</listitem>
 			</listbox>
 

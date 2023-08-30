@@ -1004,7 +1004,7 @@ TWPartition* TWPartitionManager::Find_Partition_By_Path(const string& Path) {
 
   	#ifdef OF_DEVICE_WITHOUT_PERSIST
   	if (Local_Path == "/persist")
-      		return NULL;
+		return NULL;
   	#endif
 
 	if (Local_Path == "/system")
@@ -3000,7 +3000,7 @@ void TWPartitionManager::Get_Partition_List(string ListType,
 		}
 	} else if (ListType == "flashimg") {
 		for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
-			if ((*iter)->Can_Flash_Img && (*iter)->Is_Present) {
+			if (((*iter)->Can_Flash_Img && (*iter)->Is_Present) || (*iter)->Is_Super_Flash) {
 				struct PartitionList part;
 				part.Display_Name = (*iter)->Backup_Display_Name;
 				part.Mount_Point = (*iter)->Backup_Path;
@@ -4714,7 +4714,7 @@ void TWPartitionManager::Setup_Super_Partition() {
 
 	for (auto partition: Super_Partition_List) {
 		TWPartition* part_iter = Find_Partition_By_Path("/" + partition);
-		
+
 		if (part_iter != NULL && part_iter->Is_Present) {
 			superPartition->Backup_Display_Name = superPartition->Backup_Display_Name + partition;
 			if ((orig_list_size - list_size) == max_display_size) {
@@ -4949,5 +4949,93 @@ bool TWPartitionManager::Is_Fstab_Super(std::string Mount_Point) {
 		return false;
 	else
 		return true;
+}
+
+bool TWPartitionManager::Resize_Super_Volume(TWPartition* twrpPart_image, unsigned long long image_size) {
+	TWPartition* twrpPart = Find_Partition_By_Path("/" + twrpPart_image->Super_Volume_Name);
+	if (!twrpPart) {
+		gui_err("dynamic_flash_fail=Resizing failed!");
+		return false;
+	}
+#ifdef AB_OTA_UPDATER
+	std::string part_name = Get_Bare_Partition_Name(twrpPart->Get_Mount_Point()) + Get_Active_Slot_Suffix();
+#else
+	std::string part_name = Get_Bare_Partition_Name(twrpPart->Get_Mount_Point());
+#endif
+	std::string lptools_binary = "/system/bin/lptools";
+	bool remove_other_dynamic = DataManager::GetIntValue("tw_dynamic_flash_clean") ? true : false;
+	vector<string> dynamic_to_remove { "system_ext", "product", "my_bigball", "my_carrier", "my_company", "my_engineering", "my_heytap", "my_manifest", "my_preload", "my_product", "my_region", "my_stock", "mi_ext" };
+
+	if (TWFunc::Has_Virtual_AB_Partitions()) {
+		if (!Check_Pending_Merges()) {
+			gui_err("dynamic_flash_fail=Resizing failed!");
+			return false;
+		}
+		Map_Super_Devices();
+	}
+
+	if (TWFunc::Path_Exists(lptools_binary)) {
+		std::string command, super_free_size;
+		command = lptools_binary + " free | grep -o '[[:digit:]]*' | tr -d '\n'";
+		TWFunc::Exec_Cmd(command, super_free_size);
+		LOGINFO("Free space in super partition: '%llu' , image size: '%llu'\n", stoull(super_free_size.c_str()) + twrpPart_image->Size, image_size);
+
+		bool is_enough_space = ((stoull(super_free_size.c_str()) + twrpPart_image->Size) >= image_size) ? true : false;
+
+		if (!is_enough_space && remove_other_dynamic) {
+			gui_warn("dynamic_clean_info=Removing unnecessary for GSI dynamic partitions...");
+			std::string res;
+			for (auto partition: dynamic_to_remove) {
+				res = "";
+#ifdef AB_OTA_UPDATER
+				command = lptools_binary + " remove " + partition + Get_Active_Slot_Suffix();
+#else
+				command = lptools_binary + " remove " + partition;
+#endif
+				TWFunc::Exec_Cmd(command, false);
+
+				TWPartition* part_iter = Find_Partition_By_Path("/" + partition);
+				if (part_iter) {
+					Partitions.erase(std::find(Partitions.begin(), Partitions.end(), part_iter));
+					delete part_iter;
+				}
+			}
+			is_enough_space = true;
+		}
+
+		if (is_enough_space) {
+			command = lptools_binary + " remove " + part_name;
+			TWFunc::Exec_Cmd(command, false);
+
+			command = lptools_binary + " create " + part_name + " " + TWFunc::to_string(image_size);
+			LOGINFO("Creating command: '%s'\n", command.c_str());
+			TWFunc::Exec_Cmd(command);
+
+			twrpPart->Unmap();
+			twrpPart->Map();
+			twrpPart_image->Update_Size(false);
+
+			LOGINFO("New block device for '%s': '%s'\n", part_name.c_str(), twrpPart->Primary_Block_Device.c_str());
+			LOGINFO("New sizes '%llu', '%llu'\n", twrpPart->Size, twrpPart_image->Size);
+
+			if (image_size > twrpPart->Size) {
+				gui_err("dynamic_flash_fail=Resizing failed!");
+				return false;
+			}
+
+			gui_msg(Msg("dynamic_flash_success={1} partition has been successfully resized!")(part_name));
+			return true;
+		} else {
+			if (remove_other_dynamic) {
+				gui_err("dynamic_flash_nospace=Resizing failed. Not enough space in super partition!");
+			} else {
+				gui_err("dynamic_flash_nospace_remove=Resizing failed. Not enough space in super partition! Try to enable GSI flash mode.");
+			}
+			return false;
+		}
+	} else {
+		gui_err("dynamic_flash_nolptools=Resizing failed. Cannot find lptools!");
+		return false;
+	}
 }
 //*

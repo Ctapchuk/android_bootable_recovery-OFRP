@@ -195,6 +195,7 @@ void GUIPartitionList::MatchList(void) {
 
 			TWPartition* t_part = PartitionManager.Find_Partition_By_Path(mList.at(i).Mount_Point);
 			DataManager::SetValue("tw_is_slot_part", t_part != NULL ? (int) t_part->SlotSelect : 0);
+			DataManager::SetValue("tw_is_super_part", t_part != NULL ? (int) t_part->Is_Super_Flash : 0);
 
 			if (countTotal) {
 				if (mList.at(i).isFiles)
@@ -332,6 +333,7 @@ void GUIPartitionList::NotifySelect(size_t item_selected)
 
 				TWPartition* t_part = PartitionManager.Find_Partition_By_Path(mList.at(item_selected).Mount_Point);
 				DataManager::SetValue("tw_is_slot_part", t_part != NULL ? (int) t_part->SlotSelect : 0);
+				DataManager::SetValue("tw_is_super_part", t_part != NULL ? (int) t_part->Is_Super_Flash : 0);
 
 				if (countTotal) { // [f/d] count size of backup after selecting partition
 					unsigned long long totalSize = 0, imgSize = 0, fileSize = 0;

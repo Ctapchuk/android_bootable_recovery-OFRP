@@ -287,6 +287,8 @@ TWPartition::TWPartition() {
 	SlotSelect = false;
 	Key_Directory = "";
 	Is_Super = false;
+	Is_Super_Flash = false;
+	Super_Volume_Name = "";
 	Adopted_Mount_Delay = 0;
 	Original_Path = "";
 	Use_Original_Path = false;
@@ -615,11 +617,15 @@ bool TWPartition::Process_Fstab_Line(const char *fstab_line, bool Display_Error,
 			Backup_Display_Name = Display_Name;
 			Can_Flash_Img = true;
 			Can_Be_Backed_Up = true;
+			Is_Super_Flash = TWFunc::Has_Dynamic_Partitions();
+			Super_Volume_Name = "system";
 		} else if (Mount_Point == "/vendor_image") {
 			Display_Name = "Vendor Image";
 			Backup_Display_Name = Display_Name;
 			Can_Flash_Img = true;
 			Can_Be_Backed_Up = true;
+			Is_Super_Flash = TWFunc::Has_Dynamic_Partitions();
+			Super_Volume_Name = "vendor";
 		}
 	}
 
@@ -3167,8 +3173,29 @@ bool TWPartition::Restore_Image(PartitionSettings *part_settings) {
 		Full_FileName = part_settings->Backup_Folder + "/" + Backup_FileName;
 
 	if (Restore_File_System == "emmc") {
-		if (!part_settings->adbbackup)
-			part_settings->total_restore_size = (uint64_t)(TWFunc::Get_File_Size(Full_FileName));
+		if (!part_settings->adbbackup) {
+			unsigned long long image_size = part_settings->total_restore_size = (uint64_t)(TWFunc::Get_File_Size(Full_FileName));
+
+			if (!Find_Partition_Size())
+				Size = 0;
+
+			if (Is_Super_Flash && DataManager::GetIntValue(TW_VAB_EMPTY_SLOT)) {
+				gui_err("dynamic_flash_empty_slot=Dynamic partition cannot be flashed on empty slot!");
+				return false;
+			}
+
+			if (Is_Super_Flash && image_size > Size) {
+				TWPartition* part_iter = PartitionManager.Find_Partition_By_Path(Mount_Point);
+
+				gui_msg(Msg(msg::kWarning,"dynamic_flash_resize_warn=Not enough space in {1} partition. Attempting to resize it...")(Super_Volume_Name));
+
+				DataManager::SetValue("tw_dynamic_flash_clean", 0);
+				if (!PartitionManager.Resize_Super_Volume(part_iter, image_size)) {
+					gui_err("img_size_err=Size of image is larger than target device");
+					return false;
+				}
+			}
+		}
 		if (!Raw_Read_Write(part_settings))
 			return false;
 	} else if (Restore_File_System == "mtd" || Restore_File_System == "bml") {
@@ -3425,6 +3452,20 @@ bool TWPartition::Flash_Image(PartitionSettings *part_settings) {
 
 	full_filename = part_settings->Backup_Folder + "/" + Backup_FileName;
 
+	TWPartition* part_iter = PartitionManager.Find_Partition_By_Path(Mount_Point);
+
+	if (Is_Super_Flash) {
+		if (DataManager::GetIntValue(TW_VAB_EMPTY_SLOT)) {
+			gui_err("dynamic_flash_empty_slot=Dynamic partition cannot be flashed on empty slot!");
+			return false;
+		}
+		gui_warn("dynamic_flash_warn=Attempt to flash a dynamic partition!");
+		if (DataManager::GetIntValue("tw_dynamic_convert_rw") == 1) {
+			if (!Convert_Image_RW(full_filename))
+				return false;
+		}
+	}
+
 	LOGINFO("Image filename is: %s\n", Backup_FileName.c_str());
 
 	if (Backup_Method == BM_FILES) {
@@ -3435,15 +3476,25 @@ bool TWPartition::Flash_Image(PartitionSettings *part_settings) {
 		return false;
 	} else {
 		if (!Find_Partition_Size()) {
-			LOGERR("Unable to find partition size for '%s'\n", Mount_Point.c_str());
-			return false;
+			if (Is_Super_Flash) {
+				Size = 0;
+			} else {
+				LOGERR("Unable to find partition size for '%s'\n", Mount_Point.c_str());
+				return false;
+			}
 		}
 		unsigned long long image_size = TWFunc::Get_File_Size(full_filename);
 		if (image_size > Size) {
-			LOGINFO("Size (%llu bytes) of image '%s' is larger than target device '%s' (%llu bytes)\n",
-				image_size, Backup_FileName.c_str(), Actual_Block_Device.c_str(), Size);
-			gui_err("img_size_err=Size of image is larger than target device");
-			return false;
+			if (Is_Super_Flash) {
+				gui_msg(Msg(msg::kWarning,"dynamic_flash_resize_warn=Not enough space in {1} partition. Attempting to resize it...")(Super_Volume_Name));
+				if (!PartitionManager.Resize_Super_Volume(part_iter, image_size))
+					return false;
+			} else {
+				LOGINFO("Size (%llu bytes) of image '%s' is larger than target device '%s' (%llu bytes)\n",
+					image_size, Backup_FileName.c_str(), Actual_Block_Device.c_str(), Size);
+				gui_err("img_size_err=Size of image is larger than target device");
+				return false;
+			}
 		}
 		if (Backup_Method == BM_DD) {
 			if (!part_settings->adbbackup) {
@@ -3760,6 +3811,69 @@ void TWPartition::Fox_Add_Backup_Exclusions() {
 	}
   }
  #endif
+}
+
+bool TWPartition::Convert_Image_RW(const string& image_path) {
+	std::string resize2fs_binary = "/system/bin/resize2fs";
+	std::string e2fsck_binary = "/system/bin/e2fsck";
+
+	gui_warn("dynamic_convert_rw_info=Converting image to r/w...");
+	if (!TWFunc::Path_Exists(resize2fs_binary) && !TWFunc::Path_Exists(e2fsck_binary)) {
+		gui_err("dynamic_convert_rw_nobinary=Convert failed! Cannot find resize2fs or/and e2fsck binary!");
+		return false;
+	}
+
+	TWPartition* storage = PartitionManager.Find_Partition_By_Path(image_path);
+	if (storage != NULL) {
+		if(storage->Free < 1073741824) {
+			gui_err("dynamic_convert_rw_nospace=Convert failed! Not enough space on storage to convert image!");
+			gui_err("dynamic_convert_rw_nospace_info=Make sure that your current storage with image has at least 1 GB of free space!");
+			return false;
+		}
+	} else {
+		gui_err("unable_locate_storage=Unable to locate storage device!");
+		return false;
+	}
+
+	unsigned long long image_size = TWFunc::Get_File_Size(image_path);
+
+	if (image_size > 0) {
+		std::string command;
+
+		command = e2fsck_binary + " -y -f " + image_path;
+		if (TWFunc::Exec_Cmd(command) != 0) {
+			gui_err("dynamic_convert_rw_damaged=Convert failed! Image is damaged!");
+			return false;
+		}
+
+		command = resize2fs_binary + " -M " + image_path;
+		TWFunc::Exec_Cmd(command);
+
+		image_size = TWFunc::Get_File_Size(image_path);
+
+		command = resize2fs_binary + " " + image_path + " " + TWFunc::to_string(image_size / 1024 / 1024 + 1024) + "M";
+		LOGINFO("Resizing before unshare command: '%s'\n", command.c_str());
+		TWFunc::Exec_Cmd(command);
+
+		command = e2fsck_binary + " -y -E unshare_blocks " + image_path;
+		LOGINFO("Unshare command: '%s'\n", command.c_str());
+		TWFunc::Exec_Cmd(command);
+
+		command = resize2fs_binary + " -M " + image_path;
+		TWFunc::Exec_Cmd(command);
+
+		image_size = TWFunc::Get_File_Size(image_path);
+
+		command = resize2fs_binary + " " + image_path + " " + TWFunc::to_string(image_size / 1024 / 1024 + 256) + "M";
+		LOGINFO("Final resizing command: '%s'\n", command.c_str());
+		TWFunc::Exec_Cmd(command);
+
+		gui_msg(Msg("dynamic_convert_rw_success={1} has been successfully converted to r/w!")(Backup_FileName));
+		return true;
+	} else {
+		gui_err("dynamic_convert_rw_fail=Convert failed!");
+		return false;
+	}
 }
 
 bool TWPartition::Get_Super_Status() {
