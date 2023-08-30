@@ -33,12 +33,6 @@
 					<icon res="bs_adv_frp"/>
 					<action function="page">decrypt_users</action>
 				</listitem>
-				<listitem name="{@hint_ffiles_missing}">
-					<condition var1="of_hide_data_hint" op="!=" var2="1"/>
-					<condition var1="fileexists" op="!=" var2="%fox_home_files%"/>
-					<icon res="help"/>
-					<action function="overlay">dialog_lost_info</action>
-				</listitem>
 				<listitem name="{@mount_hdr}">
 					<icon res="bs_adv_mount"/>
 					<action function="page">mount</action>
