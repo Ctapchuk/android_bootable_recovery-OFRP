@@ -653,6 +653,8 @@
 		
 		<string name="update_btn">Update</string>
 		<string name="include_kernel_log">Include Kernel Log</string>
+		<string name="include_logcat">Include Logcat</string>
+		<string name="include_pstore_log">Include Pstore Log</string>
 		
 		<string name="fm_books">Favorite folders</string>
 		<string name="fm_books_desc">Long press to edit this list</string>
@@ -803,6 +805,8 @@
 		<string name="fox_internal_q1">OrangeFox - Internal Storage - take care!</string>
 
 		<string name="copy_kernel_log">Copied kernel log to {1}</string>
+		<string name="copy_logcat">Copied logcat to {1}</string>
+		<string name="copy_pstore_log">Copied pstore log to {1}</string>
 
 		<string name="of_run_process">Starting '{1}' process</string>
 		<string name="of_run_process_fail">Unable to finish '{1}' process</string>
