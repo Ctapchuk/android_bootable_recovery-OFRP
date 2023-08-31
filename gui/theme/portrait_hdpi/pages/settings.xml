@@ -962,13 +962,20 @@
 
 		<!-- About -->
 		<page name="about">
-			<image>
+			<!--image>
 				<image resource="splash_bg"/>
 				<placement x="%center_x%" y="%row1_1_y%" placement="4"/>
-			</image>
+			</image-->
 			
 			<image>
 				<image resource="logo_big"/>
+				<condition var1="%background%" op="!=" var2="#ffffff"/>
+				<placement x="%about_logo_x%" y="%row2_1a_y%" placement="2"/>
+			</image>
+			
+			<image>
+				<image resource="logo_big_black"/>
+				<condition var1="%background%" op="=" var2="#ffffff"/>
 				<placement x="%about_logo_x%" y="%row2_1a_y%" placement="2"/>
 			</image>
 
@@ -976,52 +983,52 @@
 				<placement x="0" y="%row3_2_y%" w="%screen_w%" h="%spl_preview_bg%"/>
 			</fill>
 			
-			<image>
+			<!--image>
 				<condition var1="show_shadow" var2="1"/>
 				<placement x="0" y="%row3_2_y%" w="%screen_w%" h="%spl_preview_bg%" placement="2"/>
 				<image resource="nav_shadow"/>
-			</image>
+			</image-->
 			
-			<fill color="%linecolor%">
+			<!--fill color="%linecolor%">
 				<condition var1="show_shadow" var2="2"/>
 				<placement x="0" y="%row3_2_y%" w="1080" h="2"/>
-			</fill>
+			</fill-->
 
 			<template name="body"/>
 
 			<button style="actionbar">
 				<condition var1="tw_busy" var2="0"/>
-				<placement x="%ab_back_x%" y="%ab0_y%" placement="4"/>
+				<placement x="%ab_back_x%" y="%ab_y%" placement="4"/>
 				<action function="key">back</action>
 			</button>
 
 			<image>
 				<condition var1="tw_busy" var2="0"/>
-				<placement x="%ab_back_x%" y="%ab0_y%" placement="4"/>
-				<image resource="actionbar_w_back"/>
+				<placement x="%ab_back_x%" y="%ab_y%" placement="4"/>
+				<image resource="actionbar_back"/>
 			</image>
 
 
 			<text>
-				<font resource="about" color="#ffffff"/>
+				<font resource="about" color="%text%"/>
 				<placement x="%about_txt_x%" y="%about_logo_y%"/>
 				<text>OrangeFox Recovery</text>
 			</text>
 			
 			<text>
-				<font resource="orangefont" color="#ffffff"/>
+				<font resource="orangefont" color="%text%"/>
 				<placement x="%about_txt_x%" y="%about_txt2_y%"/>
 				<text>{@version}: %fox_actual_build%</text>
 			</text>
 
 			<text>
-				<font resource="orangefont" color="#ffffff"/>
+				<font resource="orangefont" color="%text%"/>
 				<placement x="%about_txt_x%" y="%about_txt3_y%"/>
 				<text>{@build_type}: %fox_build_type1%</text>
 			</text>
 
 			<text>
-				<font resource="orangefont" color="#ffffff"/>
+				<font resource="orangefont" color="%text%"/>
 				<placement x="%about_txt_x%" y="%about_txt4_y%"/>
 				<text>{@abt_device}: %fox_compatibility_fox_device%</text>
 			</text>
@@ -1035,7 +1042,7 @@
 
 			<image>
 				<image resource="card"/>
-				<placement x="0" y="%about_title_h%"/>
+				<placement x="0" y="%card1_y%"/>
 			</image>
 
 			<text style="about_name">

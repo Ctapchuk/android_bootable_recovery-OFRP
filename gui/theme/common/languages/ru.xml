@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <language>
-	<display>Russian</display>
+	<display>Русский</display>
 	<!-- Translation by Ctapchuk, fordownloads, OrangeFox Recovery © 2019 -->
 
 	<resources>
@@ -151,7 +151,7 @@
 		<string name="name">Имя</string>
 		<string name="enable_backup_comp_chk">Использовать сжатие</string>
 		<string name="skip_md5_backup_chk">Пропустить вычисление MD5</string>
-		<string name="disable_backup_space_chk">Отключить проверку свободного места</string>
+		<string name="disable_backup_space_chk">Не проверять свободное место</string>
 		<string name="swipe_backup">Проведите для создания копии</string>
 		<string name="backup_name_exists">Резервная копия с таким именем уже существует!</string>
 		<string name="pass_not_match">Пароли не совпадают!</string>
@@ -179,7 +179,7 @@
 		<string name="rename_backup_complete">Переименование завершено</string>
 		<string name="swipe_to_rename">Проведите для переименования</string>
 		<string name="mount_hdr">Монтирование</string>
-		<string name="mount_sys_ro_chk">Системные разделы только для чтения</string>
+		<string name="mount_sys_ro_chk">Системные разделы r/o</string>
 		<string name="decrypt_data_btn">Расшифровать</string>
 		<string name="disable_mtp_btn">Выключить MTP</string>
 		<string name="enable_mtp_btn">Включить MTP</string>
@@ -213,7 +213,7 @@
 		<string name="settings_hdr">Настройки</string>
 		<string name="settings_cptn">Настройки</string>
 		<string name="use_rmrf_chk">Использовать rm -rf</string>
-		<string name="use24clock_chk">Использовать 24-часовой формат времени</string>
+		<string name="use24clock_chk">Использовать 24-часовой формат</string>
 		<string name="rev_navbar_chk">Поменять местами нижние кнопки</string>
 		<string name="simact_chk">Имитация действий для теста темы</string>
 		<string name="simfail_chk">Имитация отказа для действий</string>
@@ -224,22 +224,22 @@
 		<string name="utcm11">(UTC-11) Мидуэй, Самоа</string>
 		<string name="utcm10">(UTC-10) Гавайи</string>
 		<string name="utcm9" >(UTC-9) Аляска</string>
-		<string name="utcm8" >(UTC-8) Тихоокеанское время, Тихуана</string>
+		<string name="utcm8" >(UTC-8) Тихоокеанское время</string>
 		<string name="utcm7" >(UTC-7) Горное время, Аризона</string>
 		<string name="utcm6" >(UTC-6) Центральное время, Мехико</string>
 		<string name="utcm5" >(UTC-5) Восточное время, Богота</string>
-		<string name="utcm4" >(UTC-4) Атлантическое время, Каракас</string>
+		<string name="utcm4" >(UTC-4) Атлантическое время</string>
 		<string name="utcm3" >(UTC-3) Бразилия, Буэнос-Айрес</string>
 		<string name="utcm2" >(UTC-2) Среднеатлантическое время</string>
-		<string name="utcm1" >(UTC-1) Азорские острова, Кабо-Верде</string>
+		<string name="utcm1" >(UTC-1) Азорские о-ва, Кабо-Верде</string>
 		<string name="utc0"  >(UTC 0) Лондон, Касабланка, Дублин</string>
-		<string name="utcp1" >(UTC+1) Амстердам, Берлин, Париж, Рим</string>
+		<string name="utcp1" >(UTC+1) Амстердам, Берлин, Париж</string>
 		<string name="utcp2" >(UTC+2) Калининград, Киев, Варшава</string>
 		<string name="utcp3" >(UTC+3) Москва, Минск, Эр-Рияд</string>
-		<string name="utcp4" >(UTC+4) Самара, Волгоград, Баку, Тбилиси</string>
-		<string name="utcp5" >(UTC+5) Екатеринбург, Уфа, Челябинск</string>
+		<string name="utcp4" >(UTC+4) Самара, Волгоград, Баку</string>
+		<string name="utcp5" >(UTC+5) Екатеринбург, Челябинск</string>
 		<string name="utcp6" >(UTC+6) Омск, Алма-Ата, Бишкек</string>
-		<string name="utcp7" >(UTC+7) Красноярск, Новосибирск, Томск</string>
+		<string name="utcp7" >(UTC+7) Красноярск, Новосибирск</string>
 		<string name="utcp8" >(UTC+8) Иркутск, Пекин, Гонконг</string>
 		<string name="utcp9" >(UTC+9) Якутск, Чита, Токио, Сеул</string>
 		<string name="utcp10">(UTC+10) Владивосток, Хабаровск</string>
@@ -687,7 +687,7 @@
 
 		<string name="areb_off">Выключено</string>
 
-		<string name="restoredialog_readonly">Не показывать диалог "только чтение"</string>
+		<string name="restoredialog_readonly">Не показывать "только чтение"</string>
 
 		<string name="offset_wrong">Неверное смещение!</string>
 
@@ -731,7 +731,7 @@
 		<string name="autostorage">Хранилище</string>
 		<string name="install_reboot">Перезагрузка через %tw_sleep% секунд...</string>
 		<string name="cancel_reboot_btn">Отменить</string>
-		<string name="skip_digest_backup_chk" version="2">Пропуск создания контрольной суммы</string>
+		<string name="skip_digest_backup_chk" version="2">Не создавать контрольную сумму</string>
 		<string name="restore_digest_chk" version="2">Проверять контрольные суммы</string>
 		<string name="restore_enable_digest_chk" version="2">Проверять контрольные суммы</string>
 		<string name="decrypt_data_vold_os_missing">Отсутствуют файлы для расшифровки: {1}</string>
@@ -771,7 +771,7 @@
 		<string name="sha2_chk">Использовать SHA2</string>
 		<string name="disabled">Выключено</string>
 		<string name="enabled">Включено</string>
-		<string name="keep_storage_data">Не очищать хранилище при восстановлении</string>
+		<string name="keep_storage_data">Не очищать внутр. хран.</string>
 		<string name="zip_compatible_err">Устройство несовместимо с прошивкой Treble!</string>
 
 		<string name="unmount_sys_install">Размонтировать системные разделы</string>
@@ -884,7 +884,7 @@
 		<string name="keyboard_title">Клавиатура</string>
 		<string name="keyboard_newstyle">Обновленный стиль</string>
 		<string name="keyboard_nums">Строка с цифрами</string>
-		<string name="key_swipe">Проведите по клавиатуре для удаления</string>
+		<string name="key_swipe">Свайп по клавиатуре чтобы удалить</string>
 		<!-- Lockscreen -->
 		<string name="lockscreen_unlock">Разблокировать</string>
 		<string name="lockscreen_title">Экран блокировки</string>
@@ -892,7 +892,7 @@
 		<string name="lockscreen_clock">Часы</string>
 		<string name="lockscreen_icon">Значок</string>
 		<string name="lockscreen_btn">Заменить слайдер кнопкой</string>
-		<string name="lockscreen_info">Показывать информацию о CPU и батареи</string>
+		<string name="lockscreen_info">Информация о CPU и батареи</string>
 		<string name="lockscreen_quicklock">Блокировка экрана нажатием на замок</string>
 
 		<!-- OTA working page -->
@@ -1021,8 +1021,8 @@
 		<string name="fox_include_super_survival_chk">Включить Super в OTA Survival</string>
 		<string name="fox_verify_incremental_ota_signature_chk">Проверка подписи OTA (только MIUI)</string>
 		<string name="fox_dmverity_chk">Отключить DM-Verity</string>
-		<string name="fox_forced_encryption_chk">Отключить принудительное шифрование</string>
-		<string name="FOX_DISABLE_OTA_AUTO_REBOOT_chk">Отключить автоперезагрузку после OTA</string>
+		<string name="fox_forced_encryption_chk">Отключить шифрование</string>
+		<string name="FOX_DISABLE_OTA_AUTO_REBOOT_chk">Не перезагружаться после OTA</string>
 		<string name="of_ota_reboot_disabled">Обновление OTA завершено. Вы отключили авто-перезагрузку. Возвращаем контроль вам...</string>
 
 		<!-- Wipe format moved -->
@@ -1035,7 +1035,7 @@
 		<string name="gst_back">Жест "назад"</string>
 		<string name="gst_back_left">Слева</string>
 		<string name="gst_back_right">Справа</string>
-		<string name="gst_console_enable">Открыть консоль, проведя сверху вниз</string>
+		<string name="gst_console_enable">Свайп сверху: открыть консоль</string>
 		<string name="gst_navbar_error">Некоторые настройки недоступны.</string>
 		<string name="gst_navbar_error_2">Отключите жесты, чтобы показать их.</string>
 
@@ -1183,7 +1183,7 @@
 		<string name="unmapping_super_devices">Отключение всех Super разделов...</string>
 		<string name="unmap_super_devices_complete">Отлючены все Super разделы</string>
 
-		<string name="auto_reflashtwrp_chk">Переустановка OrangeFox после прошивки</string>
+		<string name="auto_reflashtwrp_chk">Восстанавливать OrangeFox</string>
 		<string name="modified_ramdisk_error">файлы Ramdisk'а были изменены, невозможно создать Ramdisk для прошивки. Загрузитесь с помощью fastboot boot и попытайтесь снова, либо вернитесь в "Файлы" и прошейте img файл как "Recovery Ramdisk" через меню "Прошить Ramdisk".</string>
 		<string name="create_ramdisk_error">ошибка создания Ramdisk'а для прошивки.</string>
 		<string name="reflash_twrp">Прошить текущий OrangeFox</string>
