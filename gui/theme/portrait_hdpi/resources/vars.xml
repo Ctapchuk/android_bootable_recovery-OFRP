@@ -303,6 +303,7 @@
 		<variable name="cardtxt_7" value="1582+%cutout_w%"/>
 		<variable name="cardtxt_8" value="1642+%cutout_w%"/>
 		
+		<variable name="card1_y" value="576+%cutout_w%"/>
 		<variable name="card2_y" value="864+%cutout_w%"/>
 		<variable name="card3_y" value="1152+%cutout_w%"/>
 		<variable name="card4_y" value="1440+%cutout_w%"/>
@@ -318,7 +319,7 @@
 		<variable name="card2_ctag_y" value="928+%cutout_w%"/>
 		<variable name="card3_ctag_y" value="1216+%cutout_w%"/>
 		<variable name="card4_ctag_y" value="1504+%cutout_w%"/>
-		
+
 		<variable name="card_img1_y" value="648+%cutout_w%"/>
 		<variable name="card_img2_y" value="936+%cutout_w%"/>
 		<variable name="card_img3_y" value="1224+%cutout_w%"/>
