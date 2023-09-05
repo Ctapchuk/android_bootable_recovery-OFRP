@@ -2821,7 +2821,11 @@ void TWPartitionManager::Get_Partition_List(string ListType,
     {
       for (iter = Partitions.begin(); iter != Partitions.end(); iter++)
 	{
+#ifdef OF_SETTINGS_DIRECTORY_HIDE
+	  if ((*iter)->Can_Be_Mounted && (*iter)->Mount_Point != TWFunc::Get_Root_Path(FOX_SETTINGS_ROOT_DIRECTORY))
+#else
 	  if ((*iter)->Can_Be_Mounted)
+#endif
 	    {
 	      struct PartitionList part;
 	      part.Display_Name = (*iter)->Display_Name;
@@ -4042,6 +4046,7 @@ int TWPartitionManager::Run_OTA_Survival_Backup(bool adbbackup)
   part_settings.progress = &progress;
 
   storage = Find_Partition_By_Path(DataManager::GetCurrentStoragePath());
+  //storage = Find_Partition_By_Path(DataManager::GetStrValue(FOX_SURVIVAL_FOLDER_VAR));
   if (storage != NULL)
     {
       free_space = storage->Free;

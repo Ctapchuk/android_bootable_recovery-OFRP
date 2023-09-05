@@ -316,7 +316,7 @@ int DataManager::RestorePasswordBackup(void) {
 
 int DataManager::LoadPersistValues(void)
 {
-#ifdef OF_DEVICE_WITHOUT_PERSIST
+#if defined(OF_DEVICE_WITHOUT_PERSIST) || defined(FOX_SETTINGS_ROOT_DIRECTORY)
 	//LOGINFO("OF_DEVICE_WITHOUT_PERSIST is set - avoiding /persist...\n");
 	return -1;
 #endif
@@ -369,12 +369,14 @@ int DataManager::SaveValues()
   #ifndef OF_DEVICE_WITHOUT_PERSIST
   if (PartitionManager.Mount_By_Path("/persist", false))
     {
+      #ifndef FOX_SETTINGS_ROOT_DIRECTORY
       mPersist.SetFile(PERSIST_SETTINGS_FILE);
       mPersist.SetFileVersion(FILE_VERSION);
       pthread_mutex_lock(&m_valuesLock);
       mPersist.SaveValues();
       pthread_mutex_unlock(&m_valuesLock);
       LOGINFO("Saved settings file values to %s\n", PERSIST_SETTINGS_FILE);
+      #endif
 
       ofstream file;
 
@@ -1580,6 +1582,9 @@ void DataManager::ReadSettingsFile(void)
     }
 
   mkdir(mkdir_path, 0777);
+#ifdef FOX_SETTINGS_ROOT_DIRECTORY
+  mkdir("/sdcard/Fox", 0777);
+#endif
 
   LOGINFO("Attempt to load settings from settings file...\n");
   LoadValues(settings_file);
@@ -1605,7 +1610,11 @@ string DataManager::GetCurrentPartPath(void)
 
 string DataManager::GetSettingsStoragePath(void)
 {
+  #ifndef FOX_SETTINGS_ROOT_DIRECTORY
   return GetStrValue("tw_settings_path");
+  #else
+  return Fox_Home;
+  #endif
 }
 
 void DataManager::Vibrate(const string& varName)

@@ -692,6 +692,11 @@ ifneq ($(FOX_SETTINGS_ROOT_DIRECTORY),)
  LOCAL_CFLAGS += -DFOX_SETTINGS_ROOT_DIRECTORY='"$(FOX_SETTINGS_ROOT_DIRECTORY)"'
 endif
 
+# support hiding custom settings partition
+ifeq ($(OF_SETTINGS_DIRECTORY_HIDE),1)
+    LOCAL_CFLAGS += -DOF_SETTINGS_DIRECTORY_HIDE='"1"'
+endif
+
 # whether to wipe /metadata after formatting data
 ifeq ($(OF_WIPE_METADATA_AFTER_DATAFORMAT),1)
    ifeq ($(TW_INCLUDE_FBE_METADATA_DECRYPT),true)
