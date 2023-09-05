@@ -461,9 +461,8 @@ ifeq ($(OF_MANUAL_COPY_TWRES),1)
 endif
 
 # lptools; disable by default; enable with OF_ENABLE_LPTOOLS=1
-ifeq ($(OF_ENABLE_LPTOOLS),)
-    TW_EXCLUDE_LPTOOLS := true
-else
+ifeq ($(OF_ENABLE_LPTOOLS), 1)
+    TW_INCLUDE_LPTOOLS := 1
     ifeq ($(wildcard external/lptools/Android.bp),)
         $(warning lptools sources not found! You need to run "repo sync" to clone the sources.)
         $(warning You can also run: "git clone https://github.com/phhusson/vendor_lptools external/lptools")
