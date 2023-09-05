@@ -369,7 +369,7 @@ void TWFunc::Run_Before_Reboot(void)
 
     copy_file("/tmp/recovery.log", Logs_Dir + "/lastrecoverylog.log", 0644);
 
-#if defined(OF_DONT_KEEP_LOG_HISTORY) || defined(FOX_USE_DATA_RECOVERY_FOR_SETTINGS) // don't backup historic logs if we're not saving to /sdcard/Fox
+#ifdef OF_DONT_KEEP_LOG_HISTORY // don't backup historic logs if we're not saving to /sdcard/Fox
 	return;
 #endif
 
@@ -2969,10 +2969,10 @@ bool TWFunc::PackRepackImage_MagiskBoot(bool do_unpack, bool is_boot)
 	        if (New_Fox_Installation == 1) 
 	         {
 	           AppendLineToFile (cmd_script, 
-	           "BackUp() { cp -f /tmp/recovery.log " + Fox_Home + "/logs/post-install.log; cp -af " + cmd_script + " " + Fox_Home + "/logs/cmd_script1.log; }");
+	           "BackUp() { cp -f /tmp/recovery.log " + Fox_Logs_Dir + "/post-install.log; cp -af " + cmd_script + " " + Fox_Logs_Dir + "/cmd_script1.log; }");
 	         }
 	        else 
-	           AppendLineToFile (cmd_script, "BackUp() { cp -af " + cmd_script + " " + Fox_Home + "/logs/cmd_script1.log; }");
+	           AppendLineToFile (cmd_script, "BackUp() { cp -af " + cmd_script + " " + Fox_Logs_Dir + "/cmd_script1.log; }");
 	        
 	        //AppendLineToFile (cmd_script, "abort() { LOGINFO \"$1\"; BackUp; exit 1; }");
 	        AppendLineToFile (cmd_script, "abort() { LOGINFO \"$1\"; exit 1; }");
@@ -3052,10 +3052,10 @@ bool TWFunc::PackRepackImage_MagiskBoot(bool do_unpack, bool is_boot)
 	        if (New_Fox_Installation == 1) 
 	         {
 	           AppendLineToFile (cmd_script2, 
-	           "BackUp() { cp -af /tmp/recovery.log " + Fox_Home + "/logs/post-install.log; cp -f " + cmd_script2 + " " + Fox_Home + "/logs/cmd_script2.log; }");
+	           "BackUp() { cp -af /tmp/recovery.log " + Fox_Logs_Dir + "/post-install.log; cp -f " + cmd_script2 + " " + Fox_Logs_Dir + "/cmd_script2.log; }");
 	         }
 	        else
-	           AppendLineToFile (cmd_script2, "BackUp() { cp -f " + cmd_script2 + " " + Fox_Home + "/logs/cmd_script2.log; }");
+	           AppendLineToFile (cmd_script2, "BackUp() { cp -f " + cmd_script2 + " " + Fox_Logs_Dir + "/cmd_script2.log; }");
 
 	        //AppendLineToFile (cmd_script2, "abort() { LOGINFO \"$1\"; BackUp; exit 1; }");
 	        AppendLineToFile (cmd_script2, "abort() { LOGINFO \"$1\"; exit 1; }");
@@ -3602,8 +3602,8 @@ bool TWFunc::Fresh_Fox_Install()
 	    New_Fox_Installation = 0;
 	#endif // OF_DONT_PATCH_ON_FRESH_INSTALLATION
 
-	LOGINFO ("DEBUG [Fresh_Fox_Install()] - copying log to:%s/logs/post-install.log \n", Fox_Home.c_str());
-	copy_file("/tmp/recovery.log",  Fox_Home + "/logs/post-install.log", 0644);
+	LOGINFO ("DEBUG [Fresh_Fox_Install()] - copying log to:%s/post-install.log \n", Fox_Logs_Dir.c_str());
+	copy_file("/tmp/recovery.log",  Fox_Logs_Dir + "/post-install.log", 0644);
 
 	return true;
    }    

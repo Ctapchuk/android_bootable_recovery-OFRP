@@ -104,7 +104,7 @@ static void Decrypt_Page(bool SkipDecryption, bool datamedia) {
 		}
 	} else if (datamedia) {
 		PartitionManager.Update_System_Details();
-		if (tw_get_default_metadata(DataManager::GetSettingsStoragePath().c_str()) != 0) {
+		if (tw_get_default_metadata(DataManager::GetCurrentStoragePath().c_str()) != 0 && tw_get_default_metadata(DataManager::GetSettingsStoragePath().c_str()) != 0) {
 			LOGINFO("Failed to get default contexts and file mode for storage files.\n");
 		} else {
 			LOGINFO("Got default contexts and file mode for storage files.\n");
@@ -575,6 +575,12 @@ int main(int argc, char **argv) {
 	// Create a thread for battery monitoring
 	static std::thread battery_monitor(monitorBatteryInBackground);
 
+#ifdef FOX_SETTINGS_ROOT_DIRECTORY
+	// Language
+	PageManager::LoadLanguage(DataManager::GetStrValue("tw_language"));
+	GUIConsole::Translate_Now();
+#endif
+
 	twrpAdbBuFifo *adb_bu_fifo = new twrpAdbBuFifo();
 	TWFunc::Clear_Bootloader_Message();
 
@@ -588,9 +594,11 @@ int main(int argc, char **argv) {
 		process_recovery_mode(adb_bu_fifo, startup.Should_Skip_Decryption());
 	}
 
+#ifndef FOX_SETTINGS_ROOT_DIRECTORY
 	// Language
 	PageManager::LoadLanguage(DataManager::GetStrValue("tw_language"));
 	GUIConsole::Translate_Now();
+#endif
 
 	// Fox extra setup
   	TWFunc::Setup_Verity_Forced_Encryption();

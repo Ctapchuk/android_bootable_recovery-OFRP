@@ -50,12 +50,7 @@
 
 #define OF_SPLASH_MAX_SIZE_STR "of_splash_max_size"
 
-#ifdef FOX_SETTINGS_ROOT_DIRECTORY
-#define OF_STORAGE_PATH		    FOX_SETTINGS_ROOT_DIRECTORY"Fox"
-#else
-#define OF_STORAGE_PATH		    "/sdcard/Fox/"
-#endif
-
+#define OF_STORAGE_PATH		    "/sdcard/Fox"
 #define TW_STORAGE_PATH             "/data/recovery/"
 #define TW_SETTINGS_FILE	    ".foxs"
 #define PERSIST_SETTINGS_FILE       "/persist/.foxs"
@@ -69,8 +64,8 @@ static const std::string Fox_Bin_Dir = "/system/bin";
 static const std::string Fox_Tmp = "/tmp";
 
 static const std::string Fox_Home =
-#ifdef FOX_USE_DATA_RECOVERY_FOR_SETTINGS
-TW_STORAGE_PATH"Fox";
+#ifdef FOX_SETTINGS_ROOT_DIRECTORY
+FOX_SETTINGS_ROOT_DIRECTORY"/Fox";
 #else
 OF_STORAGE_PATH;
 #endif
@@ -78,8 +73,8 @@ OF_STORAGE_PATH;
 static const std::string FOX_THEME_PATH = Fox_Home + "/.theme";
 static const std::string FOX_NAVBAR_PATH =  Fox_Home + "/.navbar";
 static const std::string Fox_Home_Files = Fox_Home + "/FoxFiles";
-static const std::string Fox_Logs_Dir = Fox_Home + "/logs";
-static const std::string FOX_OTA_PATH =  Fox_Home + "/OTA";
+static const std::string Fox_Logs_Dir = OF_STORAGE_PATH"/logs";
+static const std::string FOX_OTA_PATH =  OF_STORAGE_PATH"/OTA";
 static const std::string Fox_sdcard_aroma_cfg = Fox_Home + "/aromafm.cfg";
 static const std::string Fox_aroma_cfg = Fox_Home_Files + "/AromaFM/AromaFM.zip.cfg";
 static const std::string FFiles_dir = "/FFiles";
@@ -98,7 +93,7 @@ static int Fox_AutoDeactivate_OnReboot = 0;   // call the deactivation process a
 static int Fox_Force_Deactivate_Process = 0;  // for a call to Deactivate_Process()
 static int Fox_Current_ROM_IsMIUI = 0; // is the currently installed ROM a MIUI ROM?
 
-#define FOX_SURVIVAL_FOLDER		Fox_Home.c_str()
+#define FOX_SURVIVAL_FOLDER		OF_STORAGE_PATH
 //#define FOX_UPDATE_BINARY		"META-INF/com/google/android/update-binary" // all zip installers must have this
 #define FOX_MIUI_UPDATE_PATH 		"META-INF/com/miui/miui_update" 	// standard MIUI ROMs have this
 #define FOX_MIUI_UPDATE_PATH_EU 	"META-INF/com/xiaomieu/xiaomieu.sh"  // Xiaomi.EU MIUI ROMs have this
@@ -112,7 +107,7 @@ static int Fox_Current_ROM_IsMIUI = 0; // is the currently installed ROM a MIUI 
 #define FOX_MAGISK_ZIP_INSTALLER 	"Magisk.zip"
 #define FOX_MAGISK_UNINSTALLER 		"uninstall.zip"
 
-#define FOX_THEME_VERSION 		"1.1"
+#define FOX_THEME_VERSION 		"1.1.1"
 #define FOX_PASS_IN_PERSIST 		"/persist/.fsec"
 #define FOX_PRE_ROM_FLASH_SCRIPT  	"/system/bin/pre_rom_flash.sh"
 #define FOX_POST_ROM_FLASH_SCRIPT 	"/system/bin/post_rom_flash.sh"

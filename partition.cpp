@@ -560,6 +560,12 @@ bool TWPartition::Process_Fstab_Line(const char *fstab_line, bool Display_Error,
 			Backup_Display_Name = Display_Name;
 			Storage_Name = Display_Name;
 		}
+#ifdef OF_SETTINGS_DIRECTORY_HIDE
+		else if (Mount_Point == TWFunc::Get_Root_Path(FOX_SETTINGS_ROOT_DIRECTORY)) {
+			Can_Be_Wiped = false;
+			Wipe_Available_in_GUI = false;
+		}
+#endif
 #ifdef TW_EXTERNAL_STORAGE_PATH
 		if (Mount_Point == EXPAND(TW_EXTERNAL_STORAGE_PATH)) {
 			Is_Storage = true;
