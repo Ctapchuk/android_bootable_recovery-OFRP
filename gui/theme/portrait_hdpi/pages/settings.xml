@@ -686,7 +686,7 @@
 			</text>
 
 			<listbox style="settingslist">
-				<placement x="0" y="%row5_2a_y%" w="%screen_w%" h="%lb_l6%"/>		
+				<placement x="0" y="%row5_2a_y%" w="%screen_w%" h="%lb_l7%"/>
 				<listitem name="{@enable_backup_comp_chk}">
 					<data variable="tw_use_compression"/>
 				</listitem>
@@ -706,6 +706,9 @@
 				</listitem>
 				<listitem name="Show additional partition to backup">
 					<data variable="fox_adv_backup"/>
+				</listitem>
+				<listitem name="{@keep_storage_data}">
+					<data variable="of_keep_storage_data"/>
 				</listitem>
 			</listbox>
 
