@@ -3,11 +3,14 @@
 
 	<mousecursor>
 		<placement w="0" h="0"/>
-		<background color="#FFFFFF00"/>
+		<background color="#FFFFFF00" resource="cursor"/>
 		<speed multiplier="2.5"/>
 	</mousecursor>
 	
 	<resources>
+		<!-- Mouse cursor -->
+		<image name="cursor" filename="Default/Other/cursor" retainaspect="1"/>
+
 		<!-- NavPanel -->
 		<image name="nav_menu_d" filename="Default/NavPanel/menu_d" retainaspect="1"/>
 		<image name="nav_wipe_d" filename="Default/NavPanel/wipe_d" retainaspect="1"/>
