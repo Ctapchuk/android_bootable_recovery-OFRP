@@ -43,6 +43,7 @@ cc_library_static {
         "bootable/recovery/twrpinstall/include",
         "bootable/recovery/libpixelflinger/include",
         "bootable/recovery/minuitwrp/include",
+    	"bootable/recovery/Fox_ssl/include",
         "bionic",
         "system/libbase/include",
         "system/core/libcutils/include",
