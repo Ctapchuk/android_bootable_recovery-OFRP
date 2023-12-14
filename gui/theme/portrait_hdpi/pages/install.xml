@@ -217,7 +217,7 @@
 
 			<listbox style="settingslist">
 				<condition var1="tw_fileexists" var2="1"/>
-				<placement x="0" y="%row3_2a_y%" w="%screen_w%" h="%lb_l4%"/>
+				<placement x="0" y="%row3_2a_y%" w="%screen_w%" h="%lb_l6%"/>
 				<listitem name="{@install_reboot_chk}">
 					<condition var1="tw_reboot_system" var2="1"/>
 					<data variable="tw_install_reboot"/>
