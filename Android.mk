@@ -323,6 +323,9 @@ ifneq ($(TW_LOAD_VENDOR_MODULES),)
     ifeq ($(TW_LOAD_VENDOR_BOOT_MODULES),true)
         LOCAL_CFLAGS += -DTW_LOAD_VENDOR_BOOT_MODULES
     endif
+    ifeq ($(TW_LOAD_PREBUILT_MODULES),true)
+        LOCAL_CFLAGS += -DTW_LOAD_PREBUILT_MODULES
+    endif
 endif
 ifeq ($(TW_INCLUDE_PYTHON),true)
     ifeq ($(wildcard external/python3/Android.mk),)
