@@ -1,3 +1,4 @@
+#include <sys/syscall.h>
 #include "kernel_module_loader.hpp"
 #include "common.h"
 #include "variables.h"
@@ -60,6 +61,8 @@ bool KernelModuleLoader::Load_Vendor_Modules() {
 	vendor_module_dirs.push_back(vendor_base_dir + gki);
 #endif
 
+	TWFunc::RunFoxScript("/system/bin/beforemodules.sh", "");
+
 	switch(Get_Boot_Mode()) {
 		case RECOVERY_FASTBOOT_MODE:
 			/* On bootmode: once, there is not always stock kernel
@@ -84,6 +87,20 @@ bool KernelModuleLoader::Load_Vendor_Modules() {
 			 */
 			break;
 	}
+
+#ifdef TW_LOAD_PREBUILT_MODULES
+	// Try to unload requested modules before load it
+	for (auto&& module_to_rnmod:kernel_modules_requested) {
+		std::string canonical_name = module_to_rnmod.substr(0, module_to_rnmod.size() - 3);
+		std::replace(canonical_name.begin(), canonical_name.end(), '-', '_');
+		syscall(__NR_delete_module, canonical_name.c_str(), O_NONBLOCK);
+	}
+
+	for (auto&& module_dir:vendor_module_dirs) {
+		modules_loaded += Try_And_Load_Modules(module_dir, true);
+		if (modules_loaded >= expected_module_count) break;
+	}
+#endif
 
 	if (ven) {
 		LOGINFO("Checking mounted /vendor\n");
