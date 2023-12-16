@@ -43,7 +43,7 @@ bool twrpRepacker::Backup_Image_For_Repack(TWPartition* Part, const std::string&
 	}
 	if (!Prepare_Empty_Folder(Temp_Folder_Destination))
 		return false;
-	std::string target_image = Temp_Folder_Destination + "boot.img";
+	std::string target_image = Temp_Folder_Destination + "/rec-part.img";
 	PartitionSettings part_settings;
 	part_settings.Part = Part;
 	if (Create_Backup) {
@@ -64,8 +64,8 @@ bool twrpRepacker::Backup_Image_For_Repack(TWPartition* Part, const std::string&
 	if (!Part->Backup(&part_settings, &not_a_pid))
 		return false;
 	std::string backed_up_image = part_settings.Backup_Folder;
-	backed_up_image += Part->Get_Backup_FileName();
-	target_image = Temp_Folder_Destination + "boot.img";
+	backed_up_image += "/" + Part->Get_Backup_FileName();
+	target_image = Temp_Folder_Destination + "/rec-part.img";
 	if (Create_Backup) {
 		std::string source = part_settings.Backup_Folder + Part->Get_Backup_FileName();
 		if (TWFunc::copy_file(source, target_image, 0644) != 0) {
@@ -90,7 +90,7 @@ std::string twrpRepacker::Unpack_Image(const std::string& Source_Path, const std
 			return std::string();
 	}
 	if (Copy_Source) {
-		std::string destination = Temp_Folder_Destination + "/boot.img";
+		std::string destination = Temp_Folder_Destination + "/rec-part.img";
 		if (TWFunc::copy_file(Source_Path, destination, 0644))
 			return std::string();
 	}
@@ -99,6 +99,10 @@ std::string twrpRepacker::Unpack_Image(const std::string& Source_Path, const std
 
 	std::string magisk_unpack_output;
 	int ret;
+
+	if (part_name != "")
+		gui_msg(Msg("unpacking_image=Unpacking {1}...")(part_name));
+
 	if ((ret = TWFunc::Exec_Cmd(command, magisk_unpack_output, true)) != 0) {
 		LOGINFO("Error unpacking %s, ret: %d!\n", Source_Path.c_str(), ret);
 		gui_msg(Msg(msg::kError, "unpack_error=Error unpacking image."));
@@ -122,13 +126,19 @@ bool twrpRepacker::Repack_Image_And_Flash(const std::string& Target_Image, const
 	}
 	DataManager::SetProgress(0);
 	PartitionManager.Update_System_Details();
-	TWPartition* part = PartitionManager.Find_Partition_By_Path("/boot");
-	if (part)
-		gui_msg(Msg("unpacking_image=Unpacking {1}...")(part->Get_Display_Name()));
-	else {
-		gui_msg(Msg(msg::kError, "unable_to_locate=Unable to locate {1}.")("/boot"));
+	gui_msg(Msg(msg::kHighlight, "reflash_started=Flash current OrangeFox started!"));
+
+	TWPartition* part = PartitionManager.Find_Partition_By_Path("/recovery");
+	if (!part)
+		part = PartitionManager.Find_Partition_By_Path("/boot");
+
+	if (!part) {
+		gui_msg(Msg(msg::kError, "unable_to_locate=Unable to locate {1}.")("/boot & /recovery"));
 		return false;
 	}
+
+	part_name = part->Get_Display_Name() + PartitionManager.Get_Active_Slot_Suffix();
+
 	if (!Backup_Image_For_Repack(part, REPACK_ORIG_DIR, Repack_Options.Backup_First, gui_lookup("repack", "Repack")))
 		return false;
 	DataManager::SetProgress(.25);
@@ -137,33 +147,32 @@ bool twrpRepacker::Repack_Image_And_Flash(const std::string& Target_Image, const
 			return false;
 		image_ramdisk_format = "gzip";
 	} else {
-		gui_msg(Msg("unpacking_image=Unpacking {1}...")(Target_Image));
 		image_ramdisk_format = Unpack_Image(Target_Image, REPACK_NEW_DIR, true);
 	}
 	if (image_ramdisk_format.empty())
 		return false;
 	DataManager::SetProgress(.5);
-	gui_msg(Msg("repacking_image=Repacking {1}...")(part->Get_Display_Name()));
+	gui_msg(Msg("repacking_image=Repacking {1}...")(part_name));
 	std::string path = REPACK_NEW_DIR;
 	if (Repack_Options.Type == REPLACE_KERNEL) {
 		// When we replace the kernel, what we really do is copy the boot partition ramdisk into the new image's folder
-		if (TWFunc::copy_file(REPACK_ORIG_DIR "ramdisk.cpio", REPACK_NEW_DIR "ramdisk.cpio", 0644)) {
+		if (TWFunc::copy_file(REPACK_ORIG_DIR "/ramdisk.cpio", REPACK_NEW_DIR "/ramdisk.cpio", 0644)) {
 			LOGERR("Failed to copy ramdisk\n");
 			return false;
 		}
 	} else if (Repack_Options.Type == REPLACE_RAMDISK_UNPACKED) {
-			if (TWFunc::copy_file(Target_Image, REPACK_ORIG_DIR "ramdisk.cpio", 0644)) {
+			if (TWFunc::copy_file(Target_Image, REPACK_ORIG_DIR "/ramdisk.cpio", 0644)) {
 				LOGERR("Failed to copy ramdisk\n");
 				return false;
 			}
-			if (TWFunc::copy_file(Target_Image, REPACK_NEW_DIR "ramdisk.cpio", 0644)) {
+			if (TWFunc::copy_file(Target_Image, REPACK_NEW_DIR "/ramdisk.cpio", 0644)) {
 				LOGERR("Failed to copy ramdisk\n");
 				return false;
 			}
 		path = REPACK_ORIG_DIR;
 	} else if (Repack_Options.Type == REPLACE_RAMDISK) {
 		// Repack the ramdisk
-		if (TWFunc::copy_file(REPACK_NEW_DIR "ramdisk.cpio", REPACK_ORIG_DIR "ramdisk.cpio", 0644)) {
+		if (TWFunc::copy_file(REPACK_NEW_DIR "/ramdisk.cpio", REPACK_ORIG_DIR "/ramdisk.cpio", 0644)) {
 			LOGERR("Failed to copy ramdisk\n");
 			return false;
 		}
@@ -181,12 +190,12 @@ bool twrpRepacker::Repack_Image_And_Flash(const std::string& Target_Image, const
 		recompress = true;
 	}
 
-	command += path + "boot.img";
+	command += path + "/rec-part.img new-rec-part.img";
 
 	std::string orig_compressed_image(REPACK_ORIG_DIR);
-	orig_compressed_image += "ramdisk.cpio";
+	orig_compressed_image += "/ramdisk.cpio";
 	std::string copy_compressed_image(REPACK_ORIG_DIR);
-	copy_compressed_image += "ramdisk-1.cpio";
+	copy_compressed_image += "/ramdisk-1.cpio";
 
 	if (recompress) {
 		std::string decompress_cmd = TWFunc::Get_MagiskBoot() + " decompress " + orig_compressed_image + " " + copy_compressed_image;
@@ -203,8 +212,8 @@ bool twrpRepacker::Repack_Image_And_Flash(const std::string& Target_Image, const
 	}
 
 	DataManager::SetProgress(.75);
-	std::string file = "new-boot.img";
-	DataManager::SetValue("tw_flash_partition", "/boot;");
+	std::string file = "new-rec-part.img";
+	DataManager::SetValue("tw_flash_partition", part->Get_Mount_Point() + ";");
 	if (!PartitionManager.Flash_Image(path, file)) {
 		LOGINFO("Error flashing new image\n");
 		return false;
@@ -212,7 +221,8 @@ bool twrpRepacker::Repack_Image_And_Flash(const std::string& Target_Image, const
 	DataManager::SetProgress(1);
 	TWFunc::removeDir(REPACK_ORIG_DIR, false);
 	if (part->Is_SlotSelect()) { if (Repack_Options.Type == REPLACE_RAMDISK || Repack_Options.Type == REPLACE_RAMDISK_UNPACKED) {
-		LOGINFO("Switching slots to flash ramdisk to both partitions\n");
+		gui_msg(Msg("reflash_switch=Switching slots to flash ramdisk to both partitions"));
+		//LOGINFO("Switching slots to flash ramdisk to both partitions\n");
 		string Current_Slot = PartitionManager.Get_Active_Slot_Display();
 		if (Current_Slot == "A")
 			PartitionManager.Override_Active_Slot("B");
@@ -220,19 +230,22 @@ bool twrpRepacker::Repack_Image_And_Flash(const std::string& Target_Image, const
 			PartitionManager.Override_Active_Slot("A");
 		DataManager::SetProgress(.25);
 		PartitionManager.Update_System_Details();
+		part_name = part->Get_Display_Name() + PartitionManager.Get_Active_Slot_Suffix();
 		if (!Backup_Image_For_Repack(part, REPACK_ORIG_DIR, Repack_Options.Backup_First, gui_lookup("repack", "Repack")))
 			return false;
-		if (TWFunc::copy_file(REPACK_NEW_DIR "ramdisk.cpio", REPACK_ORIG_DIR "ramdisk.cpio", 0644)) {
+		if (TWFunc::copy_file(REPACK_NEW_DIR "/ramdisk.cpio", REPACK_ORIG_DIR "/ramdisk.cpio", 0644)) {
 			LOGERR("Failed to copy ramdisk\n");
 			return false;
 		}
+
+		gui_msg(Msg("repacking_image=Repacking {1}...")(part_name));
 		path = REPACK_ORIG_DIR;
 		std::string command = "cd " + path + " && " + TWFunc::Get_MagiskBoot() + " repack ";
 
 		if (original_ramdisk_format != image_ramdisk_format) {
 			recompress = true;
 		}
-		command += path + "boot.img";
+		command += path + "/rec-part.img new-rec-part.img";
 
 		if (recompress) {
 			std::string decompress_cmd = TWFunc::Get_MagiskBoot() + " decompress " + orig_compressed_image + " " + copy_compressed_image;
@@ -248,8 +261,8 @@ bool twrpRepacker::Repack_Image_And_Flash(const std::string& Target_Image, const
 			return false;
 		}
 		DataManager::SetProgress(.75);
-		std::string file = "new-boot.img";
-		DataManager::SetValue("tw_flash_partition", "/boot;");
+		std::string file = "new-rec-part.img";
+		DataManager::SetValue("tw_flash_partition", part->Get_Mount_Point() + ";");
 		if (!PartitionManager.Flash_Image(path, file)) {
 			LOGINFO("Error flashing new image\n");
 			return false;
@@ -258,7 +271,10 @@ bool twrpRepacker::Repack_Image_And_Flash(const std::string& Target_Image, const
 		TWFunc::removeDir(REPACK_ORIG_DIR, false);
 	}}
 	TWFunc::removeDir(REPACK_NEW_DIR, false);
-	gui_msg(Msg(msg::kWarning, "repack_overwrite_warning=If device was previously rooted, then root has been overwritten and will need to be reinstalled."));
+	if (part->Get_Mount_Point() == "/boot")
+		gui_msg(Msg(msg::kWarning, "repack_overwrite_warning=If device was previously rooted, then root has been overwritten and will need to be reinstalled."));
+
+	gui_msg(Msg(msg::kHighlight, "reflash_done=Flash current OrangeFox completed!"));
 	string Current_Slot = PartitionManager.Get_Active_Slot_Display();
 		if (Current_Slot == "A")
 			PartitionManager.Override_Active_Slot("B");
@@ -285,7 +301,7 @@ if (!TWFunc::Path_Exists("/ramdisk-files.txt")) {
 		#ifdef OF_FORCE_CHECK_RAMDISK_CHECKSUM
 		std::string verifyfiles = "cd / && sha256sum --status -c ramdisk-files.sha256sum";
 		if (TWFunc::Exec_Cmd(verifyfiles) != 0) {
-		gui_msg(Msg(msg::kError, "modified_ramdisk_error=ramdisk files have been modified, unable to create ramdisk to flash, fastboot boot OrangeFox and try this option again or use the Install Recovery Ramdisk option."));
+			gui_msg(Msg(msg::kError, "modified_ramdisk_error=ramdisk files have been modified, unable to create ramdisk to flash, fastboot boot OrangeFox and try this option again or use the Install Recovery Ramdisk option."));
 			return false;
 		}
 		#endif

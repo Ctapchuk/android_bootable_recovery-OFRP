@@ -1189,6 +1189,9 @@
 		<string name="reflash_twrp">Прошить текущий OrangeFox</string>
 		<string name="reflashing_twrp">Прошивка OrangeFox...</string>
 		<string name="reflash_twrp_complete">OrangeFox прошит</string>
+		<string name="reflash_started">Восстановление текущего OrangeFox началось!</string>
+		<string name="reflash_switch">Смена слотов чтобы прошить рамдиск в оба раздела</string>
+		<string name="reflash_done">Восстановление OrangeFox завершено успешно!</string>
 
 		<string name="auto_disable_avb2">Выключать vbmeta AVB2.0 после прошивки</string>
 		<string name="disable_avb2">Выключить vbmeta AVB2.0</string>

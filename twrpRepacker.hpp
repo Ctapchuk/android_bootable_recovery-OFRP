@@ -44,6 +44,7 @@ class twrpRepacker {
         bool Flash_Current_Twrp();
     private:
     	bool Prepare_Empty_Folder(const std::string& Folder); // Creates an empty folder at Folder. If the folder already exists, the folder is deleted, then created
+	std::string part_name; // partition name with active slot suffix
     	std::string original_ramdisk_format;                  // Ramdisk format of boot partition
 	    std::string image_ramdisk_format;                     // Ramdisk format of boot image to repack from
 };

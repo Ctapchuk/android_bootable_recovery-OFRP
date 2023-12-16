@@ -36,8 +36,8 @@
 
 #define MAX_FSTAB_LINE_LENGTH 2048
 
-#define REPACK_ORIG_DIR "/tmp/repackorig/"
-#define REPACK_NEW_DIR "/tmp/repacknew/"
+#define REPACK_ORIG_DIR "/tmp/repackorig"
+#define REPACK_NEW_DIR "/tmp/repacknew"
 
 #define NOT_AVAILABLE -2
 
