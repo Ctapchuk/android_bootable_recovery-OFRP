@@ -146,18 +146,42 @@
 			</text>
 
 			<image>
+				<condition var1="of_ab_device" op="!=" var2="1"/>
+				<condition var1="fox_vab_device" op="!=" var2="1"/>
 				<condition var1="tw_back" op="!=" var2="fastboot"/>
 				<condition var1="tw_busy" op="!=" var2="1"/>
 				<condition var1="tw_backup_system_size" op="&lt;" var2="%tw_min_system%"/>
 				<placement x="%center_x%" y="%row_warn_y%" placement="4"/>
 				<image resource="icon_warning"/>
 			</image>
+			
+			<image>
+				<condition var1="of_ab_device" var2="1"/>
+				<condition var1="fox_vab_device" var2="1"/>
+				<condition var1="tw_back" op="!=" var2="fastboot"/>
+				<condition var1="tw_busy" op="!=" var2="1"/>
+				<condition var1="tw_backup_system_size" op="&lt;" var2="%tw_min_system%"/>
+				<placement x="%center_x%" y="%warn_center_y%" placement="4"/>
+				<image resource="icon_warning"/>
+			</image>
 
 			<text style="text_body2_fail">
+				<condition var1="of_ab_device" op="!=" var2="1"/>
+				<condition var1="fox_vab_device" op="!=" var2="1"/>
 				<condition var1="tw_back" op="!=" var2="fastboot"/>
 				<condition var1="tw_busy" op="!=" var2="1"/>
 				<condition var1="tw_backup_system_size" op="&lt;" var2="%tw_min_system%"/>
 				<placement x="%center_x%" y="%row_warn2_y%" placement="5"/>
+				<text>{@no_os_subtitle}</text>
+			</text>
+			
+			<text style="text_body2_fail">
+				<condition var1="of_ab_device" var2="1"/>
+				<condition var1="fox_vab_device" var2="1"/>
+				<condition var1="tw_back" op="!=" var2="fastboot"/>
+				<condition var1="tw_busy" op="!=" var2="1"/>
+				<condition var1="tw_backup_system_size" op="&lt;" var2="%tw_min_system%"/>
+				<placement x="%center_x%" y="%warn_center2_y%" placement="5"/>
 				<text>{@no_os_subtitle}</text>
 			</text>
 
