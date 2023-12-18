@@ -53,10 +53,13 @@
 				<listitem name="{@zip_sig_chk}">
 					<data variable="tw_signed_zip_verify"/>
 				</listitem>
-				<listitem name="{@auto_disable_avb2=Disable vbmeta AVB2.0}">
-					<condition var1="fox_auto_disable_vbmeta_avb2" var2="1"/>
-					<!--condition var1="fox_patch_avb_20" op="!=" var2="1"/-->
-					<data variable="tw_auto_disable_avb2"/>
+				<listitem name="{@auto_reflashtwrp_chk}">
+					<condition var1="fox_branch" op="&gt;=" var2="11"/>
+					<condition var1="fox_vab_device" var2="1"/>
+					<condition var1="tw_has_boot_slots" var2="1"/>
+					<condition var1="tw_has_repack_tools" var2="1"/>
+					<condition var1="fox_disable_reflash_current" op="!=" var2="1"/>
+					<data variable="tw_auto_reflashtwrp"/>
 				</listitem>
 				<listitem name="{@unmount_sys_install}">
 					<data variable="tw_unmount_system"/>
@@ -65,13 +68,10 @@
 					<condition var1="fox_branch" op="&gt;=" var2="10"/>
 					<data variable="tw_unmount_vendor"/>
 				</listitem>
-				<listitem name="{@auto_reflashtwrp_chk}">
-					<condition var1="fox_branch" op="&gt;=" var2="11"/>
-					<condition var1="fox_vab_device" var2="1"/>
-					<condition var1="tw_has_boot_slots" var2="1"/>
-					<condition var1="tw_has_repack_tools" var2="1"/>
-					<condition var1="fox_disable_reflash_current" op="!=" var2="1"/>
-					<data variable="tw_auto_reflashtwrp"/>
+				<listitem name="{@auto_disable_avb2=Disable vbmeta AVB2.0}">
+					<condition var1="fox_auto_disable_vbmeta_avb2" var2="1"/>
+					<!--condition var1="fox_patch_avb_20" op="!=" var2="1"/-->
+					<data variable="tw_auto_disable_avb2"/>
 				</listitem>
 				<listitem name="{@inject_twrp_chk}">
 					<condition var1="tw_has_injecttwrp" var2="1"/>
@@ -225,10 +225,13 @@
 				<listitem name="{@zip_sig_chk}">
 					<data variable="tw_signed_zip_verify"/>
 				</listitem>
-				<listitem name="{@auto_disable_avb2=Disable vbmeta AVB2.0}">
-					<condition var1="fox_auto_disable_vbmeta_avb2" var2="1"/>
-					<!--condition var1="fox_patch_avb_20" op="!=" var2="1"/-->
-					<data variable="tw_auto_disable_avb2"/>
+				<listitem name="{@auto_reflashtwrp_chk}">
+					<condition var1="fox_branch" op="&gt;=" var2="11"/>
+					<condition var1="fox_vab_device" var2="1"/>
+					<condition var1="tw_has_boot_slots" var2="1"/>
+					<condition var1="tw_has_repack_tools" var2="1"/>
+					<condition var1="fox_disable_reflash_current" op="!=" var2="1"/>
+					<data variable="tw_auto_reflashtwrp"/>
 				</listitem>
 				<listitem name="{@unmount_sys_install}">
 					<data variable="tw_unmount_system"/>
@@ -237,13 +240,10 @@
 					<condition var1="fox_branch" op="&gt;=" var2="10"/>
 					<data variable="tw_unmount_vendor"/>
 				</listitem>
-				<listitem name="{@auto_reflashtwrp_chk}">
-					<condition var1="fox_branch" op="&gt;=" var2="11"/>
-					<condition var1="fox_vab_device" var2="1"/>
-					<condition var1="tw_has_boot_slots" var2="1"/>
-					<condition var1="tw_has_repack_tools" var2="1"/>
-					<condition var1="fox_disable_reflash_current" op="!=" var2="1"/>
-					<data variable="tw_auto_reflashtwrp"/>
+				<listitem name="{@auto_disable_avb2=Disable vbmeta AVB2.0}">
+					<condition var1="fox_auto_disable_vbmeta_avb2" var2="1"/>
+					<!--condition var1="fox_patch_avb_20" op="!=" var2="1"/-->
+					<data variable="tw_auto_disable_avb2"/>
 				</listitem>
 				<listitem name="{@inject_twrp_chk}">
 					<condition var1="tw_has_injecttwrp" var2="1"/>
