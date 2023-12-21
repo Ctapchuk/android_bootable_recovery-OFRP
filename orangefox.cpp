@@ -1054,8 +1054,9 @@ void Fox_Post_Zip_Install(const int result)
 		int reflashtwrp = 0;
 		DataManager::GetValue(TW_AUTO_REFLASHTWRP_VAR, reflashtwrp);
 		if (reflashtwrp) {
-			gui_print_color("warning", "\n\nOrangeFox: this MIUI ROM installer is NOT using the standard update_engine and payload.bin! Attempting to compensate... \n");
-			gui_print_color("warning", "\nOrangeFox: reflashing OrangeFox ...\n");
+			gui_print("\n\n");
+			gui_msg(Msg(msg::kWarning, "fox_install_miui_nonstandart_detected=OrangeFox: this MIUI ROM installer is NOT using the standard update_engine and payload.bin! Attempting to compensate... "));
+			gui_print("\n");
 			sleep(2);
 			twrpRepacker repacker;
 			repacker.Flash_Current_Twrp();

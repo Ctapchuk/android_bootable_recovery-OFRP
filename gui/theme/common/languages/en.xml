@@ -170,6 +170,7 @@
 		<string name="restore_md5_chk">Check MD5 of backup files</string>
 		<string name="restore_enable_md5_chk">Enable MD5 verification of backup files</string>
 		<string name="restore_complete">Restore completed</string>
+		<string name="reboot_after_restore">It is recommended to reboot Android once after first boot.</string>
 		<string name="swipe_restore">Swipe to Restore</string>
 		<string name="rename_backup_hdr">Rename Backup</string>
 		<string name="rename_backup_confirm">Rename Backup</string>
@@ -794,6 +795,7 @@
 		<string name="fox_install_detecting">Detecting Current Package</string>
 		<string name="fox_install_standard_detected">- Detected Standard Package</string>
 		<string name="fox_install_miui_detected">- Detected MIUI Update Package</string>
+		<string name="fox_install_miui_nonstandart_detected">OrangeFox: this MIUI ROM installer is NOT using the standard update_engine and payload.bin! Attempting to compensate...</string>
 		<string name="fox_zip_have_bootloader">Warning: Detected reinstallation of the bootloader which was called by '{1}'.</string>
 		<string name="fox_no_space_ota_survival">Not enough free space on internal storage for creating the OTA survival.</string>
 		<string name="fox_incremental_ota_res">OTA_RES -- done!</string>

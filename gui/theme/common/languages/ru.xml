@@ -171,6 +171,7 @@
 		<string name="restore_md5_chk">Проверить MD5 копий</string>
 		<string name="restore_enable_md5_chk">Проверка MD5 для резервных копий</string>
 		<string name="restore_complete">Восстановление завершено</string>
+		<string name="reboot_after_restore">Рекомендуется вручную перезагрузиться в Android 1 раз после первой загрузки.</string>
 		<string name="swipe_restore">Проведите для восстановления</string>
 		<string name="rename_backup_hdr">Переименование</string>
 		<string name="rename_backup_confirm">Переименовать резервную копию</string>
@@ -795,6 +796,7 @@
 		<string name="fox_install_detecting">Обнаружение текущего пакета...</string>
 		<string name="fox_install_standard_detected">- Обнаружен стандартный пакет</string>
 		<string name="fox_install_miui_detected">- Обнаружен пакет обновления MIUI</string>
+		<string name="fox_install_miui_nonstandart_detected">OrangeFox: этот MIUI установщик НЕ использует стандартные update_engine и payload.bin! Попытка компенсировать...</string>
 		<string name="fox_zip_have_bootloader">Предупреждение. Обнаружена переустановка загрузчика, которая была вызвана '{1}'.</string>
 		<string name="fox_no_space_ota_survival">Недостаточно свободного места на внутреннем хранилище для создания OTA Survival.</string>
 		<string name="fox_incremental_ota_res">OTA_RES -- готово!</string>
