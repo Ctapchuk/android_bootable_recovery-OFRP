@@ -795,6 +795,7 @@
 		<string name="fox_install_detecting">Обнаружение текущего пакета...</string>
 		<string name="fox_install_standard_detected">- Обнаружен стандартный пакет</string>
 		<string name="fox_install_miui_detected">- Обнаружен пакет обновления MIUI</string>
+		<string name="fox_install_miui_nonstandart_detected">OrangeFox: этот MIUI установщик НЕ использует стандартные update_engine и payload.bin! Попытка компенсировать...</string>
 		<string name="fox_zip_have_bootloader">Предупреждение. Обнаружена переустановка загрузчика, которая была вызвана '{1}'.</string>
 		<string name="fox_no_space_ota_survival">Недостаточно свободного места на внутреннем хранилище для создания OTA Survival.</string>
 		<string name="fox_incremental_ota_res">OTA_RES -- готово!</string>
