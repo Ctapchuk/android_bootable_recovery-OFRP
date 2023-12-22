@@ -1198,7 +1198,7 @@ void DataManager::SetDefaultValues()
   #ifdef FOX_VENDOR_BOOT_RECOVERY
   mConst.SetValue(TW_AUTO_REFLASHTWRP_VAR, "0");
   #else
-  mPersist.SetValue(TW_AUTO_REFLASHTWRP_VAR, "0");
+  mPersist.SetValue(TW_AUTO_REFLASHTWRP_VAR, "1");
   #endif
 
   // avb2.0 disable
