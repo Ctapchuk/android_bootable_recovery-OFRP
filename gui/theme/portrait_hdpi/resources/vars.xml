@@ -15,6 +15,7 @@
 		
 		<variable name="of_decrypt_from_menu" value="0"/>
 		
+		<variable name="ksu_path" value="/data/adb/ksu"/>
 		<variable name="mmgui_path" value="/data/adb/modules"/>
 
 		<!-- Lockscreen -->
