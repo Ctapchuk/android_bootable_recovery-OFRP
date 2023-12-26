@@ -33,6 +33,7 @@
 		<xml name="/twres/pages/mount.xml"/>
 		<xml name="/twres/pages/files.xml"/>
 		<xml name="/twres/pages/magisk.xml"/>
+		<xml name="/twres/pages/kernelsu.xml"/>
 		<xml name="/twres/pages/advanced.xml"/>
 		<xml name="/twres/pages/reboot.xml"/>
 		<xml name="/twres/pages/settings.xml"/>
