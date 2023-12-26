@@ -948,6 +948,13 @@
 		<string name="magisk_not_found_2">and install prebuilt Magisk?</string>
 		<string name="magisk_not_found_3"></string>
 		
+		<!-- KernelSU modules -->
+		<string name="ksu_modules">KernelSU modules</string>
+		<string name="ksu_modules_not_found">No modules found!</string>
+		<string name="ksu_modules_not_found_1">KernelSU modules</string>
+		<string name="ksu_modules_not_found_2">are not installed or</string>
+		<string name="ksu_modules_not_found_3">unable to mount it!</string>
+
 		<!-- MIUI OTA -->
 		<string name="fox_ota_settings">OTA Settings</string>
 		<string name="fox_miui_ota_on">Enable OTA</string>

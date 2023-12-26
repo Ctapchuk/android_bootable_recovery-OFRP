@@ -41,11 +41,20 @@
 					<icon res="harddisk"/>
 					<action function="page">part_options</action>
 				</listitem>
-				<listitem name="Magisk Manager"><condition var1="no_magisk" op="!=" var2="1"/>
+				<listitem name="Magisk Manager">
+					<condition var1="fileexists" op="!=" var2="%ksu_path%"/>
+					<condition var1="no_magisk" op="!=" var2="1"/>
 					<icon res="magisk"/>
 					<action function="set">ftls_running=1</action>
 					<action function="set">ft_mm_found=0</action>
 					<action function="page">magisk_mount</action>
+				</listitem>
+				<listitem name="{@ksu_modules}">
+					<condition var1="fileexists" var2="%ksu_path%"/>
+					<icon res="kernelsu"/>
+					<action function="set">ftls_running=1</action>
+					<action function="set">ksu_found=0</action>
+					<action function="page">ksu_mount</action>
 				</listitem>
 				<listitem name="{@adb_sideload_btn}">
 					<icon res="bs_adv_adb"/>
