@@ -199,6 +199,8 @@
 
 			<template name="ab_main"/>
 			<template name="statusbarinfo"/>
+			<template name="gestures"/>
+			<template name="navbar"/>
 
 			<text style="text_ab_title">
 				<placement x="%col1_x%" y="%ab_bc_y%"/>
@@ -206,14 +208,14 @@
 			</text>
 
 			<button style="btn_raised">
-				<placement x="%btn_raised_left_x%" y="%row_btn_bottom_y%"/>
+				<placement x="%btn_raised_left_x%" y="%row_btn1_y%"/>
 				<text>{@reboot_btn}</text>
 				<action function="overlay">reboot</action>
 			</button>
 
 			<button style="btn_raised_hl">
 				<condition var1="tw_enable_adb" var2="1" />
-				<placement x="%btn_raised_right_x%" y="%row_btn_bottom_y%" placement="1"/>
+				<placement x="%btn_raised_right_x%" y="%row_btn1_y%" placement="1"/>
 				<text>{@enable_fastboot}</text>
 				<action function="enablefastboot"/>
 				<action function="set">tw_enable_fastboot=1</action>
@@ -222,7 +224,7 @@
 
 			<button style="btn_raised_hl">
 				<condition var1="tw_enable_fastboot" var2="1" />
-				<placement x="%btn_raised_right_x%" y="%row_btn_bottom_y%" placement="1"/>
+				<placement x="%btn_raised_right_x%" y="%row_btn1_y%" placement="1"/>
 				<text>{@enable_adb}</text>
 				<action function="enableadb"/>
 				<action function="set">tw_enable_adb=1</action>
