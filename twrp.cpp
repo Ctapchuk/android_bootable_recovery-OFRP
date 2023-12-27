@@ -118,6 +118,10 @@ static void process_fastbootd_mode() {
 		if (android::base::GetBoolProperty("ro.boot.dynamic_partitions", false)) {
 			PartitionManager.Unmap_Super_Devices();
 		}
+		
+#ifdef AB_OTA_UPDATER
+		DataManager::SetValue("tw_active_slot", PartitionManager.Get_Active_Slot_Display());
+#endif
 
 		gui_msg(Msg("fastboot_console_msg=Entered Fastboot mode..."));
 		property_set("ro.orangefox.fastbootd", "1");
