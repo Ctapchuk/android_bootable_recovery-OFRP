@@ -1105,6 +1105,11 @@
 		<string name="theme_fweight_reg">Regular</string>
 		<string name="theme_fweight_med">Medium</string>
 
+		<!-- Theme reset -->
+		<string name="theme_mismatch">* Themes version mismatch (old={1}; new={2})</string>
+		<string name="theme_reset_themes">* Resetting the themes...</string>
+		<string name="theme_reset_navbar">* Resetting the navbar...</string>
+
 		<string name="swipe_up_to_unlock">Swipe up from the bottom of the screen to Unlock</string>
 
 		<string name="spl_background">Background color</string>

@@ -2549,38 +2549,10 @@ void TWFunc::OrangeFox_Startup(void)
 
   TWFunc::Fresh_Fox_Install();
 
-//==== themes version matching
-  string theme_ver = DataManager::GetStrValue("of_themes_version");
-  if (theme_ver.empty())
-     theme_ver = "0";
+#ifndef FOX_SETTINGS_ROOT_DIRECTORY
+  TWFunc::FoxThemeCheck();
+#endif
 
-  string build_theme_ver = DataManager::GetStrValue("fox_theme_version");
-  if (build_theme_ver.empty())
-     build_theme_ver = "0";
-
-  if (theme_ver == build_theme_ver) {
-     LOGINFO("Themes version: %s\n", build_theme_ver.c_str());
-  } 
-  else {
-     bool has_themes_dir = TWFunc::Path_Exists(FOX_THEME_PATH);
-     if (has_themes_dir)
-     	gui_print_color("warning","* Themes version mismatch (old='%s'; new='%s')\n", theme_ver.c_str(), build_theme_ver.c_str());
-     else
-     	LOGINFO("Themes version mismatch (old='%s'; new='%s')\n", theme_ver.c_str(), build_theme_ver.c_str());
-     
-     DataManager::SetValue("of_themes_version", build_theme_ver);
-     if (has_themes_dir) {
-        gui_print_color("warning", "* Resetting the themes...\n");
-        TWFunc::removeDir(FOX_THEME_PATH, false);
-     }
-     
-     if (TWFunc::Path_Exists(FOX_NAVBAR_PATH)) {
-        gui_print_color("warning", "* Resetting the navbar...\n");
-        TWFunc::removeDir(FOX_NAVBAR_PATH, false);
-     }
-  }
-//====
-  
   // start mtp manually, if enabled
   #ifdef TW_HAS_MTP
  // if (DataManager::GetIntValue("tw_mtp_enabled") == 1 && !PartitionManager.is_MTP_Enabled())
@@ -5215,6 +5187,39 @@ bool TWFunc::Magiskboot_Repack_Patch_VBMeta()
    #else
    return false;
    #endif
+}
+
+void TWFunc::FoxThemeCheck()
+{
+	string theme_ver = DataManager::GetStrValue("of_themes_version");
+	if (theme_ver.empty())
+		theme_ver = "0";
+
+	string build_theme_ver = DataManager::GetStrValue("fox_theme_version");
+	if (build_theme_ver.empty())
+		build_theme_ver = "0";
+
+	if (theme_ver == build_theme_ver) {
+		LOGINFO("Themes version: %s\n", build_theme_ver.c_str());
+	} else {
+		bool has_themes_dir = TWFunc::Path_Exists(FOX_THEME_PATH);
+		if (has_themes_dir)
+			gui_msg(Msg(msg::kWarning, "theme_mismatch=* Themes version mismatch (old={1}; new={2})")(theme_ver)(build_theme_ver));
+		else
+			LOGINFO("Themes version mismatch (old='%s'; new='%s')\n", theme_ver.c_str(), build_theme_ver.c_str());
+
+		DataManager::SetValue("of_themes_version", build_theme_ver);
+		DataManager::Flush();
+		if (has_themes_dir) {
+			gui_msg(Msg(msg::kWarning, "theme_reset_themes=* Resetting the themes..."));
+			TWFunc::removeDir(FOX_THEME_PATH, false);
+		}
+
+		if (TWFunc::Path_Exists(FOX_NAVBAR_PATH)) {
+			gui_msg(Msg(msg::kWarning, "theme_reset_navbar=* Resetting the navbar..."));
+			TWFunc::removeDir(FOX_NAVBAR_PATH, false);
+		}
+	}
 }
 
 //
