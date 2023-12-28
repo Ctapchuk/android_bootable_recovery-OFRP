@@ -1106,6 +1106,11 @@
 		<string name="theme_fweight_reg">Обычный</string>
 		<string name="theme_fweight_med">Жирный</string>
 
+		<!-- Theme reset -->
+		<string name="theme_mismatch">* Версия тем не совпадает (старая={1}; новая={2})</string>
+		<string name="theme_reset_themes">* Сброс тем...</string>
+		<string name="theme_reset_navbar">* Сброс навбара...</string>
+
 		<string name="swipe_up_to_unlock">Проведите снизу вверх для разблокировки</string>
 
 		<string name="spl_background">Цвет фона</string>
