@@ -235,6 +235,8 @@ public:
 	static string sdknum_to_text(int sdk);
 	static string Check_For_TwrpFolder();
 
+	static void FoxThemeCheck();
+
 private:
 	static void Copy_Log(string Source, string Destination);
 	static string Load_File(string extension);

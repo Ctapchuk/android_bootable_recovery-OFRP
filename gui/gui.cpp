@@ -847,6 +847,7 @@ extern "C" int gui_loadResources(void)
 		if (DataManager::GetSettingsStoragePath() != DataManager::GetCurrentStoragePath()) {
 			PartitionManager.Mount_Settings_Storage(false);
 			DataManager::ReadSettingsFile();
+			TWFunc::FoxThemeCheck();
 		}
 
 		if (PageManager::LoadPackage("OrangeFox", TWRES "ui.xml", "decrypt"))
@@ -878,8 +879,10 @@ extern "C" int gui_loadResources(void)
 				check = 1;
 			}
 		}
-		if (DataManager::GetSettingsStoragePath() != DataManager::GetCurrentStoragePath())
+		if (DataManager::GetSettingsStoragePath() != DataManager::GetCurrentStoragePath()) {
 			DataManager::ReadSettingsFile();
+			TWFunc::FoxThemeCheck();
+		}
 		theme_path += "/Fox/.bin./pa.zip"; 
 		if (check || PageManager::LoadPackage("OrangeFox", theme_path, "main"))
 		{
