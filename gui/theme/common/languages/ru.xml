@@ -1215,5 +1215,6 @@
 		<string name="disable_avb2_success_msg">Выключение vbmeta AVB2.0: '{1}' произошло успешно.</string>
 		<string name="disable_avb2_fail_msg">Выключение vbmeta AVB2.0: '{1}' неудалось!</string>
 
+		<string name="slot_empty_vab">Текущий слот пустой или разделы в нём отключены! Отключение спама ошибками..</string>
 	</resources>
 </language>

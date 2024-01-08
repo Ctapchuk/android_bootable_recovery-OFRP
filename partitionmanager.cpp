@@ -477,6 +477,7 @@ clear:
 		}
 	}
 
+	Check_VAB_Empty();
 #ifdef TW_LOAD_VENDOR_MODULES
 	KernelModuleLoader::Load_Vendor_Modules();
 #endif
@@ -915,6 +916,9 @@ int TWPartitionManager::Mount_By_Path(string Path, bool Display_Error) {
       		return false;
   	#endif
 
+	if (DataManager::GetIntValue(TW_VAB_EMPTY_SLOT) && Is_Fstab_Super(Local_Path))
+		Display_Error = false;
+
 	// Iterate through all partitions
 	for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
 		if ((*iter)->Mount_Point == Local_Path || (!(*iter)->Symlink_Mount_Point.empty() && (*iter)->Symlink_Mount_Point == Local_Path)) {
@@ -945,6 +949,9 @@ int TWPartitionManager::UnMount_By_Path(string Path, bool Display_Error, int fla
   	if (Local_Path == "/persist")
       		return false;
   	#endif
+
+	if (DataManager::GetIntValue(TW_VAB_EMPTY_SLOT) && Is_Fstab_Super(Local_Path))
+		Display_Error = false;
 
 	// Iterate through all partitions
 	for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
@@ -2060,6 +2067,8 @@ void TWPartitionManager::Update_System_Details(void) {
   	#else
   	bool reporter = false;
   	#endif
+
+	Check_VAB_Empty();
 
   	if (DataManager::GetIntValue(FOX_RUN_SURVIVAL_BACKUP) != 1)
 		gui_msg("update_part_details=Updating partition details...");
@@ -4649,7 +4658,7 @@ bool TWPartitionManager::Prepare_Super_Volume(TWPartition* twrpPart) {
 	}
 
 	twrpPart->Set_Block_Device(fstabEntry.blk_device);
-	twrpPart->Update_Size(true);
+	twrpPart->Update_Size(false);
 	twrpPart->Set_Can_Be_Backed_Up(false);
 	twrpPart->Set_Can_Be_Wiped(false);
 
@@ -4912,5 +4921,35 @@ void TWPartitionManager::Refresh_Mounting_Info(void) {
 			}
 		}
 	}
+}
+
+void TWPartitionManager::Check_VAB_Empty() {
+	if (!TWFunc::Has_Virtual_AB_Partitions())
+		return;
+
+	std::vector<TWPartition*>::iterator iter;
+	int total = 0, empty = 0;
+	for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
+		if ((*iter)->Is_Super) {
+			total++;
+			if (((*iter)->Update_Size(false) && (*iter)->Size == 0) || !(*iter)->Update_Size(false))
+				empty++;
+		}
+	}
+
+	if (total == empty) {
+		if (!DataManager::GetIntValue(TW_VAB_EMPTY_SLOT))
+			gui_msg(Msg(msg::kWarning, "slot_empty_vab=Current slot is empty or unmapped! Disabling errors spamming.."));
+		DataManager::SetValue(TW_VAB_EMPTY_SLOT, "1");
+	}
+	else
+		DataManager::SetValue(TW_VAB_EMPTY_SLOT, "0");
+}
+
+bool TWPartitionManager::Is_Fstab_Super(std::string Mount_Point) {
+	if (find(Super_Partition_List.begin(), Super_Partition_List.end(), Get_Bare_Partition_Name(Mount_Point)) == Super_Partition_List.end())
+		return false;
+	else
+		return true;
 }
 //*

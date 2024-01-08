@@ -1213,5 +1213,7 @@
 		<string name="disabling_AVB2_complete">vbmeta AVB2.0 is disabled!</string>
 		<string name="disable_avb2_success_msg">Disable vbmeta AVB2.0: processing '{1}' successfully.</string>
 		<string name="disable_avb2_fail_msg">Disable vbmeta AVB2.0: processing '{1}' failed!</string>
+
+		<string name="slot_empty_vab">Current slot is empty or unmapped! Disabling errors spamming..</string>
 	</resources>
 </language>
