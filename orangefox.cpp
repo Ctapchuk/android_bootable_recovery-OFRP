@@ -502,7 +502,7 @@ string tmp = "";
 
   if (i > 3)
       return true;
- 
+
   // more checks for old file-based ROM installers
   usleep(1024);
   if (zip_EntryExists(Zip, "system/bin/sh") && zip_EntryExists(Zip, "system/etc/hosts"))
@@ -519,6 +519,7 @@ string tmp = "";
 
   // deal with recent non-standards-compliant xiaomi.eu vAB zip installers
   i = 0;
+  int ii = 0;
   #if defined(AB_OTA_UPDATER) || defined(FOX_AB_DEVICE)
     str = TWFunc::find_phrase(path, "images/super.img");
     if (!str.empty() && !is_comment_line(str))
@@ -567,11 +568,23 @@ string tmp = "";
     str = TWFunc::find_phrase(path, "images/devcfg.img");
     if (!str.empty() && !is_comment_line(str))
 	i++;
+
+    std::vector<string> images = { "super.img", "custom.img", "vendor_boot.img", "boot.img", "recovery.img", "vbmeta.img", "bluetooth.img", "keymaster.img", "dtbo.img", "cmnlib64.img", "xbl.img", "abl.img", "devcfg.img" };
+    std::vector<string> images_paths = { "images/", "firmware-update/" };
+    for(auto &image_path:images_paths) {
+        if (zip_EntryExists(Zip, image_path)) {
+            for(auto &image:images) {
+                if (zip_EntryExists(Zip, image_path + image))
+                    ii++;
+            }
+        }
+    }
+    LOGINFO("I:Installing_ROM_Query: i=%d, ii=%d\n", i, ii);
   #endif
 
   // - return
   usleep(1024);
-  if (i > 7) {
+  if (i > 7 || ii > 7) {
 	// mark this as a non-standard vAB ROM installer
 	DataManager::SetValue("found_non_standard_vAB_install", "1");
 	return true;
