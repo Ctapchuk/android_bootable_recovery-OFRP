@@ -31,8 +31,17 @@
 
 			<action>
 				<condition var1="tw_backup_system_size" op="&lt;" var2="%tw_min_system%"/>
+				<condition var1="tw_vab_empty_slot" var2="0"/>
 				<action function="disableled"/>
 				<action function="page">no_os_warning</action>
+			</action>
+
+			<action>
+				<condition var1="tw_backup_system_size" op="&lt;" var2="%tw_min_system%"/>
+				<condition var1="tw_vab_empty_slot" var2="1"/>
+				<action function="set">need_reboot=1</action>
+				<action function="set">tw_reboot_param=%tw_action_param%</action>
+				<action function="reboot">%tw_action_param%</action>
 			</action>
 		</page>
 

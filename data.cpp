@@ -745,6 +745,7 @@ void DataManager::SetDefaultValues()
 
   mData.SetValue("fox_startup_executed", "0");
 
+  mData.SetValue(TW_VAB_EMPTY_SLOT, "0");
   if (TWFunc::Has_Virtual_AB_Partitions())
   	mConst.SetValue("fox_vab_device", "1");
   else
