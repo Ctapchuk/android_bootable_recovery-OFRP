@@ -1618,6 +1618,9 @@ bool TWPartition::Mount(bool Display_Error) {
 	int exfat_mounted = 0;
 	unsigned int flags = Mount_Flags;
 
+	if (DataManager::GetIntValue(TW_VAB_EMPTY_SLOT) && PartitionManager.Is_Fstab_Super(Mount_Point))
+		Display_Error = false;
+
 	if (Is_Mounted()) {
 		return true;
 	} else if (!Can_Be_Mounted) {
@@ -1779,6 +1782,9 @@ bool TWPartition::Bind_Mount(bool Display_Error) {
 }
 
 bool TWPartition::UnMount(bool Display_Error, int flags) {
+	if (DataManager::GetIntValue(TW_VAB_EMPTY_SLOT) && PartitionManager.Is_Fstab_Super(Mount_Point))
+		Display_Error = false;
+
 	if (Is_Mounted()) {
 		int never_unmount_system;
 

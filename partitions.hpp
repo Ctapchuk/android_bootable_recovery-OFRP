@@ -447,6 +447,8 @@ public:
 	bool Disable_AVB2(bool Display_Info);                                     // Disable AVB2.0 in vbmeta/vbmeta_system
 	void Mount_Super_Toggle(const string& arg);                               // Toggle r/o and r/w for dynamic partitions
 	void Refresh_Mounting_Info();                                             // Returns read/write access for dynamic partitions if necessary
+	void Check_VAB_Empty();							  // Disables less spamming if all current dynamic partitions aren't available for mounting
+	bool Is_Fstab_Super(std::string Mount_Point);				  // Return whether partition is dynamic even if it isn't presented
 
 #ifdef TW_HAS_MTP
 	bool is_MTP_Enabled(void);						  // returns whether MTP is already enabled

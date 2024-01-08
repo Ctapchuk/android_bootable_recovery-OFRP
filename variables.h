@@ -326,6 +326,7 @@ static int Fox_Current_ROM_IsMIUI = 0; // is the currently installed ROM a MIUI 
 #define AROMA_CONFIG 		"META-INF/com/google/android/aroma-config"
 #define TW_IS_SUPER             "tw_is_super"
 #define TW_VIRTUAL_AB_ENABLED   "tw_virtual_ab.enabled"
+#define TW_VAB_EMPTY_SLOT	"tw_vab_empty_slot"
 #define TW_AUTO_REFLASHTWRP_VAR "tw_auto_reflashtwrp"
 
 // BUILD PROPS
