@@ -4590,7 +4590,8 @@ bool TWPartitionManager::Prepare_Super_Volume(TWPartition* twrpPart) {
     Fstab fstab;
 	std::string bare_partition_name = Get_Bare_Partition_Name(twrpPart->Get_Mount_Point());
 
-	Super_Partition_List.push_back(bare_partition_name);
+	if (std::find(Super_Partition_List.begin(), Super_Partition_List.end(), bare_partition_name) == Super_Partition_List.end())
+		Super_Partition_List.push_back(bare_partition_name);
 	LOGINFO("Trying to prepare %s from super partition\n", bare_partition_name.c_str());
 
 	std::string blk_device_partition;
