@@ -682,9 +682,6 @@ endif
 
 # custom settings directory
 ifneq ($(FOX_SETTINGS_ROOT_DIRECTORY),)
- ifeq ($(FOX_BUILD_TYPE),Stable)
-    $(error You cannot use 'FOX_SETTINGS_ROOT_DIRECTORY' in stable builds)
- endif
  ifeq ($(FOX_USE_DATA_RECOVERY_FOR_SETTINGS),1)
     $(error You cannot use "FOX_SETTINGS_ROOT_DIRECTORY" with "FOX_USE_DATA_RECOVERY_FOR_SETTINGS")
  endif
