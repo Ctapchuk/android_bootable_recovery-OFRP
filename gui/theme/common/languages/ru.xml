@@ -2,7 +2,7 @@
 
 <language>
 	<display>Русский</display>
-	<!-- Translation by fordownloads, Ctapchuk OrangeFox Recovery © 2019 -->
+	<!-- Translation by fordownloads, Ctapchuk, marat2509, OrangeFox Recovery © 2019 -->
 
 	<resources>
 		<!-- Font overrides - only change these if your language requires special characters -->
@@ -179,7 +179,7 @@
 		<string name="rename_backup_complete">Переименование завершено</string>
 		<string name="swipe_to_rename">Проведите для переименования</string>
 		<string name="mount_hdr">Монтирование</string>
-		<string name="mount_sys_ro_chk">Системные разделы чтение/только</string>
+		<string name="mount_sys_ro_chk">Системные разделы в read/only</string>
 		<string name="decrypt_data_btn">Расшифровать</string>
 		<string name="disable_mtp_btn">Выключить MTP</string>
 		<string name="enable_mtp_btn">Включить MTP</string>
@@ -893,7 +893,7 @@
 		<string name="lockscreen_clock">Часы</string>
 		<string name="lockscreen_icon">Значок</string>
 		<string name="lockscreen_btn">Заменить слайдер кнопкой</string>
-		<string name="lockscreen_info">Показывать ин-фо о CPU и батареи</string>
+		<string name="lockscreen_info">Показывать инфо о CPU и батареи</string>
 		<string name="lockscreen_quicklock">Блокировка экрана нажатием на замок</string>
 
 		<!-- OTA working page -->
