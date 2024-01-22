@@ -3015,7 +3015,8 @@ void TWPartitionManager::Get_Partition_List(string ListType,
 			#endif
 
 			TWPartition* boot = Find_Partition_By_Path(dest_partition);
-			if (boot) {
+			TWPartition* recovery = Find_Partition_By_Path("/recovery");
+			if (boot && !recovery) {
 				// Allow flashing kernels and ramdisks
 				struct PartitionList repack_ramdisk;
 				repack_ramdisk.Display_Name = gui_lookup("install_twrp_ramdisk", "Install Recovery Ramdisk");
