@@ -382,6 +382,7 @@ protected:
 	int passwordcheck(std::string arg);
 	int setpassword(std::string arg);
 	int changeterminal(std::string arg);
+	int mapsuperdevices(std::string arg);
 	int unmapsuperdevices(std::string arg);
 
 #ifdef FOX_USE_NANO_EDITOR

@@ -168,6 +168,20 @@
 					<action function="set">tw_slider_text={@swipe_to_confirm}</action>
 					<action function="page">confirm_action</action>
 				</listitem>
+				<listitem name="{@map_super_devices}">
+					<icon res="bs_adv_se"/>
+					<condition var1="fox_branch" op="&gt;=" var2="11"/>
+					<!--condition var1="fox_vab_device" var2="1"/ -->
+					<condition var1="fox_dynamic_device" var2="1"/>
+					<condition var1="utils_show" var2="1"/>
+					<action function="set">tw_back=advanced</action>
+					<action function="set">tw_action=mapsuperdevices</action>
+					<action function="set">tw_text1={@map_super_devices}</action>
+					<action function="set">tw_action_text1={@mapping_super_devices}</action>
+					<action function="set">tw_complete_text1={@map_super_devices_complete}</action>
+					<action function="set">tw_slider_text={@swipe_to_confirm}</action>
+					<action function="page">confirm_action</action>
+				</listitem>
 				<listitem name="{@unmap_super_devices}">
 					<icon res="bs_adv_se"/>
 					<condition var1="fox_branch" op="&gt;=" var2="11"/>

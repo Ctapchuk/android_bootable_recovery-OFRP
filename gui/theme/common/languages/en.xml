@@ -1191,6 +1191,10 @@
 		<string name="merges_snapshots">Merge Snapshots</string>
 		<string name="merging_snapshots">Merging Snapshots...</string>
 		<string name="merging_snapshots_complete">Merged Snapshots</string>
+
+		<string name="map_super_devices">Map Super Devices</string>
+		<string name="mapping_super_devices">Mapping Super Devices...</string>
+		<string name="map_super_devices_complete">Mapped all Super Devices</string>
 		
 		<string name="unmap_super_devices">Unmap Super Devices</string>
 		<string name="unmapping_super_devices">Unmapping Super Devices...</string>
