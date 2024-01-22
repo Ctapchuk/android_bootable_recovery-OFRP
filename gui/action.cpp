@@ -238,6 +238,7 @@ GUIAction::GUIAction(xml_node <> *node):GUIObject(node)
       ADD_ACTION(enableadb);
       ADD_ACTION(enablefastboot);
       ADD_ACTION(changeterminal);
+      ADD_ACTION(mapsuperdevices);
       ADD_ACTION(unmapsuperdevices);
       ADD_ACTION(disableled);
       ADD_ACTION(flashlight);
@@ -2942,6 +2943,21 @@ int GUIAction::enablefastboot(std::string arg __unused) {
 	return 0;
 }
 
+int GUIAction::mapsuperdevices(std::string arg __unused) {
+	int op_status = 1;
+
+	operation_start("Connect Super Devices");
+	if (simulate) {
+		simulate_progress_bar();
+	} else {
+		if (PartitionManager.Map_Super_Devices()) {
+			op_status = 0;
+		}
+	}
+
+	operation_end(op_status);
+	return 0;
+}
 
 int GUIAction::unmapsuperdevices(std::string arg __unused) {
 	int op_status = 1;

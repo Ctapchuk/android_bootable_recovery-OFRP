@@ -166,6 +166,8 @@ public:
 	void Check_FS_Type();                                                     // Checks the fs type using blkid, does not do anything on MTD / yaffs2 because this crashes on some devices
 	bool Update_Size(bool Display_Error);                                     // Updates size information
 	void Recreate_Media_Folder();                                             // Recreates the /data/media folder
+	bool Map();								  // Maps the partition if it is dynamic
+	bool Unmap();								  // Unmaps the partition if it is dynamic
 
 	bool Flash_Image(PartitionSettings *part_settings);                       // Flashes an image to the partition
 	void Change_Mount_Read_Only(bool new_value);                              // Changes Mount_Read_Only to new_value
@@ -442,6 +444,7 @@ public:
 	void Set_Crypto_State();                                                  // Sets encryption state for devices (ro.crypto.state)
 	int Set_Crypto_Type(const char* crypto_type);                             // Sets encryption type for FDE (block) and FBE (file) devices (ro.crypto.type)
 	void Unlock_Block_Partitions();                                           // Unlock all block devices after update_engine runs
+	bool Map_Super_Devices();                                                 // Map super devices in TWRP
 	bool Unmap_Super_Devices();                                               // Unmap super devices in TWRP
 	bool Check_Pending_Merges();                                              // Check and run pending merges on data for VAB devices
 	bool Disable_AVB2(bool Display_Info);                                     // Disable AVB2.0 in vbmeta/vbmeta_system

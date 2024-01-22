@@ -1191,6 +1191,10 @@
 		<string name="merges_snapshots">Слияние снапшотов</string>
 		<string name="merging_snapshots">Слияние снапшотов...</string>
 		<string name="merging_snapshots_complete">Слияние выполнено</string>
+
+		<string name="map_super_devices">Подключить Super разделы</string>
+		<string name="mapping_super_devices">Подключение Super разделов...</string>
+		<string name="map_super_devices_complete">Подключены все Super разделы</string>
 		
 		<string name="unmap_super_devices">Отключить Super разделы</string>
 		<string name="unmapping_super_devices">Отключение всех Super разделов...</string>

@@ -3794,4 +3794,66 @@ bool TWPartition::Is_SlotSelect() {
 string TWPartition::Get_Mount_Point() {
 	return Mount_Point;
 }
+
+bool TWPartition::Map() {
+	if (!Is_Super)
+		return false;
+
+	std::string block_device;
+#ifdef AB_OTA_UPDATER
+	std::string blk_device_partition = PartitionManager.Get_Bare_Partition_Name(Mount_Point) + PartitionManager.Get_Active_Slot_Suffix();
+#else
+	std::string blk_device_partition = PartitionManager.Get_Bare_Partition_Name(Mount_Point);
+#endif
+	android::fs_mgr::CreateLogicalPartitionParams params {
+		.block_device = PartitionManager.Get_Super_Partition(),
+		.metadata_slot = PartitionManager.Get_Active_Slot_Display() == "B" ? 1 : 0, // set slot to 0 for non-AB
+		.partition_name = blk_device_partition,
+		.timeout_ms = std::chrono::milliseconds(10000),
+		.force_writable = true,
+	};
+
+	if (!android::fs_mgr::CreateLogicalPartition(params, &block_device)) {
+		LOGINFO("Unable to map '%s'\n", blk_device_partition.c_str());
+		return false;
+	}
+
+	Set_Block_Device(block_device);
+	Can_Be_Mounted = true;
+	Check_FS_Type();
+	Find_Partition_Size();
+	TWFunc::Mapper_to_BootDevice(block_device, blk_device_partition);
+
+	return true;
+}
+
+bool TWPartition::Unmap() {
+	if (!Is_Super)
+		return false;
+
+	bool destroyed = false;
+#ifdef AB_OTA_UPDATER
+	std::string blk_device_partition = PartitionManager.Get_Bare_Partition_Name(Mount_Point) + PartitionManager.Get_Active_Slot_Suffix();
+#else
+	std::string blk_device_partition = PartitionManager.Get_Bare_Partition_Name(Mount_Point);
+#endif
+	UnMount(false);
+	Can_Be_Mounted = false;
+
+	destroyed = android::fs_mgr::DestroyLogicalPartition(blk_device_partition);
+	std::string cow_partition = blk_device_partition + "-cow";
+	std::string cow_partition_path = "/dev/block/mapper/" + cow_partition;
+	struct stat st;
+	if (lstat(cow_partition_path.c_str(), &st) == 0) {
+		LOGINFO("Removing cow partition: %s\n", cow_partition.c_str());
+		destroyed = android::fs_mgr::DestroyLogicalPartition(cow_partition);
+	}
+
+	if (!destroyed) {
+		LOGINFO("Unable to unmap '%s'\n", blk_device_partition.c_str());
+		return false;
+	}
+
+	return true;
+}
 //* 
