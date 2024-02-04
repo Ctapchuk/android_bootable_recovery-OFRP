@@ -2787,7 +2787,7 @@ int GUIAction::fixabrecoverybootloop(std::string arg __unused)
 			goto exit;
 		}
 		std::string header_path = REPACK_ORIG_DIR;
-		header_path += "header";
+		header_path += "/header";
 		if (TWFunc::Path_Exists(header_path)) {
 			command = "cd " REPACK_ORIG_DIR " && sed -i \"s|$(grep '^cmdline=' header | cut -d= -f2-)|$(grep '^cmdline=' header | cut -d= -f2- | sed -e 's/skip_override//' -e 's/  */ /g' -e 's/[ \t]*$//')|\" header";
 			if (TWFunc::Exec_Cmd(command) != 0) {
