@@ -2337,40 +2337,40 @@ int TWFunc::Check_MIUI_Treble(void)
 
   // is the device encrypted?
   if (StorageIsEncrypted())
-      gui_print_color("accent", "* Storage is encrypted\n");
+      gui_msg(Msg(msg::kHighlight, "fox_encrypted=* Storage is encrypted"));
   else
-      gui_print_color("warning", "* Storage is not encrypted\n");
+      gui_msg(Msg(msg::kWarning, "fox_not_encrypted=* Storage is not encrypted"));
   
   // show display panel name, if we got one 
   if (!display_panel.empty())
-       gui_print("* Display:    %s\n", display_panel.c_str());
+       gui_msg(Msg("fox_display=* Display:    {1}")(display_panel.c_str()));
 
   // device name
-       gui_print("* Device:     %s (%s)\n", TWFunc::Fox_Property_Get("ro.product.device").c_str(), TWFunc::Fox_Property_Get("ro.product.system.device").c_str());
+       gui_msg(Msg("fox_device=* Device:     {1} ({2})")(TWFunc::Fox_Property_Get("ro.product.device").c_str())(TWFunc::Fox_Property_Get("ro.product.system.device").c_str()));
 
   // Dynamic partitions
   string tmp = Fox_Property_Get("orangefox.super.partition");
   if (tmp == "true")
-       gui_print("* Dynamic:    yes\n");
+       gui_msg(Msg("fox_dynamic_yes=* Dynamic:    yes"));
   else
-       gui_print("* Dynamic:    no\n");
+       gui_msg(Msg("fox_dynamic_no=* Dynamic:    no"));
 
   // A/B
   tmp = Fox_Property_Get("ro.boot.slot_suffix");
   if (!tmp.empty()) {
-       gui_print("* Boot slot:  %s\n", tmp.c_str());
+       gui_msg(Msg("fox_boot_slot=* Boot slot:  {1}")(tmp.c_str()));
        // Virtual A/B
        if (Fox_Property_Get("ro.virtual_ab.enabled") == "true")
-	gui_print("* Virtual_AB: yes\n");
+	gui_msg(Msg("fox_vab_yes=* Virtual_AB: yes"));
        else
-	gui_print("* Virtual_AB: no\n");
+        gui_msg(Msg("fox_vab_no=* Virtual_AB: no"));
    }
 
   // kernel version for A/B
 #ifdef AB_OTA_UPDATER
     string kernel_version = TWFunc::Fox_Property_Get("ro.orangefox.kernel");
     if (!kernel_version.empty())
-       gui_print("* Kernel:     %s\n", kernel_version.c_str());
+       gui_msg(Msg("fox_kernel=* Kernel:     {1}")(kernel_version.c_str()));
 #endif
 
   // installed ROM
@@ -2384,7 +2384,7 @@ int TWFunc::Check_MIUI_Treble(void)
           } 
   	else
      	  {
-   	     gui_print("* Custom ROM (SDK:%i, %s)\n", rom_sdk, sdknum_to_text(rom_sdk).c_str());
+             gui_msg(Msg("fox_custom_rom=* Custom ROM (SDK:{1}, {2})")(rom_sdk)(sdknum_to_text(rom_sdk).c_str()));
     	  }
         gui_print("* %s\n", rom_desc.c_str());
         
@@ -2401,7 +2401,7 @@ int TWFunc::Check_MIUI_Treble(void)
     }
     else
       {
-    	gui_print_color("warning", "* No ROM.\n");
+        gui_msg(Msg(msg::kWarning, "fox_no_rom=* No ROM."));
       }
 
    gui_print("--------------------------\n");  
@@ -2413,16 +2413,20 @@ void TWFunc::Welcome_Message(void)
    if (Fox_Has_Welcomed > 0)
     return;
     gui_print("--------------------------\n");
-    gui_print_color("green", "Welcome to OrangeFox Recovery!\n");
-    gui_print("[Platform]  : %s\n", DataManager::GetStrValue(FOX_COMPATIBILITY_DEVICE).c_str());
-    gui_print("[Release]   : %s\n", FOX_BUILD);
-    gui_print("[Variant]   : %s\n", FOX_VARIANT);
-    gui_print("[Codebase]  : %s, %s\n", Fox_Property_Get("ro.build.version.sdk").c_str(), FOX_CURRENT_DEV_STR);
-    #if defined(FOX_USE_DATA_RECOVERY_FOR_SETTINGS) || defined(FOX_SETTINGS_ROOT_DIRECTORY)
-    gui_print("[Settings]  : %s\n", Fox_Home.c_str());
+    gui_msg(Msg(msg::kGreen, "fox_welcome=Welcome to OrangeFox Recovery!"));
+    #ifdef TARGET_BOARD_PLATFORM
+        gui_msg(Msg("fox_platform=[Platform]  : {1}")(EXPAND(TARGET_BOARD_PLATFORM)));
+    #else
+        gui_msg(Msg("fox_platform=[Platform]  : {1}")(DataManager::GetStrValue(FOX_COMPATIBILITY_DEVICE).c_str()));
     #endif
-    gui_print("[Build date]: %s\n", DataManager::GetStrValue("FOX_BUILD_DATE_REAL").c_str());
-    gui_print("[Build type]: %s\n", FOX_BUILD_TYPE);
+    gui_msg(Msg("fox_release=[Release]   : {1}")(FOX_BUILD));
+    gui_msg(Msg("fox_variant=[Variant]   : {1}")(FOX_VARIANT));
+    gui_msg(Msg("fox_codebase=[Codebase]  : {1}, {2}")(Fox_Property_Get("ro.build.version.sdk").c_str())(FOX_CURRENT_DEV_STR));
+    #if defined(FOX_USE_DATA_RECOVERY_FOR_SETTINGS) || defined(FOX_SETTINGS_ROOT_DIRECTORY)
+        gui_msg(Msg("fox_settings=[Settings]  : {1}")(Fox_Home.c_str()));
+    #endif
+    gui_msg(Msg("fox_build_date=[Build date]: {1}")(DataManager::GetStrValue("FOX_BUILD_DATE_REAL").c_str()));
+    gui_msg(Msg("fox_build_type=[Build type]: {1}")(FOX_BUILD_TYPE));
 
 #ifdef OF_ENABLE_LAB
     gui_print_color("error", "\n*** CONFIDENTIAL ALPHA. NOT FOR RELEASE!! ***\n\n");

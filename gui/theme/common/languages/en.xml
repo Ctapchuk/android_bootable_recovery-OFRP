@@ -804,6 +804,26 @@
 		<string name="fox_internal_fatal_i1">OrangeFox: FATAL ERROR! You cannot backup Internal Storage onto itself!</string>
 		<string name="fox_internal_fatal_i2">You MUST change the backup destination to MicroSD/USB-OTG.</string>
 		<string name="fox_internal_q1">OrangeFox - Internal Storage - take care!</string>
+		<string name="fox_welcome">Welcome to OrangeFox Recovery!</string>
+		<string name="fox_platform">[Platform]  : {1}</string>
+		<string name="fox_release">[Release]   : {1}</string>
+		<string name="fox_variant">[Variant]   : {1}</string>
+		<string name="fox_codebase">[Codebase]  : {1}, {2}</string>
+		<string name="fox_settings">[Settings]  : {1}</string>
+		<string name="fox_build_date">[Build date]: {1}</string>
+		<string name="fox_build_type">[Build type]: {1}</string>
+		<string name="fox_encrypted">* Storage is encrypted</string>
+		<string name="fox_not_encrypted">* Storage is not encrypted</string>
+		<string name="fox_display">* Display:    {1}</string>
+		<string name="fox_device">* Device:     {1} ({2})</string>
+		<string name="fox_dynamic_yes">* Dynamic:    yes</string>
+		<string name="fox_dynamic_no">* Dynamic:    no</string>
+		<string name="fox_boot_slot">* Boot slot:  {1}</string>
+		<string name="fox_vab_yes">* Virtual_AB: yes</string>
+		<string name="fox_vab_no">* Virtual_AB: no</string>
+		<string name="fox_kernel">* Kernel:     {1}</string>
+		<string name="fox_custom_rom">* Custom ROM (SDK:{1}, {2})</string>
+		<string name="fox_no_rom">* No ROM.</string>
 
 		<string name="copy_kernel_log">Copied kernel log to {1}</string>
 		<string name="copy_logcat">Copied logcat to {1}</string>
