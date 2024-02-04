@@ -806,6 +806,26 @@
 		<string name="fox_internal_fatal_i1">OrangeFox: КРИТИЧЕСКАЯ ошибка! Резервное копирование внутренней памяти во внутреннюю память невозможно!</string>
 		<string name="fox_internal_fatal_i2">Вы ДОЛЖНЫ изменить место расположения резервной копии на MicroSD / USB-OTG.</string>
 		<string name="fox_internal_q1">OrangeFox - Внутренняя память - будьте осторожны!</string>
+		<string name="fox_welcome">Добро пожаловать в OrangeFox рекавери!</string>
+		<string name="fox_platform">[Платформа]    : {1}</string>
+		<string name="fox_release">[Версия]       : {1}</string>
+		<string name="fox_variant">[Вариант]      : {1}</string>
+		<string name="fox_codebase">[Кодовая база] : {1}, {2}</string>
+		<string name="fox_settings">[Настройки]    : {1}</string>
+		<string name="fox_build_date">[Дата сборки]  : {1}</string>
+		<string name="fox_build_type">[Тип сборки]   : {1}</string>
+		<string name="fox_encrypted">* Хранилище зашифровано</string>
+		<string name="fox_not_encrypted">* Хранилище не зашифровано</string>
+		<string name="fox_display">* Дисплей:     {1}</string>
+		<string name="fox_device">* Девайс:      {1} ({2})</string>
+		<string name="fox_dynamic_yes">* Super:       да</string>
+		<string name="fox_dynamic_no">* Super:       нет</string>
+		<string name="fox_boot_slot">* Слот:        {1}</string>
+		<string name="fox_vab_yes">* VAB:         да</string>
+		<string name="fox_vab_no">* VAB:         нет</string>
+		<string name="fox_kernel">* Ядро:        {1}</string>
+		<string name="fox_custom_rom">* Кастомный ROM (SDK:{1}, {2})</string>
+		<string name="fox_no_rom">* Пустой ROM.</string>
 
 		<string name="copy_kernel_log">Лог ядра скопирован в {1}</string>
 		<string name="copy_logcat">Logcat скопирован в {1}</string>
