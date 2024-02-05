@@ -4834,11 +4834,12 @@ bool TWPartitionManager::Unmap_Super_Devices() {
 	LOGINFO("Unmap_Super_Devices\n");
 	bool status = true;
 	for (auto iter = Partitions.begin(); iter != Partitions.end();) {
-		if ((*iter)->Is_Super)
+		if ((*iter)->Is_Super && (*iter)->Can_Be_Mounted) // do not double unmap
 			if (!(*iter)->Unmap())
 				status = false;
 		++iter;
 	}
+
 	return status;
 }
 
