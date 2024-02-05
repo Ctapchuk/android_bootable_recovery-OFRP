@@ -2667,16 +2667,18 @@ bool TWPartition::Wipe_F2FS() {
 	}
 	LOGINFO("mkfs.f2fs command: %s\n", f2fs_command.c_str());
 
+	if (Mount_Point == "/data") {
 	// try to unbind /sdcard if it is still bind-mounted
-	#ifdef OF_UNBIND_SDCARD_F2FS
-		if (Mount_Point == "/data") {
-			LOGINFO("OrangeFox: bind-unmounting /sdcard before f2fs data format...\n");
-			usleep(32768);
-			string nul;
-			TWFunc::Exec_Cmd("umount /sdcard", nul);
-			usleep(32768);
-		}
-	#endif
+#ifdef OF_UNBIND_SDCARD_F2FS
+		LOGINFO("OrangeFox: bind-unmounting /sdcard before f2fs data format...\n");
+		usleep(32768);
+		string nul;
+		TWFunc::Exec_Cmd("umount /sdcard", nul);
+		usleep(32768);
+#endif
+		Unmap();
+	}
+
 	if (TWFunc::Exec_Cmd(f2fs_command) == 0) {
 		if (NeedPreserveFooter)
 			Wipe_Crypto_Key();
@@ -3942,26 +3944,31 @@ bool TWPartition::Map() {
 }
 
 bool TWPartition::Unmap() {
-	if (!Is_Super)
-		return false;
-
 	bool destroyed = false;
-#ifdef AB_OTA_UPDATER
-	std::string blk_device_partition = PartitionManager.Get_Bare_Partition_Name(Mount_Point) + PartitionManager.Get_Active_Slot_Suffix();
-#else
-	std::string blk_device_partition = PartitionManager.Get_Bare_Partition_Name(Mount_Point);
-#endif
+	std::string blk_device_partition;
+
 	UnMount(false);
-	Can_Be_Mounted = false;
+
+	if (Mount_Point != "/data") {
+		Can_Be_Mounted = false;
+#ifdef AB_OTA_UPDATER
+		blk_device_partition = PartitionManager.Get_Bare_Partition_Name(Mount_Point) + PartitionManager.Get_Active_Slot_Suffix();
+#else
+		blk_device_partition = PartitionManager.Get_Bare_Partition_Name(Mount_Point);
+#endif
+		std::string cow_partition = blk_device_partition + "-cow";
+		std::string cow_partition_path = "/dev/block/mapper/" + cow_partition;
+		struct stat st;
+		if (lstat(cow_partition_path.c_str(), &st) == 0) {
+			LOGINFO("Removing cow partition: %s\n", cow_partition.c_str());
+			android::fs_mgr::DestroyLogicalPartition(cow_partition);
+		}
+	} else {
+		blk_device_partition = "userdata";
+		Decrypted_Block_Device = "";
+	}
 
 	destroyed = android::fs_mgr::DestroyLogicalPartition(blk_device_partition);
-	std::string cow_partition = blk_device_partition + "-cow";
-	std::string cow_partition_path = "/dev/block/mapper/" + cow_partition;
-	struct stat st;
-	if (lstat(cow_partition_path.c_str(), &st) == 0) {
-		LOGINFO("Removing cow partition: %s\n", cow_partition.c_str());
-		destroyed = android::fs_mgr::DestroyLogicalPartition(cow_partition);
-	}
 
 	if (!destroyed) {
 		LOGINFO("Unable to unmap '%s'\n", blk_device_partition.c_str());
