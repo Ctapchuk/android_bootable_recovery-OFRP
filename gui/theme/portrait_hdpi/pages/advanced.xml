@@ -29,6 +29,7 @@
 				</listitem>
 				<listitem name="{@decrypt_users}">
 					<condition var1="tw_is_fbe" var2="1"/>
+					<condition var1="fox_encrypted_device" var2="1"/>
 					<condition var1="tw_all_users_decrypted" var2="0"/>
 					<icon res="bs_adv_frp"/>
 					<action function="page">decrypt_users</action>

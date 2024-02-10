@@ -2270,7 +2270,18 @@ void TWPartitionManager::Parse_Users() {
 			user.isDecrypted = false;
 			if (strcmp(user_check_result, "1") == 0)
 				user.isDecrypted = true;
-			Users_List.push_back(user);
+
+			bool needAdd = true;
+			std::vector<users_struct>::iterator iter;
+			for (iter = Users_List.begin(); iter != Users_List.end(); iter++) {
+				if ((*iter).userId == user.userId) {
+					*(iter) = user;
+					needAdd = false;
+					break;
+				}
+			}
+			if (needAdd)
+				Users_List.push_back(user);
 		}
 	}
 	Check_Users_Decryption_Status();
@@ -2279,6 +2290,20 @@ void TWPartitionManager::Parse_Users() {
 
 std::vector<users_struct>* TWPartitionManager::Get_Users_List() {
 	return &Users_List;
+}
+
+void TWPartitionManager::Mark_All_Users_Encrypted() {
+#ifdef TW_INCLUDE_FBE
+	std::vector<users_struct>::iterator iter;
+	for (iter = Users_List.begin(); iter != Users_List.end(); iter++) {
+		if (TWFunc::Path_Exists("/data/system_de/" + (*iter).userId + "/spblob"))
+			continue;
+		(*iter).isDecrypted = false;
+		string user_prop_decrypted = "twrp.user." + (*iter).userId + ".decrypt";
+		property_set(user_prop_decrypted.c_str(), "0");
+	}
+	Check_Users_Decryption_Status();
+#endif
 }
 
 void TWPartitionManager::Mark_User_Decrypted(int userID) {
@@ -2311,8 +2336,10 @@ void TWPartitionManager::Check_Users_Decryption_Status() {
 		LOGINFO("All found users are decrypted.\n");
 		DataManager::SetValue("tw_all_users_decrypted", "1");
 		property_set("twrp.all.users.decrypted", "true");
-	} else
+	} else {
 		DataManager::SetValue("tw_all_users_decrypted", "0");
+		TWFunc::Fox_Property_Set("twrp.all.users.decrypted", "false");
+	}
 #endif
 }
 
@@ -2356,6 +2383,15 @@ int TWPartitionManager::Decrypt_Device(string Password, int user_id) {
 		while (!TWFunc::Path_Exists("/data/system/users/gatekeeper.password.key") && --retry_count)
 			usleep(2000); // A small sleep is needed after mounting /data to ensure reliable decrypt...maybe because of DE?
 		gui_msg(Msg("decrypting_user_fbe=Attempting to decrypt FBE for user {1}...")(user_id));
+
+		TWPartition* Decrypt_Data = Find_Partition_By_Path("/data");
+		if (Decrypt_Data && Decrypt_Data->Mount(false) && !TWFunc::Path_Exists("/data/system_de/" + to_string(user_id) + "/spblob")) { // try to decrypt DE again because after remount /data it becomes encrypted again
+			LOGINFO("Attempt to decrypt DE again..\n");
+			while (!Decrypt_Data->Mount(false) && --retry_count)
+				usleep(500);
+
+			Decrypt_Data->Decrypt_FBE_DE();
+		}
 		if (android::keystore::Decrypt_User(user_id, Password)) {
 			gui_msg(Msg("decrypt_user_success_fbe=User {1} Decrypted Successfully")(user_id));
 			Mark_User_Decrypted(user_id);
