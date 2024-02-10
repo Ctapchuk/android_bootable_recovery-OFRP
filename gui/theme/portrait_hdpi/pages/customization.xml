@@ -181,12 +181,7 @@
 				<listitem name="{@sph_sph}">
 					<condition var1="no_splash_change" op="!=" var2="1"/>
 					<icon res="boot_splash"/>
-					<action function="set">spl_logo_type=w</action>
-					<action function="set">spl_bg_color=#ED6F02</action>
-					<action function="set">spl_bg_user=0</action>
-					<action function="set">spl_bg_on=0</action>
-					<action function="set">spl_ofr=1</action>
-					<action function="page">ext_custom_splash</action>
+					<action function="page">get_splash_info</action>
 				</listitem>
 				<listitem name="{@keyboard_title}">
 					<icon res="keyboard"/>
@@ -2098,6 +2093,70 @@
 				<action function="wlfx"/>
 				<action function="overlay"/>
 				<action function="page">ext_custom</action>
+			</action>
+		</page>
+
+		<page name="get_splash_info">
+			<template name="dialog_body"/>
+
+			<image>
+				<image resource="snackbar"/>
+				<placement x="0" y="%row_nav_y%" placement="2"/>
+			</image>
+
+			<text style="text_body1">
+				<placement x="%snackbar_text_x%" y="%snackbar_text_y%"/>
+				<text>{@lang_wait}</text>
+			</text>
+
+			<action>
+				<action function="set">spl_logo_type=w</action>
+				<action function="set">spl_bg_color=#ED6F02</action>
+				<action function="set">spl_bg_user=0</action>
+				<action function="set">spl_bg_on=0</action>
+				<action function="set">spl_ofr=1</action>
+				<action function="ftls">
+					splash=/twres/splash.xml
+
+					cat $splash | grep "SED Splash"
+					if [ $? -ne 0 ]; then
+						exit 0;
+					fi;
+
+					spl_logo_string=`cat $splash | grep 'image name="splash_logo"'`;
+					spl_bg_user_string=`cat $splash | grep 'image name="splash_bg"'`;
+					spl_bg_color_string=`cat $splash | grep 'background color='`;
+
+					echo ${spl_logo_string} | grep '!--' > /dev/null;
+					if [ $? -ne 0 ]; then
+						spl_logo_type=`echo ${spl_logo_string} | sed 's/.*Splash\/logo_\(.\).*/\1/'`;
+					fi;
+
+					echo ${spl_bg_user_string} | grep '!--' > /dev/null;
+					if [ $? -ne 0 ]; then
+						twrp xset spl_bg_on=1;
+					fi;
+
+					echo ${spl_bg_color_string} | grep '!--' > /dev/null;
+					if [ $? -ne 0 ]; then
+						spl_bg_color=`echo ${spl_bg_color_string} | sed 's/.*color="\([^"]*\)".*/\1/'`;
+					fi;
+
+					if [[ ! -z ${spl_logo_type} ]]; then
+						twrp xset spl_logo_type=${spl_logo_type};
+						twrp xset spl_ofr=0;
+						twrp xset spl_bg_user=1;
+					fi;
+
+					if [[ ! -z ${spl_bg_color} ]]; then
+						twrp xset spl_bg_color=${spl_bg_color};
+						twrp xset spl_bg_user=1;
+					fi;
+
+					exit 0;
+				</action>
+				<action function="overlay"/>
+				<action function="page">ext_custom_splash</action>
 			</action>
 		</page>
 	</pages>
