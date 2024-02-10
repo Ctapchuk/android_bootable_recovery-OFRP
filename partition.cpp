@@ -1775,6 +1775,10 @@ bool TWPartition::Mount(bool Display_Error) {
 		if (!Bind_Mount(false))
 			return false;
 	}
+
+	if (Mount_Point == "/data")
+		PartitionManager.Mark_All_Users_Encrypted();
+
 	return true;
 }
 
@@ -2257,6 +2261,7 @@ bool TWPartition::Wipe_Encryption() {
 	if (Wipe(Fstab_File_System)) {
 		Has_Data_Media = Save_Data_Media;
 		DataManager::SetValue(TW_IS_ENCRYPTED, 0);
+		DataManager::SetValue(FOX_ENCRYPTED_DEVICE, "0");
 #ifndef TW_OEM_BUILD
 		gui_msg("format_data_msg=You may need to reboot recovery to be able to use /data again.");
 #endif
@@ -3352,7 +3357,7 @@ void TWPartition::Find_Actual_Block_Device(void) {
 			}
 		}
 		return;
-	} else if (Is_Decrypted && !Decrypted_Block_Device.empty()) {
+	} else if ((Is_Decrypted || (Is_Encrypted && !Is_Decrypted)) && !Decrypted_Block_Device.empty()) {
 		Actual_Block_Device = Decrypted_Block_Device;
 		if (TWFunc::Path_Exists(Decrypted_Block_Device)) {
 			Is_Present = true;

@@ -456,6 +456,7 @@ public:
 	void Refresh_Mounting_Info();                                             // Returns read/write access for dynamic partitions if necessary
 	void Check_VAB_Empty();							  // Disables less spamming if all current dynamic partitions aren't available for mounting
 	bool Is_Fstab_Super(std::string Mount_Point);				  // Return whether partition is dynamic even if it isn't presented
+	void Mark_All_Users_Encrypted();                                          // Marks all users in Users_List as encrypted
 
 #ifdef TW_HAS_MTP
 	bool is_MTP_Enabled(void);						  // returns whether MTP is already enabled
@@ -480,7 +481,7 @@ private:
 	std::string original_ramdisk_format;                                      // Ramdisk format of boot partition
 	std::string repacked_ramdisk_format;                                      // Ramdisk format of boot image to repack from
 	void Mark_User_Decrypted(int userID);                                     // Marks given user ID in Users_List as decrypted
-	void Check_Users_Decryption_Status();                                      // Checks to see if all users are decrypted
+	void Check_Users_Decryption_Status();                                     // Checks to see if all users are decrypted
 
 private:
 	std::vector<TWPartition*> Partitions;                                     // Vector list of all partitions
