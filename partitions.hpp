@@ -390,6 +390,7 @@ public:
 	int Wipe_Battery_Stats();                                                 // Wipe battery stats -- /data/system/batterystats.bin
 	int Wipe_Android_Secure();                                                // Wipes android secure
 	int Format_Data();                                                        // Really formats data on /data/media devices -- also removes encryption
+	void Post_Wipe_Encryption(void);                                          // Run after formatting data to recreate /data/media/0/ + /sdcard/Fox/logs/ automatically
 	int Wipe_Media_From_Data();                                               // Removes and recreates the media folder on /data/media devices
 	int Repair_By_Path(string Path, bool Display_Error);                      // Repairs a partition based on path
 	int Resize_By_Path(string Path, bool Display_Error);                      // Resizes a partition based on path
