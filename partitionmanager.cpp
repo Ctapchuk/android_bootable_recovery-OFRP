@@ -794,6 +794,8 @@ void TWPartitionManager::Output_Partition_Logging(void) {
 }
 
 void TWPartitionManager::Output_Partition(TWPartition* Part) {
+	if (!Part)
+		return;
 	unsigned long long mb = 1048576;
 
 	printf("%s | %s | Size: %iMB", Part->Mount_Point.c_str(), Part->Actual_Block_Device.c_str(), (int)(Part->Size / mb));
