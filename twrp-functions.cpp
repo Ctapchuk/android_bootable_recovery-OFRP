@@ -5148,22 +5148,6 @@ void TWFunc::Mapper_to_BootDevice(const std::string block_device, const std::str
 	symlink(block_device.c_str(), ("/dev/block/by-name/" + partition_name).c_str());
 }
 
-void TWFunc::PostWipeEncryption(void) {
-#ifdef OF_BIND_MOUNT_SDCARD_ON_FORMAT
-	// deal with MTP issues after formatting data
-	std::string dir = "/data/media/0";
-	LOGINFO("Recreating %s...\n", dir.c_str());
-	TWFunc::Recursive_Mkdir(dir, false);
-	chmod(dir.c_str(), 0770);
-	PartitionManager.Add_MTP_Storage("/data/media");
-	// bind mount: this can be problematic for encryption
-	LOGINFO("Bind mounting /data/media/0 to /sdcard after formatting\n");
-	mount(dir.c_str(), "/sdcard", "", MS_BIND, NULL);
-#endif
-	// run the OrangeFox postformatdata script here
-	TWFunc::RunFoxScript(FOX_POST_DATA_FORMAT_SCRIPT, "");
-}
-
 void TWFunc::Set_Sbin_Dir_Executable_Flags(void) {
   system("chmod 0755 /sbin/*");
 }

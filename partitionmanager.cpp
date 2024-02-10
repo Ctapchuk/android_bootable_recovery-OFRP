@@ -1973,9 +1973,33 @@ int TWPartitionManager::Format_Data(void) {
 		Wipe_By_Path("/metadata");
 		usleep(2048);
 		#endif
+		Post_Wipe_Encryption();
 		TWFunc::check_and_run_script(TW_FORMAT_DATA_SCRIPT, "Format Data Script");
 	}
 	return ret;
+}
+
+void TWPartitionManager::Post_Wipe_Encryption(void) {
+#ifdef OF_BIND_MOUNT_SDCARD_ON_FORMAT
+	// deal with MTP issues after formatting data
+	std::string dir = "/data/media/0";
+	LOGINFO("Recreating %s...\n", dir.c_str());
+	TWFunc::Recursive_Mkdir(dir, false);
+	chmod(dir.c_str(), 0770);
+	
+	TWPartition* data = Find_Partition_By_Path(dir);
+	if (data)
+		data->Setup_Data_Media();
+		//data->Storage_Path = dir;
+	Disable_MTP();
+	Enable_MTP();
+	Add_MTP_Storage("/data");
+	// bind mount: this can be problematic for encryption
+	LOGINFO("Bind mounting /data/media/0 to /sdcard after formatting\n");
+	mount(dir.c_str(), "/sdcard", "", MS_BIND, NULL);
+#endif
+	// run the OrangeFox postformatdata script here
+	TWFunc::RunFoxScript(FOX_POST_DATA_FORMAT_SCRIPT, "");
 }
 
 int TWPartitionManager::Wipe_Media_From_Data(void) {
