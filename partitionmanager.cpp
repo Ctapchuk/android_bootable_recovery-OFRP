@@ -5102,4 +5102,36 @@ bool TWPartitionManager::Resize_Super_Volume(TWPartition* twrpPart_image, unsign
 		return false;
 	}
 }
+
+bool TWPartitionManager::Make_Empty_Super() {
+	string lptools_binary = "/system/bin/lptools";
+	if (!TWFunc::Path_Exists(lptools_binary)) {
+		LOGINFO("Cannot find lptools!\n");
+		return false;
+	}
+
+	if (TWFunc::Has_Virtual_AB_Partitions() && !Unmap_Super_Devices()) {
+		LOGINFO("Cannot unmap partitions!\n");
+		return false;
+	}
+
+	string command;
+
+	// code is for all logical partitions in super, not just those that were processed by recovery
+	auto metadata = android::fs_mgr::ReadMetadata(Get_Super_Partition(), 0);
+	if (!metadata) {
+		LOGINFO("Cannot get metadata from super!\n");
+		return false;
+	}
+	for (const auto& partition_metadata : metadata.get()->partitions) {
+		auto partition = android::fs_mgr::GetPartitionName(partition_metadata);
+
+		command = lptools_binary + " resize " + partition + " 0";
+		LOGINFO("Resizing command: '%s'\n", command.c_str());
+		TWFunc::Exec_Cmd(command, false);
+	}
+
+	Update_System_Details();
+	return true;
+}
 //*

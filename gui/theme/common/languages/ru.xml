@@ -1239,8 +1239,6 @@
 		<string name="disable_avb2_success_msg">Выключение vbmeta AVB2.0: '{1}' произошло успешно.</string>
 		<string name="disable_avb2_fail_msg">Выключение vbmeta AVB2.0: '{1}' неудалось!</string>
 
-		<string name="slot_empty_vab">Текущий слот пустой или разделы в нём отключены! Отключение спама ошибками..</string>
-
 		<!-- Dynamic flashing -->
 		<string name="dynamic_flash_warn">Попытка прошить динамический раздел!</string>
 		<string name="dynamic_flash_resize_warn">Недостаточно места в разделе {1}. Попытка расширить его...</string>
@@ -1262,5 +1260,10 @@
 		<string name="dynamic_convert_rw_damaged">Конвертирование неудалось! Образ повреждён!</string>
 		<string name="dynamic_convert_rw_success">{1} был успешно конвертирован в r/w!</string>
 		<string name="dynamic_convert_rw_fail">Конвертирование неудалось!</string>
+
+		<string name="make_super_empty">Сделать Super пустым</string>
+		<string name="making_super_empty">Опустошение Super..</string>
+		<string name="make_super_empty_complete">Super опустошон успешно!</string>
+		<string name="slot_empty_vab">Текущий слот пустой или разделы в нём отключены! Отключение спама ошибками..</string>
 	</resources>
 </language>

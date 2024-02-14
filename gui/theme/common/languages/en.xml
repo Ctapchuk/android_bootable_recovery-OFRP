@@ -1238,8 +1238,6 @@
 		<string name="disable_avb2_success_msg">Disable vbmeta AVB2.0: processing '{1}' successfully.</string>
 		<string name="disable_avb2_fail_msg">Disable vbmeta AVB2.0: processing '{1}' failed!</string>
 
-		<string name="slot_empty_vab">Current slot is empty or unmapped! Disabling errors spamming..</string>
-
 		<!-- Dynamic flashing -->
 		<string name="dynamic_flash_warn">Attempt to flash a dynamic partition!</string>
 		<string name="dynamic_flash_resize_warn">Not enough space in {1} partition. Attempting to resize it...</string>
@@ -1261,5 +1259,10 @@
 		<string name="dynamic_convert_rw_damaged">Convert failed! Image is damaged!</string>
 		<string name="dynamic_convert_rw_success">{1} has been successfully converted to r/w!</string>
 		<string name="dynamic_convert_rw_fail">Convert failed!</string>
+
+		<string name="make_super_empty">Make Super empty</string>
+		<string name="making_super_empty">Making Super empty..</string>
+		<string name="make_super_empty_complete">Make Super empty successful!</string>
+		<string name="slot_empty_vab">Current slot is empty or unmapped! Disabling errors spamming..</string>
 	</resources>
 </language>
