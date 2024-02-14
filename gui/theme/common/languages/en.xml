@@ -1258,5 +1258,9 @@
 		<string name="dynamic_convert_rw_damaged">Convert failed! Image is damaged!</string>
 		<string name="dynamic_convert_rw_success">{1} has been successfully converted to r/w!</string>
 		<string name="dynamic_convert_rw_fail">Convert failed!</string>
+
+		<string name="make_super_empty">Make Super empty</string>
+		<string name="making_super_empty">Making Super empty..</string>
+		<string name="make_super_empty_complete">Make Super empty successful!</string>
 	</resources>
 </language>

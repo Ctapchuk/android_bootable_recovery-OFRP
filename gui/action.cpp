@@ -295,6 +295,7 @@ GUIAction::GUIAction(xml_node <> *node):GUIObject(node)
 #endif
       ADD_ACTION(mergesnapshots);
       ADD_ACTION(disableAVB2);
+      ADD_ACTION(makesuperempty);
 
       //[f/d] Threaded actions
       ADD_ACTION(batch);
@@ -3037,6 +3038,19 @@ int GUIAction::disableAVB2(string arg __unused) {
 	gui_highlight("disabling_AVB2=Disabling vbmeta AVB2.0...");
 	if (PartitionManager.Disable_AVB2(true)) {
 		op_status = 0;
+	}
+	operation_end(op_status);
+	return 0;
+}
+
+int GUIAction::makesuperempty(string arg __unused) {
+	int op_status = 1;
+	operation_start("Make Super Empty");
+	if (PartitionManager.Make_Empty_Super()) {
+		gui_print_color("green", "%s\n", DataManager::GetStrValue("tw_complete_text1").c_str());
+		op_status = 0;
+	} else {
+		gui_msg(Msg(msg::kError, "failed=Failed!"));
 	}
 	operation_end(op_status);
 	return 0;

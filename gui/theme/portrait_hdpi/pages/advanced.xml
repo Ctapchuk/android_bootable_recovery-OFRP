@@ -156,6 +156,19 @@
 					<action function="set">tw_slider_text={@swipe_to_confirm}</action>
 					<action function="page">confirm_action</action>
 				</listitem>
+				<listitem name="{@make_super_empty}">
+					<icon res="bs_adv_se"/>
+					<condition var1="fox_branch" op="&gt;=" var2="11"/>
+					<condition var1="fox_vab_device" var2="1"/>
+					<condition var1="utils_show" var2="1"/>
+					<action function="set">tw_back=advanced</action>
+					<action function="set">tw_action=makesuperempty</action>
+					<action function="set">tw_text1={@make_super_empty}</action>
+					<action function="set">tw_action_text1={@making_super_empty}</action>
+					<action function="set">tw_complete_text1={@make_super_empty_complete}</action>
+					<action function="set">tw_slider_text={@swipe_to_confirm}</action>
+					<action function="page">confirm_action</action>
+				</listitem>
 				<listitem name="{@merges_snapshots}">
 					<icon res="bs_adv_se"/>
 					<condition var1="fox_branch" op="&gt;=" var2="11"/>

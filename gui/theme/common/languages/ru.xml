@@ -1259,5 +1259,9 @@
 		<string name="dynamic_convert_rw_damaged">Конвертирование неудалось! Образ повреждён!</string>
 		<string name="dynamic_convert_rw_success">{1} был успешно конвертирован в r/w!</string>
 		<string name="dynamic_convert_rw_fail">Конвертирование неудалось!</string>
+
+		<string name="make_super_empty">Сделать Super пустым</string>
+		<string name="making_super_empty">Опустошение Super..</string>
+		<string name="make_super_empty_complete">Super опустошон успешно!</string>
 	</resources>
 </language>
