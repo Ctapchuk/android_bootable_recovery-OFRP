@@ -1180,7 +1180,7 @@
 		<string name="status_delimeter">Status bar delimiter</string>
 		<string name="status_delimeter_shadow">Shadow</string>
 
-		<string name="mount_vab_partitions">Devices on super may not mount until rebooting recovery.</string>
+		<string name="mount_vab_partitions">Devices on super may not mount until after rebooting recovery.</string>
 		<string name="merges_snapshots">Merge Snapshots</string>
 		<string name="merging_snapshots">Merging Snapshots...</string>
 		<string name="merging_snapshots_complete">Merged Snapshots</string>
