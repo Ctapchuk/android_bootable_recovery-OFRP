@@ -112,6 +112,7 @@
 		<string name="format_data_adopted">во внутренней памяти.</string>
 		<string name="format_data_undo">Это не может быть отменено.</string>
 		<string name="format_data_complete">Форматирование данных завершено</string>
+		<string name="format_data_complete_suc">Форматирование данных завершено успешно!</string>
 		<!-- Translator note: the word "yes" must remain English! -->
 		<string name="yes_continue">Введите "yes" для продолжения...</string>
 		<string name="part_opt_hdr">Информация о разделе</string>
@@ -1211,15 +1212,21 @@
 		<string name="mount_vab_partitions">Super-разделы могут не монтироваться до перезагрузки рекавери.</string>
 		<string name="merges_snapshots">Слияние снапшотов</string>
 		<string name="merging_snapshots">Слияние снапшотов...</string>
-		<string name="merging_snapshots_complete">Слияние выполнено</string>
+		<string name="merging_snapshots_complete">Слияние завершено</string>
+		<string name="merging_snapshots_complete_suc">Слияние выполнено успешно!</string>
+		<string name="merging_snapshots_complete_unsuc">Неудалось выполнить слияние!</string>
 
 		<string name="map_super_devices">Подключить Super разделы</string>
 		<string name="mapping_super_devices">Подключение Super разделов...</string>
-		<string name="map_super_devices_complete">Подключены все Super разделы</string>
+		<string name="map_super_devices_complete">Подключение завершено</string>
+		<string name="map_super_devices_complete_suc">Все Super разделы подключены успешно!</string>
+		<string name="map_super_devices_complete_unsuc">Неудалось подключить все Super разделы!</string>
 		
 		<string name="unmap_super_devices">Отключить Super разделы</string>
 		<string name="unmapping_super_devices">Отключение всех Super разделов...</string>
-		<string name="unmap_super_devices_complete">Отлючены все Super разделы</string>
+		<string name="unmap_super_devices_complete">Отлючение завершено</string>
+		<string name="unmap_super_devices_complete_suc">Все Super разделы отключены успешно!</string>
+		<string name="unmap_super_devices_complete_unsuc">Неудалось отключить все Super разделы!</string>
 
 		<string name="auto_reflashtwrp_chk">Восстанавливать OrangeFox</string>
 		<string name="modified_ramdisk_error">файлы Ramdisk'а были изменены, невозможно создать Ramdisk для прошивки. Загрузитесь с помощью fastboot boot и попытайтесь снова, либо вернитесь в "Файлы" и прошейте img файл как "Recovery Ramdisk" через меню "Прошить Ramdisk".</string>
@@ -1263,7 +1270,9 @@
 
 		<string name="make_super_empty">Сделать Super пустым</string>
 		<string name="making_super_empty">Опустошение Super..</string>
-		<string name="make_super_empty_complete">Super опустошон успешно!</string>
+		<string name="make_super_empty_complete">Опустошение завершено</string>
+		<string name="make_super_empty_complete_suc">Super опустошон успешно!</string>
+		<string name="make_super_empty_complete_unsuc">Неудалось опустошить Super!</string>
 		<string name="slot_empty_vab">Текущий слот пустой или разделы в нём отключены! Отключение спама ошибками..</string>
 	</resources>
 </language>

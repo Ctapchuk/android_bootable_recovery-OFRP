@@ -2952,7 +2952,10 @@ int GUIAction::mapsuperdevices(std::string arg __unused) {
 		simulate_progress_bar();
 	} else {
 		if (PartitionManager.Map_Super_Devices()) {
+			gui_msg(Msg(msg::kGreen, "map_super_devices_complete_suc=All Super Devices have been mapped successfully!"));
 			op_status = 0;
+		} else {
+			gui_msg(Msg(msg::kError, "map_super_devices_complete_unsuc=Unable to map all Super Devices!"));
 		}
 	}
 
@@ -2968,7 +2971,10 @@ int GUIAction::unmapsuperdevices(std::string arg __unused) {
 		simulate_progress_bar();
 	} else {
 		if (PartitionManager.Unmap_Super_Devices()) {
+			gui_msg(Msg(msg::kGreen, "unmap_super_devices_complete_suc=All Super Devices have been unmapped successfully!"));
 			op_status = 0;
+		} else {
+			gui_msg(Msg(msg::kError, "unmap_super_devices_complete_unsuc=Unable to unmap all Super Devices!"));
 		}
 	}
 
@@ -3026,7 +3032,10 @@ int GUIAction::changeterminal(std::string arg) {
 int GUIAction::mergesnapshots(string arg __unused) {
 	int op_status = 1;
 	if (PartitionManager.Check_Pending_Merges()) {
+		gui_msg(Msg(msg::kGreen, "merging_snapshots_complete_suc=Merging Snapshots has been completed successfully!"));
 		op_status = 0;
+	} else {
+		gui_msg(Msg(msg::kError, "merging_snapshots_complete_unsuc=Unable to Merge Snapshots!"));
 	}
 	operation_end(op_status);
 	return 0;
@@ -3047,10 +3056,10 @@ int GUIAction::makesuperempty(string arg __unused) {
 	int op_status = 1;
 	operation_start("Make Super Empty");
 	if (PartitionManager.Make_Empty_Super()) {
-		gui_print_color("green", "%s\n", DataManager::GetStrValue("tw_complete_text1").c_str());
+		gui_msg(Msg(msg::kGreen, "make_super_empty_complete_suc=Making Super Empty have been completed successfully!"));
 		op_status = 0;
 	} else {
-		gui_msg(Msg(msg::kError, "failed=Failed!"));
+		gui_msg(Msg(msg::kError, "make_super_empty_complete_unsuc=Unable to Make Super Empty!"));
 	}
 	operation_end(op_status);
 	return 0;

@@ -111,6 +111,7 @@
 		<string name="format_data_adopted">Including Adopted Storage</string>
 		<string name="format_data_undo">This cannot be undone.</string>
 		<string name="format_data_complete">Data Format completed</string>
+		<string name="format_data_complete_suc">Data Format completed successfully!</string>
 		<!-- Translator note: the word "yes" must remain English! -->
 		<string name="yes_continue">Type "yes" to confirm.</string>
 		<string name="part_opt_hdr">Partition Info</string>
@@ -1210,15 +1211,21 @@
 		<string name="mount_vab_partitions">Devices on super may not mount until after rebooting recovery.</string>
 		<string name="merges_snapshots">Merge Snapshots</string>
 		<string name="merging_snapshots">Merging Snapshots...</string>
-		<string name="merging_snapshots_complete">Merged Snapshots</string>
+		<string name="merging_snapshots_complete">Merging completed</string>
+		<string name="merging_snapshots_complete_suc">Merging Snapshots has been completed successfully!</string>
+		<string name="merging_snapshots_complete_unsuc">Unable to Merge Snapshots!</string>
 
 		<string name="map_super_devices">Map Super Devices</string>
 		<string name="mapping_super_devices">Mapping Super Devices...</string>
-		<string name="map_super_devices_complete">Mapped all Super Devices</string>
+		<string name="map_super_devices_complete">Mapping completed</string>
+		<string name="map_super_devices_complete_suc">All Super Devices have been mapped successfully!</string>
+		<string name="map_super_devices_complete_unsuc">Unable to map all Super Devices!</string>
 		
 		<string name="unmap_super_devices">Unmap Super Devices</string>
 		<string name="unmapping_super_devices">Unmapping Super Devices...</string>
-		<string name="unmap_super_devices_complete">Unmapped all Super Devices</string>
+		<string name="unmap_super_devices_complete">Unmapping completed</string>
+		<string name="unmap_super_devices_complete_suc">All Super Devices have been unmapped successfully!</string>
+		<string name="unmap_super_devices_complete_unsuc">Unable to unmap all Super Devices!</string>
 
 		<string name="auto_reflashtwrp_chk">Reflash OrangeFox after flashing a ROM</string>
 		<string name="modified_ramdisk_error">ramdisk files have been modified, unable to create ramdisk to flash. fastboot boot OrangeFox and try this option again or go back to Files and install img file as Recovery Ramdisk using Install Ramdisk button.</string>
@@ -1262,7 +1269,9 @@
 
 		<string name="make_super_empty">Make Super empty</string>
 		<string name="making_super_empty">Making Super empty..</string>
-		<string name="make_super_empty_complete">Make Super empty successful!</string>
+		<string name="make_super_empty_complete">Make Super Empty completed</string>
+		<string name="make_super_empty_complete_suc">Making Super Empty have been completed successfully!</string>
+		<string name="make_super_empty_complete_unsuc">Unable to Make Super Empty!</string>
 		<string name="slot_empty_vab">Current slot is empty or unmapped! Disabling errors spamming..</string>
 	</resources>
 </language>
