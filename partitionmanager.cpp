@@ -1996,13 +1996,13 @@ void TWPartitionManager::Post_Wipe_Encryption(void) {
 	TWPartition* data = Find_Partition_By_Path(dir);
 	if (data)
 		data->Setup_Data_Media();
-		//data->Storage_Path = dir;
 	Disable_MTP();
 	Enable_MTP();
 	Add_MTP_Storage("/data");
 	// bind mount: this can be problematic for encryption
 	LOGINFO("Bind mounting /data/media/0 to /sdcard after formatting\n");
-	mount(dir.c_str(), "/sdcard", "", MS_BIND, NULL);
+	//mount(dir.c_str(), "/sdcard", "", MS_BIND, NULL);
+	data->Bind_Mount(false);
 #endif
 	// run the OrangeFox postformatdata script here
 	TWFunc::RunFoxScript(FOX_POST_DATA_FORMAT_SCRIPT, "");
