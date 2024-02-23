@@ -286,8 +286,11 @@ static void process_recovery_mode(twrpAdbBuFifo* adb_bu_fifo, bool skip_decrypti
 	char mtp_crash_check[PROPERTY_VALUE_MAX];
 	property_get("mtp.crash_check", mtp_crash_check, "0");
 	if (DataManager::GetIntValue("tw_mtp_enabled")
-			&& !strcmp(mtp_crash_check, "0") && !crash_counter
-			&& (!DataManager::GetIntValue(TW_IS_ENCRYPTED) || DataManager::GetIntValue(TW_IS_DECRYPTED))) {
+			&& !strcmp(mtp_crash_check, "0") && !crash_counter) {
+		if (DataManager::GetIntValue(TW_IS_ENCRYPTED) && !DataManager::GetIntValue(TW_IS_DECRYPTED)) {
+			TWPartition* data = PartitionManager.Find_Partition_By_Path("/data");
+			data->Bind_Mount(false);
+		}
 		property_set("mtp.crash_check", "1");
 		LOGINFO("Starting MTP\n");
 		if (!PartitionManager.Enable_MTP())
