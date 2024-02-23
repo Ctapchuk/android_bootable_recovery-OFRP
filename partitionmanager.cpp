@@ -466,9 +466,12 @@ clear:
 		for (std::map<string, Flags_Map>::iterator mapit=twrp_flags.begin(); mapit!=twrp_flags.end(); mapit++) {
 			if (Find_Partition_By_Path(mapit->first) == NULL) {
 				TWPartition* partition = new TWPartition();
-				if (partition->Process_Fstab_Line(mapit->second.fstab_line, Display_Error, NULL))
+				if (partition->Process_Fstab_Line(mapit->second.fstab_line, Display_Error, NULL)) {
+					if (partition->Is_Super && !Prepare_Super_Volume(partition)) {
+						delete partition;
+					}
 					Partitions.push_back(partition);
-				else
+				} else
 					delete partition;
 			}
 			if (mapit->second.fstab_line)
