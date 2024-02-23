@@ -1981,6 +1981,7 @@ int TWPartitionManager::Format_Data(void) {
 		#endif
 		Post_Wipe_Encryption();
 		TWFunc::check_and_run_script(TW_FORMAT_DATA_SCRIPT, "Format Data Script");
+		gui_msg(Msg(msg::kGreen, "format_data_complete_suc=Data Format completed successfully!"));
 	}
 	return ret;
 }
