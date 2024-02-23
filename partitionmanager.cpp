@@ -2391,6 +2391,7 @@ int TWPartitionManager::Decrypt_Device(string Password, int user_id) {
   property_set("orangefox.mount_to_decrypt", "1");
   Set_Crypto_State();
   Set_Crypto_Type("block");
+  property_set("twrp.decrypt.done", "false");
 
   if (DataManager::GetIntValue(TW_IS_FBE))
     {
