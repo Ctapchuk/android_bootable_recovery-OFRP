@@ -2587,7 +2587,7 @@ void TWFunc::OrangeFox_Startup(void)
 	{
 	  if (!Path_Exists(Fox_Home))
 	    {
-	      if (mkdir(Fox_Home.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))
+	      if (!Create_Dir_Recursive(Fox_Home,  S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH, 0, 0))
 		  LOGINFO("Error making %s directory: %s\n", Fox_Home.c_str(), strerror(errno));
 	    }         
 	  if (Path_Exists(Fox_Home))
