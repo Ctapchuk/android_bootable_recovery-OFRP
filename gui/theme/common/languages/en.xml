@@ -170,6 +170,7 @@
 		<string name="restore_md5_chk">Check MD5 of backup files</string>
 		<string name="restore_enable_md5_chk">Enable MD5 verification of backup files</string>
 		<string name="restore_complete">Restore completed</string>
+		<string name="reboot_after_restore">It is recommended to reboot Android once after first boot.</string>
 		<string name="swipe_restore">Swipe to Restore</string>
 		<string name="rename_backup_hdr">Rename Backup</string>
 		<string name="rename_backup_confirm">Rename Backup</string>

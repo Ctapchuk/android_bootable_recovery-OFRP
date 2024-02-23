@@ -171,6 +171,7 @@
 		<string name="restore_md5_chk">Проверить MD5 копий</string>
 		<string name="restore_enable_md5_chk">Проверка MD5 для резервных копий</string>
 		<string name="restore_complete">Восстановление завершено</string>
+		<string name="reboot_after_restore">Рекомендуется вручную перезагрузиться в Android 1 раз после первой загрузки.</string>
 		<string name="swipe_restore">Проведите для восстановления</string>
 		<string name="rename_backup_hdr">Переименование</string>
 		<string name="rename_backup_confirm">Переименовать резервную копию</string>
