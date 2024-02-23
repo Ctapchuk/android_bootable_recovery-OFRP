@@ -1263,5 +1263,6 @@
 		<string name="make_super_empty">Make Super empty</string>
 		<string name="making_super_empty">Making Super empty..</string>
 		<string name="make_super_empty_complete">Make Super empty successful!</string>
+		<string name="slot_empty_vab">Current slot is empty or unmapped! Disabling errors spamming..</string>
 	</resources>
 </language>

@@ -1264,5 +1264,6 @@
 		<string name="make_super_empty">Сделать Super пустым</string>
 		<string name="making_super_empty">Опустошение Super..</string>
 		<string name="make_super_empty_complete">Super опустошон успешно!</string>
+		<string name="slot_empty_vab">Текущий слот пустой или разделы в нём отключены! Отключение спама ошибками..</string>
 	</resources>
 </language>

@@ -5003,7 +5003,7 @@ void TWPartitionManager::Check_VAB_Empty() {
 
 	if (total == empty) {
 		if (!DataManager::GetIntValue(TW_VAB_EMPTY_SLOT))
-			gui_print_color("warning", "Current slot is empty or unmapped! Disabling errors spamming..");
+			gui_msg(Msg(msg::kWarning, "slot_empty_vab=Current slot is empty or unmapped! Disabling errors spamming.."));
 		DataManager::SetValue(TW_VAB_EMPTY_SLOT, "1");
 	}
 	else
@@ -5130,7 +5130,7 @@ bool TWPartitionManager::Make_Empty_Super() {
 
 		command = lptools_binary + " resize " + partition + " 0";
 		LOGINFO("Resizing command: '%s'\n", command.c_str());
-		TWFunc::Exec_Cmd(command);
+		TWFunc::Exec_Cmd(command, false);
 	}
 
 	Update_System_Details();
