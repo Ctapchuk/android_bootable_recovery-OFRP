@@ -1339,6 +1339,8 @@ void TWPartition::Setup_Data_Media() {
 		// ---
 
 		backup_exclusions.add_absolute_dir("/data/gsi"); // Contains huge files (DSU System image + Userdata image), and won't work after restoration (requires configuration files in metadata)
+		backup_exclusions.add_absolute_dir("/data/adb/ksu/modules.img"); //After ksu 0.8.x the modules.img file became 1tb, which is inhibiting the execution of backups
+		backup_exclusions.add_absolute_dir("/data/adb/ksu/modules_update.img");
 		wipe_exclusions.add_absolute_dir(Mount_Point + "/misc/vold"); // adopted storage keys
 		ExcludeAll(Mount_Point + "/system/storage.xml");
 
