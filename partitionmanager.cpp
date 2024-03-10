@@ -420,6 +420,9 @@ parse:
 		if (fstab_line[0] == '#')
 			continue;
 
+		if (strstr(fstab_line, "overlay"))
+			continue;
+
 		if (parse_userdata) {
 			if (strstr(fstab_line, "/metadata") && !strstr(fstab_line, "/data")) {
 				if (meta) {
