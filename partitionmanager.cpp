@@ -2001,6 +2001,10 @@ void TWPartitionManager::Post_Wipe_Encryption(void) {
 	// deal with MTP issues after formatting data
 	std::string dir = "/data/media/0";
 	LOGINFO("Recreating %s...\n", dir.c_str());
+	if (android::base::GetBoolProperty("external_storage.casefold.enabled", false)) {
+		TWFunc::Recursive_Mkdir("/data/media", false);
+		TWFunc::Exec_Cmd("/system/bin/chattr +F /data/media", false);
+	}
 	TWFunc::Recursive_Mkdir(dir, false);
 	chmod(dir.c_str(), 0770);
 	
@@ -2012,7 +2016,6 @@ void TWPartitionManager::Post_Wipe_Encryption(void) {
 	Add_MTP_Storage("/data");
 	// bind mount: this can be problematic for encryption
 	LOGINFO("Bind mounting /data/media/0 to /sdcard after formatting\n");
-	//mount(dir.c_str(), "/sdcard", "", MS_BIND, NULL);
 	data->Bind_Mount(false);
 #endif
 	// run the OrangeFox postformatdata script here
