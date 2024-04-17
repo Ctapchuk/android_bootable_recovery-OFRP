@@ -1684,9 +1684,10 @@
 				<condition var1="spl_bg_user" var2="1"/>
 				<placement x="%ab_btn1_x%" y="%ab_y%" placement="4"/>
 				<action function="set">spl_bg_user=0</action>
+				<action function="set">spl_bg_on=0</action>
 				<action function="set">spl_logo_type=w</action>
 				<action function="set">spl_ofr=1</action>
-				<action function="set">spl_bg_color=#ED6F02</action>
+				<action function="set">spl_bg_color=#000001</action>
 				<action function="page">ext_custom_splash</action>
 			</button>
 
@@ -1771,6 +1772,7 @@
 				<placement x="0" y="%row4_3_y%" w="%screen_w%" h="%spl_list_h%"/>
 				<data name="spl_bg_color"/>
 				<iconsize w="%col1_x_caption%" h="%bl_h1%" padding="25"/>
+				<listitem name="{@spl_image}">#000001</listitem>
 				<listitem name="{@spl_accent}"><condition var1="accent" op="!=" var2="#d86100"/><condition var1="accent" op="!=" var2="#ed6f02"/>%accent%</listitem>
 				<listitem name="{@spl_orange}">#ED6F02</listitem>
 				<listitem name="{@spl_white}">#FFFFFF</listitem>
@@ -1900,7 +1902,12 @@
 				<action function="set">tw_splash_png_path=%tw_zip_location_tmp%</action>
 				<action function="set">spl_bg_user=1</action>
 				<action function="set">spl_bg_on=1</action>
-				<action function="page">ext_custom_splash</action>
+				<action function="set">spl_bg_color=#000001</action>
+				<action function="cmd">
+						cp "%tw_splash_png_path%/%tw_splash_png_name%" "/twres/images/Splash/user.png";
+				</action>
+				<action function="set">of_reload_back=ext_custom_splash</action>
+				<action function="reload"/>
 			</action>
 
 			<template name="gestures"/>
@@ -2111,7 +2118,7 @@
 
 			<action>
 				<action function="set">spl_logo_type=w</action>
-				<action function="set">spl_bg_color=#ED6F02</action>
+				<action function="set">spl_bg_color=#000001</action>
 				<action function="set">spl_bg_user=0</action>
 				<action function="set">spl_bg_on=0</action>
 				<action function="set">spl_ofr=1</action>

@@ -747,12 +747,14 @@
 			</fill>
 			
 			<image>
-				<condition var1="spl_bg_user" var2="0"/>
+				<condition var1="spl_bg_on" var2="0"/>
+				<condition var1="spl_bg_color" var2="#000001"/>
 				<image resource="splash_bg"/>
 				<placement x="%center_x%" y="%row2_3_y%" placement="4"/>
 			</image>
 			<image>
 				<condition var1="spl_bg_on" var2="1"/>
+				<condition var1="spl_bg_color" var2="#000001"/>
 				<image resource="splash_user"/>
 				<placement x="%center_x%" y="%row2_3_y%" placement="4"/>
 			</image>
