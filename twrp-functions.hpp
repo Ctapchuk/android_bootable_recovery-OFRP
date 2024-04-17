@@ -237,7 +237,6 @@ public:
 	static void FoxThemeCheck();
 
 private:
-	static void Copy_Log(string Source, string Destination);
 	static string Load_File(string extension);
 	static bool Patch_Forced_Encryption(void);
     	static bool Patch_DM_Verity(void);
