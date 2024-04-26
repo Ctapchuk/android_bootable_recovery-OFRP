@@ -883,7 +883,7 @@ extern "C" int gui_loadResources(void)
 			DataManager::ReadSettingsFile();
 			TWFunc::FoxThemeCheck();
 		}
-		theme_path += "/Fox/.bin./pa.zip"; 
+		theme_path = DataManager::GetSettingsStoragePath() + "/theme/ui.zip"; 
 		if (check || PageManager::LoadPackage("OrangeFox", theme_path, "main"))
 		{
 #endif // ifndef TW_OEM_BUILD
