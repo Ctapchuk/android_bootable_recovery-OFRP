@@ -233,6 +233,7 @@ GUIAction::GUIAction(xml_node <> *node):GUIObject(node)
       ADD_ACTION(cancelbackup);
       ADD_ACTION(checkpartitionlifetimewrites);
       ADD_ACTION(mountsystemtoggle);
+      ADD_ACTION(togglefastcharge);
       ADD_ACTION(setlanguage);
       ADD_ACTION(togglebacklight);
       ADD_ACTION(enableadb);
@@ -3060,6 +3061,19 @@ int GUIAction::makesuperempty(string arg __unused) {
 		op_status = 0;
 	} else {
 		gui_msg(Msg(msg::kError, "make_super_empty_complete_unsuc=Unable to Make Super Empty!"));
+	}
+	operation_end(op_status);
+	return 0;
+}
+
+int GUIAction::togglefastcharge(std::string arg) {
+	int op_status = 1;
+	operation_start("Toggle Fast Charging");
+	if (!arg.empty()) {
+		op_status = 0;
+		DataManager::SetValue("tw_enable_fastcharge", arg);
+		TWFunc::Fox_Property_Set("twrp.enable.fastcharge", arg == "1" ? "true" : "false");
+
 	}
 	operation_end(op_status);
 	return 0;

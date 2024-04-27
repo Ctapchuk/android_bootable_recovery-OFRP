@@ -24,6 +24,8 @@
 		<variable name="lock_info" value="1" persist="1"/>
 		<!--variable name="lock_btn" value="0" persist="1"/-->
 		<variable name="lock_btn" persist="1"/>
+		<variable name="lock_batinfo1_y" value="%screen_original_h%-476"/>
+		<variable name="lock_batinfo2_y" value="%screen_original_h%-376"/>
 
 		<!-- Device settings -->
 		<variable name="charging_now" value="0"/>

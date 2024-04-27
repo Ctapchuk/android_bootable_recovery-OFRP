@@ -567,6 +567,48 @@ int main(int argc, char **argv) {
 			value = std::to_string(lastVal);
 
 			DataManager::SetValue("tw_battery_charge", value + "%" + charging);
+
+			FILE * curr = fopen("/sys/class/power_supply/battery/current_now","rt");
+			unsigned long current = 0;
+			if (curr) {
+				char curr_s[16];
+				fgets(curr_s, sizeof(curr_s), curr);
+				fclose(curr);
+
+				if (curr_s[0] == '-')
+					sscanf(curr_s + 1, "%lu", &current);
+				else
+					sscanf(curr_s, "%lu", &current);
+
+				current /= 1000;
+			}
+
+			FILE * volt = fopen("/sys/class/power_supply/battery/voltage_now","rt");
+			unsigned int voltage = 0;
+			if (volt) {
+				char volt_s[8];
+				fgets(volt_s, sizeof(volt_s), volt);
+				fclose(volt);
+
+				sscanf(volt_s, "%u", &voltage);
+				voltage /= 1000;
+			}
+
+			FILE * temp_f = fopen("/sys/class/power_supply/battery/temp","rt");
+			unsigned int temp = 0;
+			if (temp_f) {
+				char temp_s[8];
+				fgets(temp_s, sizeof(temp_s), temp_f);
+				fclose(temp_f);
+
+				sscanf(temp_s, "%u", &temp);
+			}
+
+			DataManager::SetValue("tw_battery_amperage", std::to_string(current) + " mA");
+			DataManager::SetValue("tw_battery_voltage", std::to_string(voltage / 1000) + '.' + std::to_string(voltage % 1000) + " V");
+			DataManager::SetValue("tw_battery_temp", std::to_string(temp / 10) + '.' + std::to_string(temp % 10) + " °C");
+			DataManager::SetValue("tw_battery_wattage", std::to_string(voltage * current / 1000000) + '.' + std::to_string(voltage * current % 100000)[0] + " W");
+
 			DataManager::SetValue("tw_battery", value);
 			DataManager::SetValue("charging_now", (charging == '+') ? "1" : "0");
 

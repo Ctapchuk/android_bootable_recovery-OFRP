@@ -252,7 +252,18 @@
 					<data variable="tw_never_show_system_ro_page"/>
 				</listitem>
 				<listitem name="{@fox_boot_fastcharge}">
+					<condition var1="fileexists" var2="/sys/kernel/fast_charge/force_fast_charge"/>
 					<data variable="fox_boot_fastcharge_check"/>
+				</listitem>
+				<listitem name="{@fox_enable_fastcharge}">
+					<icon res="checkbox_true"/>
+					<condition var1="tw_enable_fastcharge" var2="1"/>
+					<action function="togglefastcharge">0</action>
+				</listitem>
+				<listitem name="{@fox_enable_fastcharge}">
+					<icon res="checkbox_false"/>
+					<condition var1="tw_enable_fastcharge" var2="0"/>
+					<action function="togglefastcharge">1</action>
 				</listitem>
 				<listitem name="{@files_auto_open}">
 					<data variable="fm_auto_open"/>

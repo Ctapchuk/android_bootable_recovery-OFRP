@@ -2417,6 +2417,8 @@ void TWFunc::OrangeFox_Startup(void)
 	}
     }
 
+  TWFunc::Fox_Property_Set("twrp.enable.fastcharge", DataManager::GetIntValue("tw_enable_fastcharge") ? "true" : "false");
+
   if (DataManager::GetIntValue(FOX_PERFORMANCE_CHECK) == 1)
     {
       DataManager::SetValue(FOX_GOVERNOR_STABLE, performance);

@@ -445,6 +445,7 @@ protected:
 	int enablefastboot(std::string arg);
 	int mergesnapshots(std::string arg);
 	int makesuperempty(std::string arg);
+	int togglefastcharge(std::string arg);
 	int simulate;
 };
 

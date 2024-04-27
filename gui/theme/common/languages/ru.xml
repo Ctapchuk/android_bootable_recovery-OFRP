@@ -1041,6 +1041,7 @@
 		<string name="fox_led_title">Настройки светодиода</string>
 		<string name="fox_use_green_led">Зеленый светодиод</string>
 		<string name="fox_boot_fastcharge">Включить быструю зарядку</string>
+		<string name="fox_enable_fastcharge">{@fox_boot_fastcharge}</string>
 
 		<!-- OTA -->
 		<string name="fox_ota_msg_ready">Вы готовы получать обновления!</string>
