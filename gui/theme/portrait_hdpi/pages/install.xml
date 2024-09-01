@@ -459,7 +459,7 @@
 			</text>
 
 			<partitionlist style="partitionlist_radio">
-				<placement x="0" y="%row2_2a_y%" w="%screen_w%" h="%lb_l8%"/>
+				<placement x="0" y="%row2_2a_y%" w="%screen_w%" h="%options_list_num_2%"/>
 				<data name="tw_flash_partition"/>
 				<listtype name="flashimg"/>
 			</partitionlist>
@@ -469,18 +469,18 @@
 				<condition var1="tw_is_slot_part" var2="1"/>
 				<condition var1="tw_has_boot_slots" var2="1"/>
 				<condition var1="tw_is_super_part" var2="0"/>
-				<placement x="%col1_x_caption%" y="%row6_3a_y%"/>
+				<placement x="%col1_x_caption%" y="%row7_3_y%"/>
 				<text>{@options_cptn}</text>
 			</text>
 
 			<text style="caption">
 				<condition var1="tw_is_super_part" var2="1"/>
-				<placement x="%col1_x_caption%" y="%row6_3a_y%"/>
+				<placement x="%col1_x_caption%" y="%row7_3_y%"/>
 				<text>{@options_cptn}</text>
 			</text>
 
 			<listbox style="settingslist">
-				<placement x="0" y="%row7_1a_y%" w="%screen_w%" h="%lb_l3%"/>
+				<placement x="0" y="%row8_1_y%" w="%screen_w%" h="%lb_l3%"/>
 				<listitem name="{@flash_ab_both_slots}">
 					<condition var1="fox_branch" op="&gt;=" var2="11"/>
 					<condition var1="fox_vab_device" var2="1"/>

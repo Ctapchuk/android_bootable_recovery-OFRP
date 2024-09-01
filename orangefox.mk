@@ -137,6 +137,7 @@ ifeq ($(FOX_AB_DEVICE),1)
     	LOCAL_SHARED_LIBRARIES += libhardware android.hardware.boot@1.0
     	TWRP_REQUIRED_MODULES += libhardware android.hardware.boot@1.0-service android.hardware.boot@1.0-service.rc
     endif
+    RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/bootctl
 endif
 
 # vendor_boot recovery
@@ -245,10 +246,6 @@ ifneq ($(OF_FL_PATH2),)
     LOCAL_CFLAGS += -DOF_FL_PATH2='"$(OF_FL_PATH2)"'
 else
     LOCAL_CFLAGS += -DOF_FL_PATH2='""'
-endif
-
-ifeq ($(OF_USE_HEXDUMP),1)
-    LOCAL_CFLAGS += -DOF_USE_HEXDUMP='"1"'
 endif
 
 ifeq ($(OF_SKIP_FBE_DECRYPTION),1)
@@ -461,12 +458,13 @@ ifeq ($(OF_MANUAL_COPY_TWRES),1)
 endif
 
 # lptools; disable by default; enable with OF_ENABLE_LPTOOLS=1
-ifeq ($(OF_ENABLE_LPTOOLS), 1)
-    TW_INCLUDE_LPTOOLS := 1
+ifeq ($(OF_ENABLE_LPTOOLS),1)
     ifeq ($(wildcard external/lptools/Android.bp),)
         $(warning lptools sources not found! You need to run "repo sync" to clone the sources.)
         $(warning You can also run: "git clone https://github.com/phhusson/vendor_lptools external/lptools")
         $(error lptools sources not present; exiting)
+    else
+        TW_INCLUDE_LPTOOLS := true
     endif
 endif
 
@@ -690,5 +688,21 @@ endif
 
 ifeq ($(OF_FORCE_CASEFOLDING),1)
     LOCAL_CFLAGS += -DOF_FORCE_CASEFOLDING
+endif
+
+# whether to use the updated magiskboot
+ifeq ($(FOX_USE_UPDATED_MAGISKBOOT),1)
+    LOCAL_CFLAGS += -DFOX_USE_UPDATED_MAGISKBOOT
+endif
+
+# whether to skip building Infozip zip from source
+ifeq ($(FOX_EXCLUDE_ZIP),1)
+    LOCAL_CFLAGS += -DFOX_EXCLUDE_ZIP
+    TW_EXCLUDE_ZIP := true
+endif
+
+# if using the prebuilt LZ4 binary, ensure that liblz4.so is included
+ifeq ($(FOX_USE_LZ4_BINARY),1)
+    RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/liblz4.so
 endif
 #

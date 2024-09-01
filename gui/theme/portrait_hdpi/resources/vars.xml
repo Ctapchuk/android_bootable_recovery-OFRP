@@ -36,9 +36,9 @@
 		<variable name="fox_adv_backup" value="0" persist="1"/>
 		
 		<!-- Favorites menu -->
-		<variable name="book_1" value="/system/app" persist="1"/>
-		<variable name="book_2" value="/system/framework" persist="1"/>
-		<variable name="book_3" value="/data/app" persist="1"/>
+		<variable name="book_1" value="/sdcard/Fox" persist="1"/>
+		<variable name="book_2" value="/sdcard/Fox/logs" persist="1"/>
+		<variable name="book_3" value="/sdcard/Android" persist="1"/>
 		<variable name="book_4" value="notset" persist="1"/>
 		<variable name="book_5" value="notset" persist="1"/>
 		<variable name="book_6" value="notset" persist="1"/>
