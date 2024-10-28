@@ -946,7 +946,7 @@ int GUIAction::fileextension(std::string arg)
 {
   string ext = TWFunc::lowercase(arg.substr(arg.find_last_of(".") + 1));
 
-  if (TWFunc::lowercase(arg.substr(0, 6)) == "magisk" && ext == "apk")
+  if ((TWFunc::lowercase(arg.substr(0, 6)) == "magisk" || TWFunc::lowercase(arg.substr(0, 11)) == "app-release" || TWFunc::lowercase(arg.substr(0, 9)) == "app-debug") && ext == "apk")
     ext = "zip";
   
   DataManager::SetValue("tw_file_extension", ext);
