@@ -2055,7 +2055,7 @@ bool TWPartition::Repair() {
 			return false;
 		gui_msg(Msg("repairing_using=Repairing {1} using {2}...")(Display_Name)("fsck.f2fs"));
 		Find_Actual_Block_Device();
-		command = "/system/bin/fsck.f2fs " + Actual_Block_Device;
+		command = "/system/bin/fsck.f2fs -y " + Actual_Block_Device;
 		LOGINFO("Repair command: %s\n", command.c_str());
 		// try to unbind /sdcard if it is still bind-mounted
 		#ifdef OF_UNBIND_SDCARD_F2FS
@@ -2235,6 +2235,12 @@ bool TWPartition::Decrypt(string Password) {
 bool TWPartition::Wipe_Encryption() {
 	bool Save_Data_Media = Has_Data_Media;
 	bool ret = false;
+	std::string the_wipe_fs;
+#ifdef OF_FORCE_DATA_FORMAT_F2FS
+	the_wipe_fs = "f2fs";
+#else
+	the_wipe_fs = Fstab_File_System;
+#endif
 	BasePartition* base_partition = make_partition();
 
 	if (!base_partition->PreWipeEncryption())
@@ -2260,7 +2266,14 @@ bool TWPartition::Wipe_Encryption() {
 	Decrypted_Block_Device = "";
 	Is_Decrypted = false;
 	Is_Encrypted = false;
-	if (Wipe(Fstab_File_System)) {
+
+#ifdef OF_DISPLAY_FORMAT_FILESYSTEMS_DEBUG_INFO
+	gui_print("DEBUG: Fstab_File_System=%s\n", Fstab_File_System.c_str());
+	gui_print("DEBUG: Current_File_System=%s\n", Current_File_System.c_str());
+	gui_print("DEBUG: Format_Target_File_System=%s\n", the_wipe_fs.c_str());
+#endif
+
+	if (Wipe(the_wipe_fs)) {
 		Has_Data_Media = Save_Data_Media;
 		DataManager::SetValue(TW_IS_ENCRYPTED, 0);
 		DataManager::SetValue(FOX_ENCRYPTED_DEVICE, "0");

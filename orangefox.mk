@@ -38,6 +38,15 @@ ifeq ($(FOX_DEVICE_MODEL),)
     LOCAL_CFLAGS += -DFOX_DEVICE_MODEL='"$(DEVICE)"'
 endif
 
+# include resetprop automatically
+ifneq ($(TW_INCLUDE_RESETPROP),true)
+   TW_INCLUDE_RESETPROP := true
+endif
+
+ifneq ($(TW_INCLUDE_LIBRESETPROP),true)
+   TW_INCLUDE_LIBRESETPROP := true
+endif
+
 # turn on magiskboot automatically
 OF_USE_MAGISKBOOT := 1
 OF_USE_MAGISKBOOT_FOR_ALL_PATCHES := 1
@@ -133,6 +142,7 @@ endif
 ifeq ($(FOX_AB_DEVICE),1)
     LOCAL_CFLAGS += -DFOX_AB_DEVICE='"1"'
     ifneq ($(AB_OTA_UPDATER),true)
+	AB_OTA_UPDATER := true
     	LOCAL_CFLAGS += -DAB_OTA_UPDATER=1
     	LOCAL_SHARED_LIBRARIES += libhardware android.hardware.boot@1.0
     	TWRP_REQUIRED_MODULES += libhardware android.hardware.boot@1.0-service android.hardware.boot@1.0-service.rc
@@ -147,8 +157,8 @@ ifeq ($(FOX_VENDOR_BOOT_RECOVERY),1)
     LOCAL_CFLAGS += -DFOX_VENDOR_BOOT_RECOVERY='"1"'
     OF_NO_SPLASH_CHANGE := 1
     FOX_VANILLA_BUILD := 1
+    OF_NO_REFLASH_CURRENT_ORANGEFOX := 1
     ifeq ($(BOARD_BOOT_HEADER_VERSION),3)
-        OF_NO_REFLASH_CURRENT_ORANGEFOX := 1
  	$(warning For a proper vendor_boot recovery build, use 'BOARD_BOOT_HEADER_VERSION := 4' and 'BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true')
     endif
     ifeq ($(FOX_VENDOR_BOOT_RECOVERY_FULL_REFLASH),1)
@@ -704,5 +714,10 @@ endif
 # if using the prebuilt LZ4 binary, ensure that liblz4.so is included
 ifeq ($(FOX_USE_LZ4_BINARY),1)
     RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/liblz4.so
+endif
+
+# whether to force f2fs when formatting data
+ifeq ($(OF_FORCE_DATA_FORMAT_F2FS),1)
+    LOCAL_CFLAGS += -DOF_FORCE_DATA_FORMAT_F2FS
 endif
 #
