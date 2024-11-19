@@ -479,8 +479,8 @@ clear:
 				if (partition->Process_Fstab_Line(mapit->second.fstab_line, Display_Error, NULL)) {
 					if (partition->Is_Super && !Prepare_Super_Volume(partition)) {
 						delete partition;
-					}
-					Partitions.push_back(partition);
+					} else
+						Partitions.push_back(partition);
 				} else
 					delete partition;
 			}
