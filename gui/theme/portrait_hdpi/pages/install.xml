@@ -506,6 +506,7 @@
 				<text>{@img_advanced}</text>
 				<condition var1="tw_has_boot_slots" var2="1"/>
 				<condition var1="tw_has_repack_tools" var2="1"/>
+				<condition var1="tw_include_install_recovery_ramdisk" var2="1"/>
 				<action function="set">tw_repack_kernel=0</action>
 				<action function="page">flash_image_ab</action>
 			</button>
