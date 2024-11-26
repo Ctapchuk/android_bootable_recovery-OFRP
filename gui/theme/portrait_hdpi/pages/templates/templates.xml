@@ -25,14 +25,7 @@
 					<action function="set">tw_reload_fm=1</action>
 					<action function="page">filemanagerlist</action>
 				</listitem>
-				<listitem name="{@usbotg}">
-					<icon res="otg"/>
-					<condition var1="fileexists" var2="/usb-otg"/>
-					<action function="set">tw_file_location1=/usb-otg</action>
-					<action function="set">tw_reload_fm=1</action>
-					<action function="page">filemanagerlist</action>
-				</listitem>
-				<listitem name="{@usbotg}">
+				<listitem name="{@usb_storage}">
 					<icon res="otg"/>
 					<condition var1="fileexists" var2="/usb_otg"/>
 					<action function="set">tw_file_location1=/usb_otg</action>
@@ -93,14 +86,7 @@
 					<action function="set">tw_reload_fm=1</action>
 					<action function="page">%sp_back%</action>
 				</listitem>
-				<listitem name="{@usbotg}">
-					<icon res="otg"/>
-					<condition var1="fileexists" var2="/usb-otg"/>
-					<action function="set">tw_zip_location_tmp=/usb-otg</action>
-					<action function="set">tw_reload_fm=1</action>
-					<action function="page">%sp_back%</action>
-				</listitem>
-				<listitem name="{@usbotg}">
+				<listitem name="{@usb_storage}">
 					<icon res="otg"/>
 					<condition var1="fileexists" var2="/usb_otg"/>
 					<action function="set">tw_zip_location_tmp=/usb_otg</action>

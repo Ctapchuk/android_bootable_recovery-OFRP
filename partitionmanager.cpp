@@ -3545,7 +3545,7 @@ void TWPartitionManager::Translate_Partition_Display_Names() {
 	Translate_Partition("/external_sd", "microsd", "Micro SDCard", "microsd", "Micro SDCard", "data_backup", "Data (excl. storage)");
 	Translate_Partition("/external_sdcard", "microsd", "Micro SDCard", "microsd", "Micro SDCard", "data_backup", "Data (excl. storage)");
 	Translate_Partition("/sdcard1", "microsd", "Micro SDCard", "microsd", "Micro SDCard", "data_backup", "Data (excl. storage)");
-	Translate_Partition("/usb-otg", "usbotg", "USB OTG", "usbotg", "USB OTG", "usb_otg", "USB-Storage");
+	Translate_Partition("/usb_otg", "usb_storage", "USB-Storage", "usb_storage", "USB-Storage");
 	Translate_Partition("/sd-ext", "sdext", "SD-EXT");
 
 	// Android secure is a special case
@@ -5154,5 +5154,60 @@ bool TWPartitionManager::Make_Empty_Super() {
 
 	Update_System_Details();
 	return true;
+}
+
+void TWPartitionManager::checkUsbOtgStatus() {
+	static bool mtp_was_enabled;
+	static string usbotg_prim = "";
+	static string usbotg_alt = "";
+	static bool usbotg_1stmount = true;
+	static TWPartition* usbotg = Find_Partition_By_Path("usb_otg");
+
+	if (usbotg && !usbotg->Primary_Block_Device.empty()) {
+		usbotg_prim = usbotg->Primary_Block_Device;
+		usbotg_alt = usbotg->Alternate_Block_Device;
+	} else return;
+
+	if (TWFunc::Path_Exists(usbotg_prim)) {
+		if (usbotg_1stmount) {
+			//need to mount
+			mtp_was_enabled = TWFunc::Toggle_MTP(false);
+			usbotg->Mount(true);
+			usbotg_1stmount = false;
+			if (PageManager::GetCurrentPage() == "filemanagerlist" && DataManager::GetStrValue("tw_file_location1") == "/usb_otg")
+				gui_changePage("filemanagerlist");
+		}
+	} else if (!usbotg_alt.empty()) {
+		if (TWFunc::Path_Exists(usbotg_alt)) {
+			if (usbotg_1stmount) {
+				//need to mount
+				mtp_was_enabled = TWFunc::Toggle_MTP(false);
+				usbotg->Mount(true);
+				usbotg_1stmount = false;
+				if (PageManager::GetCurrentPage() == "filemanagerlist" && DataManager::GetStrValue("tw_file_location1") == "/usb_otg")
+					gui_changePage("filemanagerlist");
+			}
+		} else if (!usbotg_1stmount) {
+			usbotg->UnMount(false);
+			usbotg->Is_Present = false;
+			usbotg->Size = 0;
+			usbotg->Used = 0;
+			usbotg->Free = 0;
+			usbotg_1stmount = true;
+			if (PageManager::GetCurrentPage() == "filemanagerlist" && DataManager::GetStrValue("tw_file_location1") == "/usb_otg")
+				gui_changePage("filemanagerlist");
+			TWFunc::Toggle_MTP(mtp_was_enabled);
+		}
+	} else if (!usbotg_1stmount) {
+		usbotg->UnMount(false);
+		usbotg->Is_Present = false;
+		usbotg->Size = 0;
+		usbotg->Used = 0;
+		usbotg->Free = 0;
+		usbotg_1stmount = true;
+		if (PageManager::GetCurrentPage() == "filemanagerlist" && DataManager::GetStrValue("tw_file_location1") == "/usb_otg")
+			gui_changePage("filemanagerlist");
+		TWFunc::Toggle_MTP(mtp_was_enabled);
+	}
 }
 //*

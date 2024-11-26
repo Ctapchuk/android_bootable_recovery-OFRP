@@ -459,6 +459,7 @@ public:
 	bool Is_Fstab_Super(std::string Mount_Point);				  // Return whether partition is dynamic even if it isn't presented
 	void Mark_All_Users_Encrypted();                                          // Marks all users in Users_List as encrypted
 	bool Make_Empty_Super();                                                  // Makes Super empty (equivalent to fastboot wipe-super super_empty.img command)
+	void checkUsbOtgStatus();						  // Checks if usb_otg is connected
 
 #ifdef TW_HAS_MTP
 	bool is_MTP_Enabled(void);						  // returns whether MTP is already enabled

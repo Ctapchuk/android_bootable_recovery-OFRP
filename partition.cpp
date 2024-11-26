@@ -1625,6 +1625,7 @@ bool TWPartition::Is_File_System_Writable(void) {
 bool TWPartition::Mount(bool Display_Error) {
 	int exfat_mounted = 0;
 	unsigned int flags = Mount_Flags;
+	string mount_fs = "";
 
 	if (DataManager::GetIntValue(TW_VAB_EMPTY_SLOT) && PartitionManager.Is_Fstab_Super(Mount_Point))
 		Display_Error = false;
@@ -1673,7 +1674,7 @@ bool TWPartition::Mount(bool Display_Error) {
 		LOGINFO("cmd: '%s'\n", cmd.c_str());
 
 		if (TWFunc::Exec_Cmd(cmd) == 0) {
-			return true;
+			goto exit;
 		} else {
 			LOGINFO("ntfs-3g failed to mount, trying regular mount method.\n");
 		}
@@ -1699,7 +1700,7 @@ bool TWPartition::Mount(bool Display_Error) {
 				return false;
 			} else {
 				LOGINFO("Mounted '%s' (MTD) as RO\n", Mount_Point.c_str());
-				return true;
+				goto exit;
 			}
 		} else {
 			struct stat st;
@@ -1722,11 +1723,11 @@ bool TWPartition::Mount(bool Display_Error) {
 					return false;
 				}
 			}
-			return true;
+			goto exit;
 		}
 	}
 
-	string mount_fs = Current_File_System;
+	mount_fs = Current_File_System;
 	if (Current_File_System == "exfat" && TWFunc::Path_Exists("/sys/module/texfat"))
 		mount_fs = "texfat";
 
@@ -1769,6 +1770,8 @@ bool TWPartition::Mount(bool Display_Error) {
 		}
 #endif
 	}
+
+exit:
 
 	if (Removable)
 		Update_Size(Display_Error);
