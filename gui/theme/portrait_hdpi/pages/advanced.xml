@@ -83,6 +83,11 @@
 					<action function="set">tw_back=advanced</action>
 					<action function="overlay">reboot</action>
 				</listitem>
+				<!-- cram the appmgr items onto no more than 2 lines, so as to not break existing scripts-->
+				<listitem name="{@appmgr_title}">
+					<condition var1="enable_app_manager" var2="1"/>
+					<icon res="apps"/> <action function="page">apps_load</action>
+				</listitem>
 				<listitem name="{@more}">
 					<condition var1="utils_show" op="!=" var2="1"/>
 					<icon res="utils"/>
@@ -200,11 +205,6 @@
 					<action function="set">tw_complete_text1={@unmap_super_devices_complete}</action>
 					<action function="set">tw_slider_text={@swipe_to_confirm}</action>
 					<action function="page">confirm_action</action>
-				</listitem>
-				<!-- cram the appmgr items onto no more than 2 lines, so as to not break existing scripts-->
-				<listitem name="{@appmgr_title}">
-					<condition var1="enable_app_manager" var2="1"/> <condition var1="utils_show" var2="1"/>
-					<icon res="apps"/> <action function="page">apps_load</action>
 				</listitem>
 				<listitem name="AromaFM">
 					<condition var1="utils_show" var2="1"/>
