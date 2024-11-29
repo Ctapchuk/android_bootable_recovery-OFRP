@@ -3185,12 +3185,6 @@ bool TWPartitionManager::Enable_MTP(void) {
 		char vendor[PROPERTY_VALUE_MAX];
 		char product[PROPERTY_VALUE_MAX];
 		property_set("sys.usb.config", "none");
-		property_get("usb.vendor", vendor, "18D1");
-		property_get("usb.product.mtpadb", product, "4EE2");
-		string vendorstr = vendor;
-		string productstr = product;
-		TWFunc::write_to_file("/config/usb_gadget/g1/idVendor", vendorstr);
-		TWFunc::write_to_file("/config/usb_gadget/g1/idProduct", productstr);
 		property_set("sys.usb.config", "mtp,adb");
 	}
 	/* To enable MTP debug, use the twrp command line feature:
@@ -3238,15 +3232,7 @@ bool TWPartitionManager::Disable_MTP(void) {
 	property_set("sys.usb.ffs.mtp.ready", "0");
 	property_get("sys.usb.config", old_value, "");
 	if (strcmp(old_value, "adb") != 0) {
-		char vendor[PROPERTY_VALUE_MAX];
-		char product[PROPERTY_VALUE_MAX];
 		property_set("sys.usb.config", "none");
-		property_get("usb.vendor", vendor, "18D1");
-		property_get("usb.product.adb", product, "D001");
-		string vendorstr = vendor;
-		string productstr = product;
-		TWFunc::write_to_file("/config/usb_gadget/g1/idVendor", vendorstr);
-		TWFunc::write_to_file("/config/usb_gadget/g1/idProduct", productstr);
 		usleep(2000);
 	}
 #ifdef TW_HAS_MTP
