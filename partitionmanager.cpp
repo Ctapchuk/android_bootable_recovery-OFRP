@@ -2931,11 +2931,7 @@ void TWPartitionManager::Get_Partition_List(string ListType,
     {
       for (iter = Partitions.begin(); iter != Partitions.end(); iter++)
 	{
-#ifdef OF_SETTINGS_DIRECTORY_HIDE
-	  if ((*iter)->Can_Be_Mounted && (*iter)->Mount_Point != TWFunc::Get_Root_Path(FOX_SETTINGS_ROOT_DIRECTORY))
-#else
-	  if ((*iter)->Can_Be_Mounted)
-#endif
+	  if ((*iter)->Can_Be_Mounted && (*iter)->Show_In_Mount_Menu)
 	    {
 	      struct PartitionList part;
 	      part.Display_Name = (*iter)->Display_Name;
@@ -3546,6 +3542,7 @@ void TWPartitionManager::Translate_Partition_Display_Names() {
 	Translate_Partition("/external_sdcard", "microsd", "Micro SDCard", "microsd", "Micro SDCard", "data_backup", "Data (excl. storage)");
 	Translate_Partition("/sdcard1", "microsd", "Micro SDCard", "microsd", "Micro SDCard", "data_backup", "Data (excl. storage)");
 	Translate_Partition("/usb_otg", "usb_storage", "USB-Storage", "usb_storage", "USB-Storage");
+	Translate_Partition("/storage", "internal", "Internal Storage");
 	Translate_Partition("/sd-ext", "sdext", "SD-EXT");
 
 	// Android secure is a special case

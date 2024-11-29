@@ -260,6 +260,7 @@ private:
 	bool Convert_Image_RW(const string& image_path);                          // Convert r/o system images to r/w images
 
 private:
+	bool Show_In_Mount_Menu;						  // Indicates that the partition should be showed in the mount menu
 	bool Can_Be_Mounted;                                                      // Indicates that the partition can be mounted
 	bool Can_Be_Wiped;                                                        // Indicates that the partition can be wiped
 	bool Can_Be_Backed_Up;                                                    // Indicates that the partition will show up in the backup list

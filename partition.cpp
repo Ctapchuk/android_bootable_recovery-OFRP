@@ -226,6 +226,7 @@ const struct flag_list tw_flags[] = {
 };
 
 TWPartition::TWPartition() {
+	Show_In_Mount_Menu = true;
 	Can_Be_Mounted = false;
 	Can_Be_Wiped = false;
 	Can_Be_Backed_Up = false;
@@ -564,10 +565,16 @@ bool TWPartition::Process_Fstab_Line(const char *fstab_line, bool Display_Error,
 		}
 #ifdef OF_SETTINGS_DIRECTORY_HIDE
 		else if (Mount_Point == TWFunc::Get_Root_Path(FOX_SETTINGS_ROOT_DIRECTORY)) {
+			Show_In_Mount_Menu = false;
 			Can_Be_Wiped = false;
 			Wipe_Available_in_GUI = false;
 		}
 #endif
+		else if (Mount_Point == "/storage") {
+			Show_In_Mount_Menu = false;
+			Can_Be_Wiped = false;
+			Wipe_Available_in_GUI = false;
+		}
 #ifdef TW_EXTERNAL_STORAGE_PATH
 		if (Mount_Point == EXPAND(TW_EXTERNAL_STORAGE_PATH)) {
 			Is_Storage = true;
