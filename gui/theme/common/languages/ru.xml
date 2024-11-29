@@ -1182,11 +1182,6 @@
 		<string name="fix_recovery_loop_complete">Исправление Bootloop'a завершено</string>
 		<string name="fixing_recovery_loop_patch">Исправление ядра...</string>
 		<string name="fix_recovery_loop_patch_error">Ошибка исправления ядра.</string>
-		<string name="try_app">Скачайте приложение!</string>
-		<string name="try_app_2">Устанавливайте обновления</string>
-		<string name="try_app_3">OrangeFox c помощью нового</string>
-		<string name="try_app_4">приложения. Скачать:</string>
-		<string name="try_app_5">https://app.orangefox.tech</string>
 		<string name="fm_edit_file">Редактировать в nano</string>
 		<string name="fm_open_terminal_btn">Открыть терминал</string>
 		<string name="batch_progress">Выполнено</string>
