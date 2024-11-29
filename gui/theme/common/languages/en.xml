@@ -1268,11 +1268,8 @@
 		<string name="dynamic_convert_rw_success">{1} has been successfully converted to r/w!</string>
 		<string name="dynamic_convert_rw_fail">Convert failed!</string>
 
-		<string name="make_super_empty">Make Super empty</string>
-		<string name="making_super_empty">Making Super empty..</string>
-		<string name="make_super_empty_complete">Make Super Empty completed</string>
-		<string name="make_super_empty_complete_suc">Making Super Empty have been completed successfully!</string>
-		<string name="make_super_empty_complete_unsuc">Unable to Make Super Empty!</string>
 		<string name="slot_empty_vab">Current slot is empty or unmapped! Disabling errors spamming..</string>
+		<string name="super_rewrite_err">Failed to rewrite Super metadata</string>
+		<string name="super_rewrite_success">Super metadata was rewritten successfully!</string>
 	</resources>
 </language>

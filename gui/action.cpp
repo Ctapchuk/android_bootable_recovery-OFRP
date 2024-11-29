@@ -296,7 +296,6 @@ GUIAction::GUIAction(xml_node <> *node):GUIObject(node)
 #endif
       ADD_ACTION(mergesnapshots);
       ADD_ACTION(disableAVB2);
-      ADD_ACTION(makesuperempty);
 
       //[f/d] Threaded actions
       ADD_ACTION(batch);
@@ -1559,6 +1558,8 @@ int GUIAction::wipe(std::string arg)
     {
       if (arg == "data")
 	ret_val = PartitionManager.Factory_Reset();
+      else if (arg == "super")
+	ret_val = PartitionManager.Rewrite_Super_Metadata();
       else if (arg == "battery")
 	ret_val = PartitionManager.Wipe_Battery_Stats();
       else if (arg == "rotate")
@@ -1625,6 +1626,19 @@ int GUIAction::wipe(std::string arg)
 			{
 			  skip = true;
 			}
+		    }
+		  else if (wipe_path == "/super")
+		    {
+		      if (!PartitionManager.Rewrite_Super_Metadata())
+		        {
+			  gui_err("super_rewrite_err=Failed to rewrite Super metadata");
+			  ret_val = false;
+			  break;
+		        }
+		      else
+		        {
+		          skip = true;
+		        }
 		    }
 		  else if (wipe_path == "DALVIK")
 		    {
@@ -3026,19 +3040,6 @@ int GUIAction::disableAVB2(string arg __unused) {
 	gui_highlight("disabling_AVB2=Disabling vbmeta AVB2.0...");
 	if (PartitionManager.Disable_AVB2(true)) {
 		op_status = 0;
-	}
-	operation_end(op_status);
-	return 0;
-}
-
-int GUIAction::makesuperempty(string arg __unused) {
-	int op_status = 1;
-	operation_start("Make Super Empty");
-	if (PartitionManager.Make_Empty_Super()) {
-		gui_msg(Msg(msg::kGreen, "make_super_empty_complete_suc=Making Super Empty have been completed successfully!"));
-		op_status = 0;
-	} else {
-		gui_msg(Msg(msg::kError, "make_super_empty_complete_unsuc=Unable to Make Super Empty!"));
 	}
 	operation_end(op_status);
 	return 0;

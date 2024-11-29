@@ -1269,11 +1269,8 @@
 		<string name="dynamic_convert_rw_success">{1} был успешно конвертирован в r/w!</string>
 		<string name="dynamic_convert_rw_fail">Конвертирование неудалось!</string>
 
-		<string name="make_super_empty">Сделать Super пустым</string>
-		<string name="making_super_empty">Опустошение Super..</string>
-		<string name="make_super_empty_complete">Опустошение завершено</string>
-		<string name="make_super_empty_complete_suc">Super опустошон успешно!</string>
-		<string name="make_super_empty_complete_unsuc">Неудалось опустошить Super!</string>
 		<string name="slot_empty_vab">Текущий слот пустой или разделы в нём отключены! Отключение спама ошибками..</string>
+		<string name="super_rewrite_err">Не удалось перезаписать метаданные Super</string>
+		<string name="super_rewrite_success">Метаданные Super были успешно перезаписаны!</string>
 	</resources>
 </language>

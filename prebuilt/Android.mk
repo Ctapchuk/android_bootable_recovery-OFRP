@@ -296,6 +296,10 @@ ifeq ($(PRODUCT_USE_DYNAMIC_PARTITIONS),true)
     ifneq ($(TW_INCLUDE_LPTOOLS),)
         RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/lptools
     endif
+    ifeq ($(TW_ALLOW_REWRITE_SUPER_METADATA),true)
+        RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/lpmake
+        RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/lpflash
+    endif
 endif
 
 ifneq ($(wildcard system/core/libsparse/Android.*),)

@@ -2949,7 +2949,7 @@ void TWPartitionManager::Get_Partition_List(string ListType,
     {
       for (iter = Partitions.begin(); iter != Partitions.end(); iter++)
 	{
-	  if ((*iter)->Wipe_Available_in_GUI && !(*iter)->Is_SubPartition)
+	  if ((*iter)->Wipe_Available_in_GUI && !(*iter)->Is_SubPartition && (*iter)->Current_File_System != "emmc")
 	    {
 	      struct PartitionList part;
 	      part.Display_Name = (*iter)->Display_Name;
@@ -4814,6 +4814,10 @@ void TWPartitionManager::Setup_Super_Partition() {
 	superPartition->Is_Present = true;
 	superPartition->Is_SubPartition = false;
 	superPartition->Setup_Image();
+#ifdef TW_ALLOW_REWRITE_SUPER_METADATA
+	superPartition->Display_Name = "Super";
+	superPartition->Wipe_Available_in_GUI = true;
+#endif
 	Add_Partition(superPartition);
 	PartitionManager.Output_Partition(superPartition);
 }
@@ -5124,38 +5128,6 @@ bool TWPartitionManager::Resize_Super_Volume(TWPartition* twrpPart_image, unsign
 	}
 }
 
-bool TWPartitionManager::Make_Empty_Super() {
-	string lptools_binary = "/system/bin/lptools";
-	if (!TWFunc::Path_Exists(lptools_binary)) {
-		LOGINFO("Cannot find lptools!\n");
-		return false;
-	}
-
-	if (TWFunc::Has_Virtual_AB_Partitions() && !Unmap_Super_Devices()) {
-		LOGINFO("Cannot unmap partitions!\n");
-		return false;
-	}
-
-	string command;
-
-	// code is for all logical partitions in super, not just those that were processed by recovery
-	auto metadata = android::fs_mgr::ReadMetadata(Get_Super_Partition(), 0);
-	if (!metadata) {
-		LOGINFO("Cannot get metadata from super!\n");
-		return false;
-	}
-	for (const auto& partition_metadata : metadata.get()->partitions) {
-		auto partition = android::fs_mgr::GetPartitionName(partition_metadata);
-
-		command = lptools_binary + " resize " + partition + " 0";
-		LOGINFO("Resizing command: '%s'\n", command.c_str());
-		TWFunc::Exec_Cmd(command, false);
-	}
-
-	Update_System_Details();
-	return true;
-}
-
 void TWPartitionManager::checkUsbOtgStatus() {
 	static bool mtp_was_enabled;
 	static string usbotg_prim = "";
@@ -5209,5 +5181,91 @@ void TWPartitionManager::checkUsbOtgStatus() {
 			gui_changePage("filemanagerlist");
 		TWFunc::Toggle_MTP(mtp_was_enabled);
 	}
+}
+
+bool TWPartitionManager::Rewrite_Super_Metadata() {
+	if (!TWFunc::Has_Dynamic_Partitions())
+		return false;
+
+	const string lpmake_binary = "/system/bin/lpmake";
+	const string lpflash_binary = "/system/bin/lpflash";
+	const string super_empty = "/tmp/super_empty.img";
+	if (!TWFunc::Path_Exists(lpmake_binary) || !TWFunc::Path_Exists(lpflash_binary)) {
+		LOGINFO("Cannot find lpmake or/and lpflash!\n");
+		return false;
+	}
+
+	string command = lpmake_binary;
+	TWPartition* Super_Partition = Find_Partition_By_Path("/super");
+	if (!Super_Partition) {
+		LOGINFO("Cannot find the super partition!\n");
+		return false;
+	}
+
+	const unsigned long long super_size = Super_Partition->Size;
+	const int metadata_size = 65536;
+#ifdef AB_OTA_UPDATER
+	const int metadata_slots = 3;
+#else
+	const int metadata_slots = 2;
+#endif
+#ifdef BOARD_SUPER_PARTITION_GROUPS
+	const string super_group = EXPAND(BOARD_SUPER_PARTITION_GROUPS);
+#else
+	LOGINFO("BOARD_SUPER_PARTITION_GROUPS is not defined!\n");
+	return false;
+#endif
+#ifdef SUPER_GROUP_SIZE
+	const unsigned long long super_group_size = (unsigned long long) SUPER_GROUP_SIZE;
+#else
+	LOGINFO("SUPER_GROUP_SIZE is not defined!\n");
+	return false;
+#endif
+#ifdef SUPER_GROUP_PARTITION_LIST
+	const std::vector<std::string> super_group_partition_list = TWFunc::split_string(EXPAND(SUPER_GROUP_PARTITION_LIST), ' ', true);
+#else
+	LOGINFO("SUPER_GROUP_PARTITION_LIST is not defined!\n");
+	return false;
+#endif
+	command += " --device-size=" + TWFunc::to_string(super_size);
+	command += " --metadata-size=" + TWFunc::to_string(metadata_size);
+	command += " --metadata-slots=" + TWFunc::to_string(metadata_slots);
+	if (TWFunc::Has_Virtual_AB_Partitions())
+		command += " --virtual-ab";
+#ifdef AB_OTA_UPDATER
+	command += " --group=" + super_group + "_a:" + TWFunc::to_string(super_group_size);
+	command += " --group=" + super_group + "_b:" + TWFunc::to_string(super_group_size);
+	for (auto part: super_group_partition_list) {
+		command += " --partition=" + part + "_a:none:0:" + super_group + "_a";
+	}
+	for (auto part: super_group_partition_list) {
+		command += " --partition=" + part + "_b:none:0:" + super_group + "_b";
+	}
+#else
+	command += " --group=" + super_group + ":" + TWFunc::to_string(super_group_size);
+	for (auto part: super_group_partition_list) {
+		command += " --partition=" + part + ":none:0:" + super_group;
+	}
+#endif
+	command += " --output=" + super_empty;
+	LOGINFO("Lpmake command: %s\n", command.c_str());
+
+	Unmap_Super_Devices();
+
+	if (TWFunc::Exec_Cmd(command, false)) {
+		LOGINFO("Unable to create super_empty image!\n");
+		return false;
+	}
+
+	command = lpflash_binary + " " + Super_Partition->Actual_Block_Device + " " + super_empty;
+	LOGINFO("Lpflash command: %s\n", command.c_str());
+
+	if (TWFunc::Exec_Cmd(command, false)) {
+		LOGINFO("Unable to flash metadata to super image!\n");
+		return false;
+	}
+
+	gui_msg(Msg(msg::kGreen, "super_rewrite_success=Super metadata was rewritten successfully!"));
+	return true;
 }
 //*
