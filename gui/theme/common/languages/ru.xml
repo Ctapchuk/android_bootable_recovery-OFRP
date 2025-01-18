@@ -1273,5 +1273,6 @@
 		<string name="check_merge_unverified1">Текущий статус обновления - Unverified!</string>
 		<string name="check_merge_unverified2">Это означает, что обновление было только применено, но слияние ещё не было начато. Слияние не допускается в исходном слоте.</string>
 		<string name="check_merge_unverified3">ПОЖАЛУЙСТА, ПЕРЕЗАГРУЗИТЕСЬ В ЦЕЛЕВОЙ СЛОТ И ПОПРОБУЙТЕ СНОВА!</string>
+		<string name="blkdiscard_perform">Выполнение BLKDISCARD на блочном устройстве {1}</string>
 	</resources>
 </language>

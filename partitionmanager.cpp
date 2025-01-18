@@ -5250,6 +5250,8 @@ bool TWPartitionManager::Rewrite_Super_Metadata() {
 		return false;
 	}
 
+	Super_Partition->BlkDiscard();
+
 	command = lpflash_binary + " " + Super_Partition->Actual_Block_Device + " " + super_empty;
 	LOGINFO("Lpflash command: %s\n", command.c_str());
 

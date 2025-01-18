@@ -1560,6 +1560,8 @@ int GUIAction::wipe(std::string arg)
 	ret_val = PartitionManager.Factory_Reset();
       else if (arg == "super")
 	ret_val = PartitionManager.Rewrite_Super_Metadata();
+      else if (arg == "frp")
+	ret_val = PartitionManager.Wipe_By_Path("/frp");
       else if (arg == "battery")
 	ret_val = PartitionManager.Wipe_Battery_Stats();
       else if (arg == "rotate")
@@ -1626,6 +1628,18 @@ int GUIAction::wipe(std::string arg)
 			{
 			  skip = true;
 			}
+		    }
+		  else if (wipe_path == "/frp")
+		    {
+		      if (!PartitionManager.Wipe_By_Path("/frp"))
+		        {
+			  ret_val = false;
+			  break;
+		        }
+		      else
+		        {
+		          skip = true;
+		        }
 		    }
 		  else if (wipe_path == "/super")
 		    {
