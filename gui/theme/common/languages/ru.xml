@@ -111,8 +111,9 @@
 		<string name="format_data_ptr3">медиафайлы и зашифрованные файлы.</string>
 		<string name="format_data_adopted">во внутренней памяти.</string>
 		<string name="format_data_undo">Это не может быть отменено.</string>
-		<string name="format_data_complete">Форматирование данных завершено</string>
-		<string name="format_data_complete_suc">Форматирование данных завершено успешно!</string>
+		<string name="format_data_complete">Форматирование Data завершено</string>
+		<string name="format_data_complete_suc">Форматирование Data завершено успешно!</string>
+		<string name="format_data_complete_unsuc">Не удалось форматировать Data!</string>
 		<!-- Translator note: the word "yes" must remain English! -->
 		<string name="yes_continue">Введите "yes" для продолжения...</string>
 		<string name="part_opt_hdr">Информация о разделе</string>

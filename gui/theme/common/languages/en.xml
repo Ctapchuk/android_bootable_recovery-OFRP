@@ -112,6 +112,7 @@
 		<string name="format_data_undo">This cannot be undone.</string>
 		<string name="format_data_complete">Data Format completed</string>
 		<string name="format_data_complete_suc">Data Format completed successfully!</string>
+		<string name="format_data_complete_unsuc">Failed to format Data!</string>
 		<!-- Translator note: the word "yes" must remain English! -->
 		<string name="yes_continue">Type "yes" to confirm.</string>
 		<string name="part_opt_hdr">Partition Info</string>

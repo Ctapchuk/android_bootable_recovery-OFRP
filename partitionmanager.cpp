@@ -1974,12 +1974,15 @@ int TWPartitionManager::Format_Data(void) {
 #endif
 			if (metadata != NULL)
 				metadata->Mount(true);
-			if (!Check_Pending_Merges())
+			if (!Check_Pending_Merges()) {
+				gui_msg(Msg(msg::kError, "format_data_complete_unsuc=Failed to format Data!"));
 				return false;
+			}
 		}
 		ret = dat->Wipe_Encryption();
 	} else {
 		gui_msg(Msg(msg::kError, "unable_to_locate=Unable to locate {1}.")("/data"));
+		gui_msg(Msg(msg::kError, "format_data_complete_unsuc=Failed to format Data!"));
 		return false;
 	}
 
