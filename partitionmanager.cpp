@@ -4923,12 +4923,20 @@ bool TWPartitionManager::Unmap_Super_Devices() {
 bool TWPartitionManager::Check_Pending_Merges() {
 	auto sm = android::snapshot::SnapshotManager::NewForFirstStageMount();
 	if (!sm) {
-		LOGERR("Unable to call snapshot manager\n");
+		gui_err("check_merge_snapfail=Unable to call snapshot manager!");
 		return false;
 	}
 
 	if (!Unmap_Super_Devices()) {
-		LOGERR("Unable to unmap dynamic partitions.\n");
+		gui_err("unmap_super_devices_complete_unsuc=Unable to unmap all Super Devices!");
+		return false;
+	}
+
+	LOGINFO("Checking for merges\n");
+	if (sm->GetUpdateState() == android::snapshot::UpdateState::Unverified) {
+		gui_msg(Msg(msg::kYellow, "check_merge_unverified1=Current update state is Unverified!"));
+		gui_msg(Msg(msg::kYellow, "check_merge_unverified2=This means that an update was just applied but has not yet started merging. Merging in not allowed in source slot."));
+		gui_msg(Msg(msg::kYellow, "check_merge_unverified3=PLEASE REBOOT TO INACTIVE SLOT AND TRY AGAIN!"));
 		return false;
 	}
 
@@ -4938,9 +4946,8 @@ bool TWPartitionManager::Check_Pending_Merges() {
 		LOGINFO("waiting for merge to complete: %.2f\n", progress);
 	};
 
-	LOGINFO("checking for merges\n");
 	if (!sm->HandleImminentDataWipe(callback)) {
-		LOGERR("Unable to check merge status\n");
+		gui_err("check_merge_fail=Unable to check merge status!");
 		return false;
 	}
 	return true;

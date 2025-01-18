@@ -1268,5 +1268,10 @@
 		<string name="slot_empty_vab">Текущий слот пустой или разделы в нём отключены! Отключение спама ошибками..</string>
 		<string name="super_rewrite_err">Не удалось перезаписать метаданные Super</string>
 		<string name="super_rewrite_success">Метаданные Super были успешно перезаписаны!</string>
+		<string name="check_merge_snapfail">Не удалось вызвать снапшот-менеджер!</string>
+		<string name="check_merge_fail">Не удалось проверить статус слияния!</string>
+		<string name="check_merge_unverified1">Текущий статус обновления - Unverified!</string>
+		<string name="check_merge_unverified2">Это означает, что обновление было только применено, но слияние ещё не было начато. Слияние не допускается в исходном слоте.</string>
+		<string name="check_merge_unverified3">ПОЖАЛУЙСТА, ПЕРЕЗАГРУЗИТЕСЬ В ЦЕЛЕВОЙ СЛОТ И ПОПРОБУЙТЕ СНОВА!</string>
 	</resources>
 </language>
