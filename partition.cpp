@@ -3957,7 +3957,8 @@ bool TWPartition::Map() {
 		.force_writable = true,
 	};
 
-	if (!android::fs_mgr::CreateLogicalPartition(params, &block_device)) {
+	struct stat st;
+	if (!android::fs_mgr::CreateLogicalPartition(params, &block_device) && lstat(("/dev/block/mapper/" + blk_device_partition).c_str(), &st) != 0) {
 		LOGINFO("Unable to map '%s'\n", blk_device_partition.c_str());
 		return false;
 	}
@@ -3974,11 +3975,11 @@ bool TWPartition::Map() {
 bool TWPartition::Unmap() {
 	bool destroyed = false;
 	std::string blk_device_partition;
+	struct stat st;
 
 	UnMount(false);
 
 	if (Mount_Point != "/data") {
-		Can_Be_Mounted = false;
 #ifdef AB_OTA_UPDATER
 		blk_device_partition = PartitionManager.Get_Bare_Partition_Name(Mount_Point) + PartitionManager.Get_Active_Slot_Suffix();
 #else
@@ -3986,7 +3987,6 @@ bool TWPartition::Unmap() {
 #endif
 		std::string cow_partition = blk_device_partition + "-cow";
 		std::string cow_partition_path = "/dev/block/mapper/" + cow_partition;
-		struct stat st;
 		if (lstat(cow_partition_path.c_str(), &st) == 0) {
 			LOGINFO("Removing cow partition: %s\n", cow_partition.c_str());
 			android::fs_mgr::DestroyLogicalPartition(cow_partition);
@@ -3998,10 +3998,13 @@ bool TWPartition::Unmap() {
 
 	destroyed = android::fs_mgr::DestroyLogicalPartition(blk_device_partition);
 
-	if (!destroyed) {
+	if (!destroyed && lstat(("/dev/block/mapper/" + blk_device_partition).c_str(), &st) != 0) {
 		LOGINFO("Unable to unmap '%s'\n", blk_device_partition.c_str());
 		return false;
 	}
+
+	if (Mount_Point != "/data")
+		Can_Be_Mounted = false;
 
 	return true;
 }
