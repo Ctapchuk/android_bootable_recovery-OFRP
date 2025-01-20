@@ -61,6 +61,10 @@ bool KernelModuleLoader::Load_Vendor_Modules() {
 	vendor_module_dirs.push_back(vendor_base_dir + gki);
 #endif
 
+	TWPartition* firmware = PartitionManager.Find_Partition_By_Path("/firmware");
+	if (firmware)
+		firmware->Mount(true);
+
 	TWFunc::RunFoxScript("/system/bin/beforemodules.sh", "");
 
 	switch(Get_Boot_Mode()) {
@@ -84,6 +88,7 @@ bool KernelModuleLoader::Load_Vendor_Modules() {
 
 	if (DataManager::GetIntValue(TW_VAB_EMPTY_SLOT)) {
 #ifdef TW_LOAD_PREBUILT_MODULES
+prebuilt:
 		for (auto&& module_dir:vendor_module_dirs) {
 			modules_loaded += Try_And_Load_Modules(module_dir, true);
 			if (modules_loaded >= expected_module_count) break;
@@ -99,19 +104,24 @@ bool KernelModuleLoader::Load_Vendor_Modules() {
 		if (ven) {
 			LOGINFO("Checking mounted /vendor\n");
 			ven->Mount(true);
+			for (auto&& module_dir:vendor_module_dirs) {
+				modules_loaded += Try_And_Load_Modules(module_dir, true);
+				if (modules_loaded >= expected_module_count) goto exit;
+			}
 		}
 		if (ven_dlkm) {
 			LOGINFO("Checking mounted /vendor_dlkm\n");
 			ven_dlkm->Mount(true);
-		}
-
-		for (auto&& module_dir:vendor_module_dirs) {
-			modules_loaded += Try_And_Load_Modules(module_dir, true);
+			modules_loaded += Try_And_Load_Modules(vendor_dlkm_base_dir, true);
 			if (modules_loaded >= expected_module_count) goto exit;
 		}
-
-		modules_loaded += Try_And_Load_Modules(vendor_dlkm_base_dir, true);
-		if (modules_loaded >= expected_module_count) goto exit;
+#ifdef TW_LOAD_PREBUILT_MODULES
+		if (ven)
+			ven->UnMount(false);
+		if (ven_dlkm)
+			ven_dlkm->UnMount(false);
+		goto prebuilt;
+#endif
 	}
 exit:
 	if (ven)
