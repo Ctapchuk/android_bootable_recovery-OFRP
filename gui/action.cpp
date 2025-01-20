@@ -2150,25 +2150,11 @@ int GUIAction::adbsideload(std::string arg __unused)
 		operation_end(0);
 	} else {
 		gui_msg("start_sideload=Starting ADB sideload feature...");
-
-		int adb_enabled = 0;
-		DataManager::GetValue("fox_adb", adb_enabled);
-		if (adb_enabled) {
-			property_set("ctl.stop", "adbd");
-			usleep(500000);
-			property_set("ctl.start", "adbd");
-			usleep(500000);
-		} else {
-			property_set("ctl.start", "adbd");
-			property_set("orangefox.adb.status", "1");
-			DataManager::SetValue("fox_adb", "1");
-			usleep(500000);
-		}
-
 		bool mtp_was_enabled = TWFunc::Toggle_MTP(false);
 
 		// wait for the adb connection
 		Device::BuiltinAction reboot_action = Device::REBOOT_BOOTLOADER;
+		TWFunc::Fox_Property_Set("ctl.stop", "adbd"); // stop adbd to free /dev/usb-ffs/adb/ep0 for minadbd
 		int ret = twrp_sideload("/", &reboot_action);
 		sideload_child_pid = GetMiniAdbdPid();
 		DataManager::SetValue("tw_has_cancel", 0); // Remove cancel button from gui now that the zip install is going to start
@@ -2187,12 +2173,6 @@ int GUIAction::adbsideload(std::string arg __unused)
 				PartitionManager.Wipe_Dalvik_Cache();
 		}
 		TWFunc::Toggle_MTP(mtp_was_enabled);
-		if (!adb_enabled) {
-			property_set("ctl.stop", "adbd");
-			property_set("orangefox.adb.status", "0");
-			DataManager::SetValue("fox_adb", "0");
-		}
-
 		reinject_after_flash();
 		operation_end(ret);
 	}
