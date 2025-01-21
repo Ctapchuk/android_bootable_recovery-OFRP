@@ -256,6 +256,7 @@ static void process_recovery_mode(twrpAdbBuFifo* adb_bu_fifo, bool skip_decrypti
 	// Check for and load custom theme if present
 	TWFunc::check_selinux_support();
 	gui_loadCustomResources();
+	PartitionManager.Mount_Super_Toggle(DataManager::GetStrValue("tw_mount_system_ro")); // Reset Mount_Read_Only flag here to follow tw_mount_system_ro var
 	PartitionManager.Output_Partition_Logging();
 
 	// Fixup the RTC clock on devices which require it
@@ -362,8 +363,6 @@ static void process_recovery_mode(twrpAdbBuFifo* adb_bu_fifo, bool skip_decrypti
 	// Disable flashing of stock recovery
 	TWFunc::Disable_Stock_Recovery_Replace();
 #endif
-
-	PartitionManager.Refresh_Mounting_Info();
 }
 
 static void reboot() {

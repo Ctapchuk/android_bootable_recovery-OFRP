@@ -1692,6 +1692,8 @@ bool TWPartition::Mount(bool Display_Error) {
 
 	if (Mount_Read_Only)
 		flags |= MS_RDONLY;
+	else
+		flags &= ~MS_RDONLY;
 
 	if (Fstab_File_System == "yaffs2") {
 		// mount an MTD partition as a YAFFS2 filesystem.
@@ -1847,15 +1849,15 @@ bool TWPartition::ReMount_RW(bool Display_Error) {
 		return true;
 
 	bool ro = Mount_Read_Only;
-	int flags = Mount_Flags;
+	//int flags = Mount_Flags;
 
 	Mount_Read_Only = false;
-	Mount_Flags &= ~MS_RDONLY;
+	//Mount_Flags &= ~MS_RDONLY;
 
 	bool ret = ReMount(Display_Error);
 
 	Mount_Read_Only = ro;
-	Mount_Flags = flags;
+	//Mount_Flags = flags;
 
 	return ret;
 }

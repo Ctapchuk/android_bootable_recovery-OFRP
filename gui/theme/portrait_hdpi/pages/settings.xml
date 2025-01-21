@@ -159,16 +159,24 @@
 			<listbox style="settingslist">
 				<placement x="0" y="%row1_2_y%" w="%screen_w%" h="%lb_l5%"/>
 				<listitem name="{@mount_sys_ro_chk}">
-					<condition var1="general_back" var2="mount"/>
-					<condition var1="tw_mount_system_ro" op="!=" var2="0"/>
 					<icon res="checkbox_true"/>
+					<condition var1="general_back" var2="mount"/>
+					<condition var1="fox_dynamic_device" var2="0"/>
+					<condition var1="tw_mount_system_ro" op="!=" var2="0"/>
 					<action function="set">tw_lifetime_writes=2</action>
 					<action function="page">system_readonly_check_ext_context</action>
 				</listitem>
 				<listitem name="{@mount_sys_ro_chk}">
+					<icon res="checkbox_true"/>
+					<condition var1="general_back" var2="mount"/>
+					<condition var1="fox_dynamic_device" var2="1"/>
+					<condition var1="tw_mount_system_ro" op="!=" var2="0"/>
+					<action function="mountsystemtoggle">0</action>
+				</listitem>
+				<listitem name="{@mount_sys_ro_chk}">
+					<icon res="checkbox_false"/>
 					<condition var1="general_back" var2="mount"/>
 					<condition var1="tw_mount_system_ro" var2="0"/>
-					<icon res="checkbox_false"/>
 					<action function="mountsystemtoggle">1</action>
 				</listitem>
 				<listitem name="{@unmount_sys_install}">
@@ -233,13 +241,20 @@
 				<placement x="0" y="%row2_2_y%" w="%screen_w%" h="%lb_l10%"/>
 				<listitem name="{@mount_sys_ro_chk}">
 					<icon res="checkbox_true"/>
+					<condition var1="fox_dynamic_device" var2="0"/>
 					<condition var1="tw_mount_system_ro" op="!=" var2="0"/>
 					<action function="set">tw_lifetime_writes=2</action>
 					<action function="page">system_readonly_check</action>
 				</listitem>
 				<listitem name="{@mount_sys_ro_chk}">
-					<condition var1="tw_mount_system_ro" var2="0"/>
+					<icon res="checkbox_true"/>
+					<condition var1="fox_dynamic_device" var2="1"/>
+					<condition var1="tw_mount_system_ro" op="!=" var2="0"/>
+					<action function="mountsystemtoggle">0</action>
+				</listitem>
+				<listitem name="{@mount_sys_ro_chk}">
 					<icon res="checkbox_false"/>
+					<condition var1="tw_mount_system_ro" var2="0"/>
 					<action function="mountsystemtoggle">1</action>
 				</listitem>
 				<listitem name="{@use_rmrf_chk}">

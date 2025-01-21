@@ -4898,7 +4898,6 @@ bool TWPartitionManager::Map_Super_Devices() {
 				status = false;
 		++iter;
 	}
-	Refresh_Mounting_Info();
 
 	return status;
 }
@@ -4963,44 +4962,33 @@ void TWPartitionManager::UnMount_System_Partitions(void) {
 	}
 }
 
-void TWPartitionManager::Mount_Super_Toggle(const string& arg) {
+bool TWPartitionManager::Mount_Super_Toggle(const string& arg) {
+	bool found_rw = false; // all required partitions can be mounted only in r/o mode
 	std::vector<TWPartition*>::iterator iter;
-	if (arg == "0")
-			DataManager::SetValue("tw_mount_system_ro", 0);
-		else
-			DataManager::SetValue("tw_mount_system_ro", 1);
-
 	for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
 		if ((*iter)->Is_Super) {
 			bool need_remount = (*iter)->Is_Mounted();
 			(*iter)->UnMount(false);
-			if (arg == "0")
-				(*iter)->Change_Mount_Read_Only(false);
-			else
+
+			if (arg == "0" && (*iter)->Current_File_System != "erofs") { // Always keep erofs in r/o mode
+				// Check the possibility of mounting in r/w, keep Mount_Read_Only flag if unable to mount
+				if ((*iter)->ReMount_RW(false)) {
+					(*iter)->Change_Mount_Read_Only(false);
+					(*iter)->UnMount(false);
+					found_rw = true;
+				} else {
+					(*iter)->Change_Mount_Read_Only(true);
+				}
+			} else {
 				(*iter)->Change_Mount_Read_Only(true);
+			}
 
 			if (need_remount)
 				(*iter)->Mount(false);
 		}
 	}
-}
 
-void TWPartitionManager::Refresh_Mounting_Info(void) {
-	if (!DataManager::GetIntValue("tw_mount_system_ro")) {
-		std::vector<TWPartition*>::iterator iter;
-		string command;
-		for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
-			if ((*iter)->Is_Super && (*iter)->Current_File_System != "erofs") {
-				(*iter)->Change_Mount_Read_Only(false);
-#ifdef AB_OTA_UPDATER
-				command = "blockdev --setrw /dev/block/mapper/" + Get_Bare_Partition_Name((*iter)->Get_Mount_Point()) + PartitionManager.Get_Active_Slot_Suffix();
-#else
-				command = "blockdev --setrw /dev/block/mapper/" + Get_Bare_Partition_Name((*iter)->Get_Mount_Point());
-#endif
-				TWFunc::Exec_Cmd(command, false);
-			}
-		}
-	}
+	return arg == "0" ? found_rw : true;
 }
 
 void TWPartitionManager::Check_VAB_Empty() {
