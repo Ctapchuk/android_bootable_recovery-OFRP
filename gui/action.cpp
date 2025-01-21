@@ -1975,6 +1975,7 @@ int GUIAction::terminalcommand(std::string arg)
       DataManager::SetValue("tw_background_thread_running", 1);
       FILE *fp;
       char line[512];
+      int exit_code = 0;
 
       fp = popen(command.c_str(), "r");
       if (fp == NULL)
@@ -2017,9 +2018,9 @@ int GUIAction::terminalcommand(std::string arg)
 		    keep_going = 0;	// Done executing
 		}
 	    }
-	  fclose(fp);
+	  exit_code = WEXITSTATUS(pclose(fp));
 	}
-      DataManager::SetValue("tw_operation_status", 0); //WEXITSTATUS(pclose(fp)) != 0 ? 1 : 0
+      DataManager::SetValue("tw_operation_status", exit_code != 0 ? 1 : 0);
       DataManager::SetValue("tw_operation_state", 1);
       DataManager::SetValue("tw_terminal_state", 0);
       DataManager::SetValue("tw_background_thread_running", 0);

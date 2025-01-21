@@ -536,7 +536,7 @@
 		
 		<!-- Colors -->
 		<variable name="transparent" value="#00000000"/>
-		<variable name="text_success" value="#68B60B"/>
+		<variable name="text_success" value="#00FF00"/>
 		<variable name="text_fail" value="#FF0101"/>
 		<variable name="warning" value="#FF6600"/>
 		<variable name="error" value="#FF0000"/>
