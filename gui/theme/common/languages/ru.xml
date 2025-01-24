@@ -972,12 +972,15 @@
 		<string name="magisk_not_found_2">"Дополнения OrangeFox" и</string>
 		<string name="magisk_not_found_3">установить Magisk?</string>
 
-		<!-- KernelSU modules -->
+		<!-- APatch / KernelSU modules -->
+		<string name="ap_modules">Модули APatch</string>
 		<string name="ksu_modules">Модули KernelSU</string>
-		<string name="ksu_modules_not_found">Модули не найдены!</string>
-		<string name="ksu_modules_not_found_1">Модули KernelSU</string>
-		<string name="ksu_modules_not_found_2">не установлены или</string>
-		<string name="ksu_modules_not_found_3">произошла ошибка монтирования!</string>
+
+		<string name="modules_not_found">Модули не найдены!</string>
+		<string name="modules_not_found_1_ap">Модули APatch не установлены</string>
+		<string name="modules_not_found_1_ksu">Модули KernelSU не установлены</string>
+		<string name="modules_not_found_2">или произошла ошибка</string>
+		<string name="modules_not_found_3">монтирования!</string>
 
 		<!-- Incremental OTA -->
 		<string name="fox_ota_settings">Настройки OTA</string>
