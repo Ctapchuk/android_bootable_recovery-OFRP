@@ -2964,9 +2964,6 @@ bool TWPartition::Raw_Read_Write(PartitionSettings *part_settings) {
 		}
 	}
 	else {
-#ifdef TW_ENABLE_BLKDISCARD
-		BlkDiscard();
-#endif
 		destfn = Actual_Block_Device;
 		if (part_settings->adbbackup) {
 			srcfn = TW_ADB_RESTORE;
@@ -3567,10 +3564,6 @@ bool TWPartition::Is_Sparse_Image(const string& Filename) {
 
 bool TWPartition::Flash_Sparse_Image(const string& Filename) {
 	string Command;
-
-#ifdef TW_ENABLE_BLKDISCARD
-	BlkDiscard();
-#endif
 
 	gui_msg(Msg("flashing=Flashing {1}...")(Display_Name));
 
