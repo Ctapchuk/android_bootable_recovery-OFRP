@@ -389,6 +389,7 @@
 				<placement x="%snackbar_button_x%" y="%snackbar_button_y%"/>
 				<text>{@apply_btn}</text>
 				<action function="set">needs_repack=0</action>
+				<action function="resetterminal"/>
 				<action function="overlay">apply_changes</action>
 			</button>
 			
@@ -420,6 +421,7 @@
 				<action function="set">theme_accent_light_tmp=%theme_accent_light%</action>
 				<action function="set">theme_accent_dark_tmp=%theme_accent_dark%</action>
 				<action function="set">theme_style_tmp=%theme_style%</action>
+				<action function="resetterminal"/>
 				<action function="overlay">apply_changes</action>
 			</button>
 		</template>

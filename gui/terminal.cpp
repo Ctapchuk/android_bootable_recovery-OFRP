@@ -265,88 +265,50 @@ survives things like page changes or even theme reloads.
 class TerminalEngine
 {
 public:
-#if 0 // later
+	COLOR defaultTerminalFontColor = {255, 255, 255, 255};
 	struct Attributes
 	{
-		COLOR fgcolor; // TODO: what about palette?
+		COLOR fgcolor;
 		COLOR bgcolor;
 		// could add bold, underline, blink, etc.
+		Attributes() : fgcolor({0, 0, 0, 0}), bgcolor({0, 0, 0, 0}) {}
 	};
 
-	struct AttributeRange
-	{
-		size_t start; // start position inside text (in bytes)
-		Attributes a;
-	};
-#endif
 	typedef uint32_t CodePoint; // Unicode code point
-
-	// A line of text, optimized for rendering and storage in the buffer
-	struct Line
-	{
-		std::string text; // in UTF-8 format
-//		std::vector<AttributeRange> attrs;
-		Line() {}
-		size_t utf8forward(size_t start) const
-		{
-			if (start >= text.size())
-				return start;
-			uint32_t u8state = 0, u8cp = 0;
-			size_t i = start;
-			uint32_t rc;
-			do {
-				rc = utf8decode(&u8state, &u8cp, (unsigned char)text[i]);
-				++i;
-			} while (rc != UTF8_ACCEPT && rc != UTF8_REJECT && i < text.size());
-			return i;
-		}
-
-		std::string substr(size_t start, size_t n) const
-		{
-			size_t i = 0;
-			for (; start && i < text.size(); i = utf8forward(i))
-				--start;
-			size_t s = i;
-			for (; n && i < text.size(); i = utf8forward(i))
-				--n;
-			return text.substr(s, i - s);
-		}
-		size_t length() const
-		{
-			size_t n = 0;
-			for (size_t i = 0; i < text.size(); i = utf8forward(i))
-				++n;
-			return n;
-		}
-	};
 
 	// A single character cell with a Unicode code point
 	struct Cell
 	{
-		Cell() : cp(' ') {}
-		Cell(CodePoint cp) : cp(cp) {}
+		Cell() : cp(' '), attrs() {}
+		Cell(CodePoint cp) : cp(cp), attrs() {}
 		CodePoint cp;
-//		Attributes a;
+		Attributes attrs;
 	};
 
-	// A line of text, optimized for editing single characters
-	struct UnpackedLine
+	// A line of text, optimized for rendering and storage in the buffer
+	struct Line
 	{
 		std::vector<Cell> cells;
-		void eraseFrom(size_t x)
+		Line() {}
+
+		std::string substr(size_t start, size_t n) const
 		{
-			if (cells.size() > x)
-				cells.erase(cells.begin() + x, cells.end());
+			std::string sub;
+			size_t count = 0;
+			for (size_t i = start; i < cells.size() && count < n; ++i) {
+				utf8add(sub, cells[i].cp);
+				count++;
+			}
+			return sub;
 		}
 
-		void eraseTo(size_t x)
+		size_t length() const
 		{
-			if (x > 0)
-				cells.erase(cells.begin(), cells.begin() + x);
+			return cells.size();
 		}
 	};
 
-	TerminalEngine()
+	TerminalEngine() : currentAttributes()
 	{
 		// the default size will be overwritten by the GUI window when the size is known
 		width = 40;
@@ -356,6 +318,12 @@ public:
 		updateCounter = 0;
 		state = kStateGround;
 		utf8state = utf8codepoint = 0;
+	}
+
+	void syncColors()
+	{
+		currentAttributes = Attributes();
+		currentAttributes.fgcolor = defaultTerminalFontColor;
 	}
 
 	void setSize(int xChars, int yChars, int w, int h)
@@ -401,7 +369,6 @@ public:
 		cursorX = cursorY = 0;
 		lines.clear();
 		setY(0);
-		unpackLine(0);
 		linewrap = false;
 		++updateCounter;
 	}
@@ -470,7 +437,7 @@ public:
 	}
 
 	size_t getLinesCount() const { return lines.size(); }
-	const Line& getLine(size_t n) { if (unpackedY == n) packLine(); return lines[n]; }
+	const Line& getLine(size_t n) { return lines[n]; }
 	int getCursorX() const { return cursorX; }
 	int getCursorY() const { return cursorY; }
 	int getUpdateCounter() const { return updateCounter; }
@@ -500,40 +467,7 @@ public:
 	void right(int n = 1) { setX(cursorX + n); }
 
 private:
-	void packLine()
-	{
-		std::string& s = lines[unpackedY].text;
-		s.clear();
-		for (size_t i = 0; i < unpackedLine.cells.size(); ++i) {
-			Cell& c = unpackedLine.cells[i];
-			utf8add(s, c.cp);
-			// later: if attributes changed, add attributes
-		}
-	}
-
-	void unpackLine(size_t y)
-	{
-		uint32_t u8state = 0, u8cp = 0;
-		std::string& s = lines[y].text;
-		unpackedLine.cells.clear();
-		for (size_t i = 0; i < s.size(); ++i) {
-			uint32_t rc = utf8decode(&u8state, &u8cp, (unsigned char)s[i]);
-			if (rc == UTF8_ACCEPT)
-				unpackedLine.cells.push_back(Cell(u8cp));
-		}
-		if (unpackedLine.cells.size() < (size_t)width)
-			unpackedLine.cells.resize(width);
-		unpackedY = y;
-	}
-
-	void ensureUnpacked(size_t y)
-	{
-		if (unpackedY != y)
-		{
-			packLine();
-			unpackLine(y);
-		}
-	}
+	Attributes currentAttributes;
 
 	void processC0(char ch)
 	{
@@ -605,16 +539,74 @@ private:
 			down();
 			setX(0);
 		}
-		ensureUnpacked(cursorY);
-		// extend unpackedLine if needed, write ch into cell
-		if (unpackedLine.cells.size() <= (size_t)cursorX)
-			unpackedLine.cells.resize(cursorX+1);
-		unpackedLine.cells[cursorX].cp = cp;
+
+		// Ensure lines[cursorY] and its cells vector are initialized
+		if (lines.size() <= (size_t)cursorY) {
+			lines.resize(cursorY + 1); // Ensure enough lines
+		}
+		if (lines[cursorY].cells.size() <= (size_t)cursorX) {
+			lines[cursorY].cells.resize(cursorX + 1); // Ensure enough cells in the line
+		}
+
+		lines[cursorY].cells[cursorX].cp = cp;
+		lines[cursorY].cells[cursorX].attrs = currentAttributes;
 
 		right(); // also bumps updateCounter
 
 		if (cursorX >= width)
 			linewrap = true;
+	}
+
+	void processSGRParameter(std::string paramStr, Attributes& attrs)
+	{
+		int param = parseArg(paramStr, 0);
+		switch (param) {
+			case 0: // Reset all attributes
+				attrs = Attributes();
+				break;
+			// Foreground (font) colors
+			case 30: attrs.fgcolor = {0, 0, 0, 255}; break;   // Black
+			case 31: attrs.fgcolor = {255, 0, 0, 255}; break; // Red
+			case 32: attrs.fgcolor = {0, 255, 0, 255}; break; // Green
+			case 33: attrs.fgcolor = {255, 255, 0, 255}; break;// Yellow
+			case 34: attrs.fgcolor = {0, 0, 255, 255}; break; // Blue
+			case 35: attrs.fgcolor = {255, 0, 255, 255}; break;// Magenta
+			case 36: attrs.fgcolor = {0, 255, 255, 255}; break;// Cyan
+			case 37: attrs.fgcolor = {255, 255, 255, 255}; break;// White
+			case 39: attrs.fgcolor = defaultTerminalFontColor; break; // Default
+			// Background colors
+			case 40: attrs.bgcolor = {0, 0, 0, 255}; break;   // Black
+			case 41: attrs.bgcolor = {255, 0, 0, 255}; break; // Red
+			case 42: attrs.bgcolor = {0, 255, 0, 255}; break; // Green
+			case 43: attrs.bgcolor = {255, 255, 0, 255}; break;// Yellow
+			case 44: attrs.bgcolor = {0, 0, 255, 255}; break; // Blue
+			case 45: attrs.bgcolor = {255, 0, 255, 255}; break;// Magenta
+			case 46: attrs.bgcolor = {0, 255, 255, 255}; break;// Cyan
+			case 47: attrs.bgcolor = {255, 255, 255, 255}; break;// White
+			case 49: attrs.bgcolor = {0, 0, 0, 0}; break; // Default
+			// Foreground (font) bright colors
+			case 90: attrs.fgcolor = {85, 85, 85, 255}; break; // Bright Black
+			case 91: attrs.fgcolor = {255, 85, 85, 255}; break; // Bright Red
+			case 92: attrs.fgcolor = {85, 255, 85, 255}; break; // Bright Green
+			case 93: attrs.fgcolor = {255, 255, 85, 255}; break; // Bright Yellow
+			case 94: attrs.fgcolor = {85, 85, 255, 255}; break; // Bright Blue
+			case 95: attrs.fgcolor = {255, 85, 255, 255}; break; // Bright Magenta
+			case 96: attrs.fgcolor = {85, 255, 255, 255}; break; // Bright Cyan
+			case 97: attrs.fgcolor = {255, 255, 255, 255}; break; // Bright White
+			// Background bright colors
+			case 100: attrs.bgcolor = {85, 85, 85, 255}; break; // Bright Black
+			case 101: attrs.bgcolor = {255, 85, 85, 255}; break; // Bright Red
+			case 102: attrs.bgcolor = {85, 255, 85, 255}; break; // Bright Green
+			case 103: attrs.bgcolor = {255, 255, 85, 255}; break; // Bright Yellow
+			case 104: attrs.bgcolor = {85, 85, 255, 255}; break; // Bright Blue
+			case 105: attrs.bgcolor = {255, 85, 255, 255}; break; // Bright Magenta
+			case 106: attrs.bgcolor = {85, 255, 255, 255}; break; // Bright Cyan
+			case 107: attrs.bgcolor = {255, 255, 255, 255}; break; // Bright White
+
+			default:
+				debug_printf("unknown SGR parameter: %d\n", param);
+				break;
+		}
 	}
 
 	void processEsc(CodePoint cp)
@@ -713,18 +705,17 @@ private:
 			case 'J': // ED - erase in page
 				{
 					int param = parseArg(ctlseq, 0);
-					ensureUnpacked(cursorY);
 					switch (param) {
 						default:
 						case 0:
-							unpackedLine.eraseFrom(cursorX);
+							lines[cursorY].cells.erase(lines[cursorY].cells.begin() + cursorX, lines[cursorY].cells.end());
 							if (lines.size() > (size_t)cursorY+1)
 								lines.erase(lines.begin() + cursorY+1, lines.end());
 							break;
 						case 1:
-							unpackedLine.eraseTo(cursorX);
+							lines[cursorY].cells.erase(lines[cursorY].cells.begin(), lines[cursorY].cells.begin() + cursorX);
 							if (cursorY > 0) {
-								lines.erase(lines.begin(), lines.begin() + cursorY-1);
+								lines.erase(lines.begin(), lines.begin() + cursorY);
 								cursorY = 0;
 							}
 							break;
@@ -738,19 +729,44 @@ private:
 			case 'K': // EL - erase in line
 				{
 					int param = parseArg(ctlseq, 0);
-					ensureUnpacked(cursorY);
 					switch (param) {
 						default:
 						case 0:
-							unpackedLine.eraseFrom(cursorX);
+							lines[cursorY].cells.erase(lines[cursorY].cells.begin() + cursorX, lines[cursorY].cells.end());
 							break;
 						case 1:
-							unpackedLine.eraseTo(cursorX);
+							lines[cursorY].cells.erase(lines[cursorY].cells.begin(), lines[cursorY].cells.begin() + cursorX);
 							break;
 						case 2:
-							unpackedLine.cells.clear();
+							lines[cursorY].cells.clear();
 							break;
 					}
+				}
+				break;
+			case 'm': // SGR code
+				{
+					ctlseq.pop_back();
+					std::string params = ctlseq;
+					Attributes newAttrs = currentAttributes;
+
+					if (params.empty() || params == "0") { // \e[m или \e[0m - reset
+						syncColors();
+						return;
+					}
+
+					std::string paramStr;
+					for (char c : params) {
+						if (c == ';') {
+							processSGRParameter(paramStr, newAttrs);
+							paramStr.clear();
+						} else {
+							paramStr += c;
+						}
+					}
+					processSGRParameter(paramStr, newAttrs);
+
+					currentAttributes = newAttrs;
+					return;
 				}
 				break;
 			// case 'L': // IL - insert line
@@ -766,8 +782,6 @@ private:
 	bool linewrap; // true to put next character into next line
 	int width, height; // window size in chars
 	std::vector<Line> lines; // the text buffer
-	UnpackedLine unpackedLine; // current line for editing
-	size_t unpackedY; // number of current line
 	int updateCounter; // changes whenever terminal could require redraw
 
 	Pseudoterminal pty;
@@ -803,6 +817,8 @@ GUITerminal::GUITerminal(xml_node<>* node) : GUIScrollList(node)
 	}
 
 	engine = &gEngine;
+	engine->defaultTerminalFontColor = mFontColor;
+	engine->syncColors();
 	updateCounter = 0;
 }
 
@@ -903,12 +919,26 @@ void GUITerminal::RenderItem(size_t itemindex, int yPos, bool selected __unused)
 	if (!mFont || !mFont->GetResource())
 		return;
 
-	gr_color(mFontColor.red, mFontColor.green, mFontColor.blue, mFontColor.alpha);
-	// later: handle attributes here
+	int cell_x = mRenderX;
+	for (const auto& cell : line.cells) {
+		if (cell.cp == 0) continue; // Skip empty cells
 
-	// render text
-	const char* text = line.text.c_str();
-	gr_textEx_scaleW(mRenderX, yPos, text, mFont->GetResource(), mRenderW, TOP_LEFT, 0);
+		gr_color(cell.attrs.fgcolor.red, cell.attrs.fgcolor.green, cell.attrs.fgcolor.blue, cell.attrs.fgcolor.alpha);
+
+		std::string charStr;
+		utf8add(charStr, cell.cp);
+		int charWidth = twrpTruetype::gr_ttf_measureEx(charStr.c_str(), mFont->GetResource());
+
+		// Fill background if needed
+		if (cell.attrs.bgcolor.alpha > 0) {
+			gr_color(cell.attrs.bgcolor.red, cell.attrs.bgcolor.green, cell.attrs.bgcolor.blue, cell.attrs.bgcolor.alpha);
+			gr_fill(cell_x, yPos, charWidth, actualItemHeight);
+			gr_color(cell.attrs.fgcolor.red, cell.attrs.fgcolor.green, cell.attrs.fgcolor.blue, cell.attrs.fgcolor.alpha);
+		}
+
+		gr_textEx_scaleW(cell_x, yPos, charStr.c_str(), mFont->GetResource(), mRenderW, TOP_LEFT, 0);
+		cell_x += charWidth;
+	}
 
 	if (itemindex == (size_t) engine->getCursorY()) {
 		// render cursor

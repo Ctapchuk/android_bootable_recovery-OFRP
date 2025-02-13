@@ -239,6 +239,7 @@ GUIAction::GUIAction(xml_node <> *node):GUIObject(node)
       ADD_ACTION(enableadb);
       ADD_ACTION(enablefastboot);
       ADD_ACTION(changeterminal);
+      ADD_ACTION(resetterminal);
       ADD_ACTION(mapsuperdevices);
       ADD_ACTION(unmapsuperdevices);
       ADD_ACTION(disableled);
@@ -3079,6 +3080,13 @@ int GUIAction::changeterminal(std::string arg) {
 	}
 	if (res)
 		gui_changePage("terminal");
+	return 0;
+}
+
+int GUIAction::resetterminal(string arg __unused) {
+	if (term && term->status()) {
+		term->stop();
+	}
 	return 0;
 }
 
