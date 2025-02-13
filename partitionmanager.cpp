@@ -2275,7 +2275,7 @@ void TWPartitionManager::Parse_Users() {
 			// Attempt to get name of user. Fallback to user ID if this fails.
 			std::string path = "/data/system/users/" + to_string(userId) + ".xml";
 			int converted = 0;
-			if (TWFunc::Get_Android_SDK_Version() > 30 && TWFunc::Path_Exists(path)) {
+			if ((TWFunc::Get_Android_SDK_Version() > 30 || DataManager::GetIntValue(TW_VAB_EMPTY_SLOT)) && TWFunc::Path_Exists(path)) {
 				if(!TWFunc::Check_Xml_Format(path)) {
 					string oldpath = path;
 					if (TWFunc::abx_to_xml(path, path)) {
@@ -2286,7 +2286,7 @@ void TWPartitionManager::Parse_Users() {
 						converted = -1;
 				}
 			}
-			if (converted < 0)
+			if (converted <= 0)
 				user.userName = to_string(userId);
 			else {
 				char* userFile = PageManager::LoadFileToBuffer(path, NULL);
