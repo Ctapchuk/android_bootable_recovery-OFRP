@@ -679,13 +679,6 @@ LOCAL_POST_INSTALL_CMD := \
 
 # Darth9
 #
-# make sure that the terminfo directory is copied for nano
-ifeq ($(FOX_USE_NANO_EDITOR),1)
-	LOCAL_POST_INSTALL_CMD += \
-	cp -rf $(TARGET_OUT_ETC)/nano $(TARGET_RECOVERY_ROOT_OUT)/system/etc/; \
-	cp -rf external/libncurses/lib/terminfo $(TARGET_RECOVERY_ROOT_OUT)/system/etc/;
-endif
-
 # deal with "cannot delete non-empty directory: root/vendor" errors
 ifeq ($(OF_MANUAL_ROOT_VENDOR_ERROR_FIX),1)
 LOCAL_POST_INSTALL_CMD += \
