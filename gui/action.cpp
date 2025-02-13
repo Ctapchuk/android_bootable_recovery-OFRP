@@ -2174,6 +2174,7 @@ int GUIAction::adbsideload(std::string arg __unused)
 			if (wipe_dalvik)
 				PartitionManager.Wipe_Dalvik_Cache();
 		}
+		TWFunc::Fox_Property_Set("ctl.start", "adbd");
 		TWFunc::Toggle_MTP(mtp_was_enabled);
 		reinject_after_flash();
 		operation_end(ret);
