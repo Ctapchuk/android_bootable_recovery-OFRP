@@ -26,8 +26,6 @@
 		<variable name="lock_info" value="1" persist="1"/>
 		<!--variable name="lock_btn" value="0" persist="1"/-->
 		<variable name="lock_btn" persist="1"/>
-		<variable name="lock_batinfo1_y" value="%screen_original_h%-476"/>
-		<variable name="lock_batinfo2_y" value="%screen_original_h%-376"/>
 
 		<!-- Device settings -->
 		<variable name="charging_now" value="0"/>
@@ -526,6 +524,12 @@
 		<variable name="slidervalue_sliderw" value="96"/>
 		<variable name="slidervalue_sliderh" value="96"/>
 		<variable name="slider_y_l" value="%screen_original_h%-176"/>
+
+		<!-- Lockscreen additional -->
+		<variable name="lock_batinfo1_y" value="%slider_y%-376"/>
+		<variable name="lock_batinfo2_y" value="%slider_y%-276"/>
+		<variable name="lock_batinfo1_y_l" value="%slider_y_l%-376"/>
+		<variable name="lock_batinfo2_y_l" value="%slider_y_l%-276"/>
 
 		<variable name="unlock_gest_y" value="%screen_original_h%-48"/>
 		

@@ -51,6 +51,7 @@
 				<condition var1="clock_style" var2="1"/>
 				<condition var1="lock_info" var2="1"/>
 				<condition var1="charging_now" var2="1"/>
+				<condition var1="lock_btn" var2="1"/>
 				<font resource="info"/>
 				<placement x="%center_x%" y="%lock_batinfo1_y%" placement="4"/>
 				<text>%tw_battery_charge%</text>
@@ -60,8 +61,29 @@
 				<condition var1="clock_style" var2="1"/>
 				<condition var1="lock_info" var2="1"/>
 				<condition var1="charging_now" var2="1"/>
+				<condition var1="lock_btn" var2="1"/>
 				<font resource="info"/>
 				<placement x="%center_x%" y="%lock_batinfo2_y%" placement="4"/>
+				<text>%tw_battery_temp% | %tw_battery_amperage% | %tw_battery_voltage% | %tw_battery_wattage%</text>
+			</text>
+
+			<text color="%text%">
+				<condition var1="clock_style" var2="1"/>
+				<condition var1="lock_info" var2="1"/>
+				<condition var1="charging_now" var2="1"/>
+				<condition var1="lock_btn" var2="0"/>
+				<font resource="info"/>
+				<placement x="%center_x%" y="%lock_batinfo1_y_l%" placement="4"/>
+				<text>%tw_battery_charge%</text>
+			</text>
+
+			<text color="%text%">
+				<condition var1="clock_style" var2="1"/>
+				<condition var1="lock_info" var2="1"/>
+				<condition var1="charging_now" var2="1"/>
+				<condition var1="lock_btn" var2="0"/>
+				<font resource="info"/>
+				<placement x="%center_x%" y="%lock_batinfo2_y_l%" placement="4"/>
 				<text>%tw_battery_temp% | %tw_battery_amperage% | %tw_battery_voltage% | %tw_battery_wattage%</text>
 			</text>
 
