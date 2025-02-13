@@ -645,6 +645,7 @@ int Fox_Prepare_Update_Binary(const char *path, ZipArchiveHandle Zip)
   DataManager::SetValue("found_fox_overwriting_rom", "0");
   TWFunc::Fox_Property_Set("found_fox_overwriting_rom", "");
   DataManager::SetValue("found_non_standard_vAB_install", "0");
+  DataManager::SetValue("tw_recovery_hash", TWFunc::GetRecoveryHash());
 
   if (DataManager::GetIntValue(FOX_INSTALL_PREBUILT_ZIP) != 1)
     {
@@ -1105,13 +1106,22 @@ void Fox_Post_Zip_Install(const int result)
 		gui_warn("mount_vab_partitions=Devices on super may not mount until after rebooting recovery.");
 		gui_warn("flash_ab_reboot=To flash additional zips, please reboot recovery to switch to the updated slot.");
 
-		int reflashtwrp = 0;
-		DataManager::GetValue(TW_AUTO_REFLASHTWRP_VAR, reflashtwrp);
-		if (reflashtwrp) {
+		/*if (reflashtwrp) {
 			gui_print("\n\n");
 			gui_msg(Msg(msg::kWarning, "fox_install_nonstandart_detected=OrangeFox: this ROM installer is NOT using the standard update_engine and payload.bin! Attempting to compensate... "));
 			gui_print("\n");
 			sleep(2);
+			twrpRepacker repacker;
+			repacker.Flash_Current_Twrp();
+		}*/
+	}
+
+	if (DataManager::GetStrValue("tw_recovery_hash") != TWFunc::GetRecoveryHash()) {
+		gui_warn("recovery_overwrite_detected=OrangeFox overwrite detected");
+
+		int reflashtwrp = 0;
+		DataManager::GetValue(TW_AUTO_REFLASHTWRP_VAR, reflashtwrp);
+		if (reflashtwrp) {
 			twrpRepacker repacker;
 			repacker.Flash_Current_Twrp();
 		}

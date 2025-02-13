@@ -235,6 +235,7 @@ public:
 	static string Check_For_TwrpFolder();
 
 	static void FoxThemeCheck();
+	static string GetRecoveryHash(void);
 
 private:
 	static string Load_File(string extension);

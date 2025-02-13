@@ -1234,6 +1234,7 @@
 		<string name="reflash_twrp">Flash current OrangeFox</string>
 		<string name="reflashing_twrp">Flashing OrangeFox...</string>
 		<string name="reflash_twrp_complete">Done flashing OrangeFox</string>
+		<string name="recovery_overwrite_detected">OrangeFox overwrite detected</string>
 		<string name="reflash_started">Flash current OrangeFox started!</string>
 		<string name="reflash_switch">Switching slots to flash recovery to both partitions</string>
 		<string name="reflash_done">Flash current OrangeFox completed successfully!</string>

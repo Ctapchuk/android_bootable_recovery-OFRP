@@ -1235,6 +1235,7 @@
 		<string name="reflash_twrp">Прошить текущий OrangeFox</string>
 		<string name="reflashing_twrp">Прошивка OrangeFox...</string>
 		<string name="reflash_twrp_complete">OrangeFox прошит</string>
+		<string name="recovery_overwrite_detected">Обнаружена перезапись OrangeFox</string>
 		<string name="reflash_started">Восстановление текущего OrangeFox началось!</string>
 		<string name="reflash_switch">Смена слота для установки рекавери в оба раздела</string>
 		<string name="reflash_done">Восстановление OrangeFox завершено успешно!</string>

@@ -5251,4 +5251,24 @@ bool TWPartitionManager::Rewrite_Super_Metadata() {
 	gui_msg(Msg(msg::kGreen, "super_rewrite_success=Super metadata was rewritten successfully!"));
 	return true;
 }
+
+string TWPartitionManager::Get_Partition_Hash(TWPartition* twrpPart, bool slot_hash) {
+	if (!twrpPart)
+		return "-1";
+
+	string res;
+	string command = "/system/bin/sha256sum -b " + twrpPart->Primary_Block_Device;
+
+	if (slot_hash && twrpPart->Is_SlotSelect()) {
+		string res_tmp;
+		TWFunc::Exec_Cmd(command + "_a", res);
+		TWFunc::Exec_Cmd(command + "_b", res_tmp);
+		res += " ";
+		res += res_tmp;
+	} else {
+		TWFunc::Exec_Cmd(command, res);
+	}
+
+	return res;
+}
 //*

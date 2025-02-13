@@ -4703,4 +4703,16 @@ void TWFunc::FoxThemeCheck()
 	}
 }
 
+string TWFunc::GetRecoveryHash(void) {
+	TWPartition* recovery = PartitionManager.Find_Partition_By_Path("/recovery");
+	if (!recovery) {
+		LOGINFO("GetRecoveryHash is only for devices with recovery partition!\n");
+		return "-1";
+	}
+	string res = PartitionManager.Get_Partition_Hash(recovery);
+
+	LOGINFO("GetRecoveryHash is '%s'\n", res.c_str());
+	return res;
+}
+
 //

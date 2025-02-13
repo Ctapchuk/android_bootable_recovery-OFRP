@@ -417,6 +417,7 @@ int TWinstall_zip(const char *path, int *wipe_cache, bool check_for_digest)
 			run_rom_scripts = true;
 			usleep(32);
 			TWFunc::RunFoxScript(FOX_PRE_ROM_FLASH_SCRIPT, path);
+			DataManager::SetValue("tw_recovery_hash", TWFunc::GetRecoveryHash());
 
 			ret_val = Run_Update_Binary(path, wipe_cache, AB_OTA_ZIP_TYPE);
 
@@ -434,11 +435,11 @@ int TWinstall_zip(const char *path, int *wipe_cache, bool check_for_digest)
 				gui_warn("mount_vab_partitions=Devices on super may not mount until after rebooting recovery.");
 			}
 			gui_warn("flash_ab_reboot=To flash additional zips, please reboot recovery to switch to the updated slot.");
-			DataManager::GetValue(TW_AUTO_REFLASHTWRP_VAR, reflashtwrp);
+			/*DataManager::GetValue(TW_AUTO_REFLASHTWRP_VAR, reflashtwrp);
 			if (reflashtwrp) {
 			twrpRepacker repacker;
 			repacker.Flash_Current_Twrp();
-			}
+			}*/
 		} else {
 			std::string binary_name("ui.xml");
 			ZipEntry64 binary_entry;
