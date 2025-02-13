@@ -950,6 +950,7 @@ void DataManager::SetDefaultValues()
 	mConst.SetValue("tw_disable_haptics", "1");
 #endif
   mPersist.SetValue("tw_enable_fastcharge", "0");
+  mPersist.SetValue("tw_vab_clean_flash", "0");
 
   TWPartition *store = PartitionManager.Get_Default_Storage_Partition();
   if (store)

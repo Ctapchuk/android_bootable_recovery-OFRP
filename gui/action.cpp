@@ -234,6 +234,7 @@ GUIAction::GUIAction(xml_node <> *node):GUIObject(node)
       ADD_ACTION(checkpartitionlifetimewrites);
       ADD_ACTION(mountsystemtoggle);
       ADD_ACTION(togglefastcharge);
+      ADD_ACTION(vabcleanflash);
       ADD_ACTION(setlanguage);
       ADD_ACTION(togglebacklight);
       ADD_ACTION(enableadb);
@@ -1559,8 +1560,6 @@ int GUIAction::wipe(std::string arg)
     {
       if (arg == "data")
 	ret_val = PartitionManager.Factory_Reset();
-      else if (arg == "super")
-	ret_val = PartitionManager.Rewrite_Super_Metadata();
       else if (arg == "frp")
 	ret_val = PartitionManager.Wipe_By_Path("/frp");
       else if (arg == "battery")
@@ -1634,19 +1633,6 @@ int GUIAction::wipe(std::string arg)
 		    {
 		      if (!PartitionManager.Wipe_By_Path("/frp"))
 		        {
-			  ret_val = false;
-			  break;
-		        }
-		      else
-		        {
-		          skip = true;
-		        }
-		    }
-		  else if (wipe_path == "/super")
-		    {
-		      if (!PartitionManager.Rewrite_Super_Metadata())
-		        {
-			  gui_err("super_rewrite_err=Failed to rewrite Super metadata");
 			  ret_val = false;
 			  break;
 		        }
@@ -3124,6 +3110,18 @@ int GUIAction::togglefastcharge(std::string arg) {
 
 	}
 	operation_end(op_status);
+	return 0;
+}
+
+int GUIAction::vabcleanflash(std::string arg) {
+	if (arg.empty())
+		return -1;
+	
+	TWFunc::Fox_Property_Set("ro.virtual_ab.snapshots_skip_check", arg == "1" ? "true" : "false");
+	TWFunc::Fox_Property_Set("ro.virtual_ab.snapshots_skip_creating", arg == "1" ? "true" : "false");
+	DataManager::SetValue("tw_vab_clean_flash", arg);
+	LOGINFO("vabcleanflash: set tw_vab_clean_flash to '%s'\n", arg.c_str());
+
 	return 0;
 }
 //

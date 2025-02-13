@@ -4800,10 +4800,6 @@ void TWPartitionManager::Setup_Super_Partition() {
 	superPartition->Is_Present = true;
 	superPartition->Is_SubPartition = false;
 	superPartition->Setup_Image();
-#ifdef TW_ALLOW_REWRITE_SUPER_METADATA
-	superPartition->Display_Name = "Super";
-	superPartition->Wipe_Available_in_GUI = true;
-#endif
 	Add_Partition(superPartition);
 	PartitionManager.Output_Partition(superPartition);
 }
@@ -4920,6 +4916,8 @@ bool TWPartitionManager::Unmap_Super_Devices() {
 }
 
 bool TWPartitionManager::Check_Pending_Merges() {
+	if (!TWFunc::Path_Exists("/metadata/ota/state"))
+		return true;
 	auto sm = android::snapshot::SnapshotManager::NewForFirstStageMount();
 	if (!sm) {
 		gui_err("check_merge_snapfail=Unable to call snapshot manager!");
@@ -5231,22 +5229,28 @@ bool TWPartitionManager::Rewrite_Super_Metadata() {
 	command += " --output=" + super_empty;
 	LOGINFO("Lpmake command: %s\n", command.c_str());
 
-	Unmap_Super_Devices();
-
 	if (TWFunc::Exec_Cmd(command, false)) {
 		LOGINFO("Unable to create super_empty image!\n");
 		return false;
 	}
 
-	Super_Partition->BlkDiscard();
+	Unmap_Super_Devices();
+	Backup_Super_Metadata();
+	//Super_Partition->BlkDiscard();
 
 	command = lpflash_binary + " " + Super_Partition->Actual_Block_Device + " " + super_empty;
 	LOGINFO("Lpflash command: %s\n", command.c_str());
 
 	if (TWFunc::Exec_Cmd(command, false)) {
 		LOGINFO("Unable to flash metadata to super image!\n");
+		unlink(super_empty.c_str());
 		return false;
 	}
+
+	Mount_By_Path("/metadata", false);
+	TWFunc::removeDir("/metadata/ota", false);
+	UnMount_By_Path("/metadata", false);
+	unlink(super_empty.c_str());
 
 	gui_msg(Msg(msg::kGreen, "super_rewrite_success=Super metadata was rewritten successfully!"));
 	return true;
@@ -5270,5 +5274,31 @@ string TWPartitionManager::Get_Partition_Hash(TWPartition* twrpPart, bool slot_h
 	}
 
 	return res;
+}
+
+bool TWPartitionManager::Backup_Super_Metadata() {
+	auto current_metadata = android::fs_mgr::ReadMetadata(Get_Super_Partition(), 0);
+	if (!current_metadata) {
+		LOGINFO("Unable to get super metadata\n");
+		return false;
+	}
+	for (const auto& block_device : current_metadata.get()->block_devices) {
+		if (android::fs_mgr::GetBlockDevicePartitionName(block_device) == "super") {
+			DataManager::SetValue("super_first_logical_sector", (unsigned long long)block_device.first_logical_sector);
+			break;
+		}
+	}
+	string metadata_bck_cmd = "dd if=" + Get_Super_Partition() + " of=/tmp/super_metadata_backup.bin bs=512 count=" + DataManager::GetStrValue("super_first_logical_sector");
+	LOGINFO("Metadata backup command: %s\n", metadata_bck_cmd.c_str());
+	return !TWFunc::Exec_Cmd(metadata_bck_cmd, false);
+}
+
+bool TWPartitionManager::Restore_Super_Metadata() {
+	string metadata_rstr_cmd = "dd if=/tmp/super_metadata_backup.bin of=" + Get_Super_Partition() + " bs=512 seek=0 count=" + DataManager::GetStrValue("super_first_logical_sector");
+	LOGINFO("Metadata restore command: %s\n", metadata_rstr_cmd.c_str());
+	int res = TWFunc::Exec_Cmd(metadata_rstr_cmd, false);
+	if (!res)
+		unlink("/tmp/super_metadata_backup.bin");
+	return !res;
 }
 //*

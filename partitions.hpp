@@ -461,6 +461,8 @@ public:
 	void Mark_All_Users_Encrypted();                                          // Marks all users in Users_List as encrypted
 	void checkUsbOtgStatus();						  // Checks if usb_otg is connected
 	bool Rewrite_Super_Metadata();						  // Creates and writes new metadata to the super partition
+	bool Backup_Super_Metadata();						  // Backup super partition metadata
+	bool Restore_Super_Metadata();						  // Restore super partition metadata
 
 #ifdef TW_HAS_MTP
 	bool is_MTP_Enabled(void);						  // returns whether MTP is already enabled

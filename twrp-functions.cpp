@@ -2422,6 +2422,8 @@ void TWFunc::OrangeFox_Startup(void)
     }
 
   TWFunc::Fox_Property_Set("twrp.enable.fastcharge", DataManager::GetIntValue("tw_enable_fastcharge") ? "true" : "false");
+  TWFunc::Fox_Property_Set("ro.virtual_ab.snapshots_skip_check", DataManager::GetIntValue("tw_vab_clean_flash") ? "true" : "false");
+  TWFunc::Fox_Property_Set("ro.virtual_ab.snapshots_skip_creating", DataManager::GetIntValue("tw_vab_clean_flash") ? "true" : "false");
 
   if (DataManager::GetIntValue(FOX_PERFORMANCE_CHECK) == 1)
     {

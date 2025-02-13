@@ -407,6 +407,7 @@ int TWinstall_zip(const char *path, int *wipe_cache, bool check_for_digest)
 			LOGINFO("AB zip\n");
 			gui_msg(Msg(msg::kHighlight, "flash_ab_inactive=Flashing A/B zip to inactive slot: {1}")(PartitionManager.Get_Active_Slot_Display()=="A"?"B":"A"));
 			// We need this so backuptool can do its magic
+			bool clean_flash = DataManager::GetIntValue("tw_vab_clean_flash");
 			bool system_mount_state = PartitionManager.Is_Mounted_By_Path(PartitionManager.Get_Android_Root_Path());
 			bool vendor_mount_state = PartitionManager.Is_Mounted_By_Path("/vendor");
 			PartitionManager.Mount_By_Path(PartitionManager.Get_Android_Root_Path(), false);
@@ -417,10 +418,14 @@ int TWinstall_zip(const char *path, int *wipe_cache, bool check_for_digest)
 			run_rom_scripts = true;
 			usleep(32);
 			TWFunc::RunFoxScript(FOX_PRE_ROM_FLASH_SCRIPT, path);
+			if (clean_flash && !PartitionManager.Rewrite_Super_Metadata())
+				gui_err("super_rewrite_err=Failed to rewrite Super metadata");
 			DataManager::SetValue("tw_recovery_hash", TWFunc::GetRecoveryHash());
 
 			ret_val = Run_Update_Binary(path, wipe_cache, AB_OTA_ZIP_TYPE);
 
+			if ((ret_val != INSTALL_SUCCESS) && clean_flash)
+				PartitionManager.Restore_Super_Metadata();
 			DataManager::SetValue(FOX_ZIP_INSTALLER_CODE, 1); // mark as custom ROM install
 
 			umount("/system/bin/sh");

@@ -1278,5 +1278,9 @@
 		<string name="check_merge_unverified2">This means that an update was just applied but has not yet started merging. Merging in not allowed in source slot.</string>
 		<string name="check_merge_unverified3">PLEASE REBOOT TO INACTIVE SLOT AND TRY AGAIN!</string>
 		<string name="blkdiscard_perform">Perform BLKDISCARD on block device {1}</string>
+
+		<string name="snapshots_skip_check">Skip snapshots check</string>
+		<string name="snapshots_skip_creating">Skip snapshots creating</string-->
+		<string name="vab_clean_flash">Clean payload flashing</string>
 	</resources>
 </language>
