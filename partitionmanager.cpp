@@ -5181,7 +5181,11 @@ bool TWPartitionManager::Rewrite_Super_Metadata() {
 		return false;
 	}
 
-	const unsigned long long super_size = Super_Partition->Size;
+	unsigned long long super_size = Super_Partition->Size;
+#ifdef BOARD_SUPER_PARTITION_SIZE
+	if (super_size == 0)
+		super_size = (unsigned long long) BOARD_SUPER_PARTITION_SIZE;
+#endif
 	const int metadata_size = 65536;
 #ifdef AB_OTA_UPDATER
 	const int metadata_slots = 3;
